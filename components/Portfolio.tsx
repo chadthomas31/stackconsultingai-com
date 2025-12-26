@@ -31,20 +31,6 @@ const projects = [
     url: "#"
   },
   {
-    name: "SoCal Mobile Auto",
-    description: "Mobile auto repair service website with booking and scheduling",
-    image: "/screenshots/socalmobileauto.png",
-    tags: ["Next.js", "Supabase", "Booking"],
-    url: "https://socalmobileauto.com"
-  },
-  {
-    name: "Mobile Auto Repair Tech",
-    description: "Professional mobile auto repair services with multilingual support",
-    image: "/screenshots/mobileautorepair.png",
-    tags: ["Next.js", "TypeScript", "i18n"],
-    url: "#"
-  },
-  {
     name: "Mid-Pacific Cleaning",
     description: "Commercial cleaning services website with service area mapping",
     image: "/screenshots/mid-pacific-cleaning.png",
