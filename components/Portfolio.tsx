@@ -64,6 +64,13 @@ const projects = [
     image: "/screenshots/quadratouch.png",
     tags: ["Next.js", "TypeScript", "Supabase"],
     url: "#"
+  },
+  {
+    name: "CG ModelTek",
+    description: "Aerospace engineering proof of concept platform showcasing technical capabilities",
+    image: "/screenshots/cgmodeltekv3.png",
+    tags: ["Next.js", "TypeScript", "Aerospace"],
+    url: "https://cgmodeltekv3.vercel.app"
   }
 ];
 
