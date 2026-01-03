@@ -22,18 +22,18 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Contact</h4>
             <div className="space-y-2">
               <a
-                href="mailto:contact@stackconsultingai.com"
+                href="mailto:hello@stackconsultingai.com"
                 className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                <span>contact@stackconsultingai.com</span>
+                <span>hello@stackconsultingai.com</span>
               </a>
               <a
-                href="tel:+15551234567"
+                href="tel:+19498048225"
                 className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                <span>(555) 123-4567</span>
+                <span>(949) 804-8225</span>
               </a>
             </div>
           </div>

@@ -21,7 +21,7 @@ export default function Hero() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8">
           <Sparkles className="w-4 h-4" />
-          <span>8 Businesses Transformed</span>
+          <span>8+ Projects Delivered in 2025</span>
         </div>
 
         {/* Main Heading */}
@@ -61,7 +61,7 @@ export default function Hero() {
         <div className="flex flex-wrap justify-center items-center gap-8 text-muted-foreground">
           <div className="flex items-center gap-2">
             <Code2 className="w-6 h-6 text-primary" />
-            <span className="font-medium">Next.js 14</span>
+            <span className="font-medium">Next.js 15</span>
           </div>
           <div className="flex items-center gap-2">
             <Code2 className="w-6 h-6 text-primary" />

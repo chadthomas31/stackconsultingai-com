@@ -32,20 +32,20 @@ export default function PricingCalculator() {
   ];
 
   const pageOptions = [
-    { value: "1-3", label: "1-3 Pages", cost: 1500 },
-    { value: "4-7", label: "4-7 Pages", cost: 3000 },
-    { value: "8-15", label: "8-15 Pages", cost: 5000 },
-    { value: "16+", label: "16+ Pages", cost: 8000 }
+    { value: "1-3", label: "1-3 Pages", cost: 750 },
+    { value: "4-7", label: "4-7 Pages", cost: 1800 },
+    { value: "8-15", label: "8-15 Pages", cost: 3000 },
+    { value: "16+", label: "16+ Pages", cost: 5000 }
   ];
 
   const featureOptions = [
     { value: "contact-form", label: "Contact Form", cost: 0 },
-    { value: "booking", label: "Booking System", cost: 1500 },
-    { value: "ecommerce", label: "E-commerce", cost: 3000 },
-    { value: "auth", label: "User Authentication", cost: 2000 },
-    { value: "cms", label: "Content Management", cost: 1000 },
-    { value: "api", label: "Custom API Integration", cost: 2500 },
-    { value: "analytics", label: "Analytics Dashboard", cost: 1500 }
+    { value: "booking", label: "Booking System", cost: 900 },
+    { value: "ecommerce", label: "E-commerce", cost: 1800 },
+    { value: "auth", label: "User Authentication", cost: 1200 },
+    { value: "cms", label: "Content Management", cost: 600 },
+    { value: "api", label: "Custom API Integration", cost: 1500 },
+    { value: "analytics", label: "Analytics Dashboard", cost: 900 }
   ];
 
   const timelineOptions = [
@@ -96,7 +96,7 @@ export default function PricingCalculator() {
   };
 
   return (
-    <section id="calculator" className="py-20 px-4 bg-secondary/30">
+    <section id="pricing" className="py-20 px-4 bg-secondary/30">
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
