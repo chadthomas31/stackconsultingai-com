@@ -13,8 +13,9 @@ export default function Footer() {
               Stack Consulting AI
             </h3>
             <p className="text-muted-foreground">
-              Modern web solutions for South Orange County businesses
+              You don’t need more tools. You need a better stack.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">Stack smarter. Move faster.</p>
           </div>
 
           {/* Contact */}

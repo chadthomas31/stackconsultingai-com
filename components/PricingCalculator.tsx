@@ -11,6 +11,11 @@ interface CalculatorInputs {
   email: string;
 }
 
+type ScopeRecommendation = {
+  tier: "Starter" | "Growth" | "Scale";
+  summary: string;
+};
+
 export default function PricingCalculator() {
   const [inputs, setInputs] = useState<CalculatorInputs>({
     businessType: "",
@@ -21,7 +26,7 @@ export default function PricingCalculator() {
   });
   
   const [showEstimate, setShowEstimate] = useState(false);
-  const [estimate, setEstimate] = useState({ min: 0, max: 0 });
+  const [recommendation, setRecommendation] = useState<ScopeRecommendation | null>(null);
 
   const businessTypes = [
     { value: "local-service", label: "Local Service Business", multiplier: 1.0 },
@@ -79,20 +84,27 @@ export default function PricingCalculator() {
     }, 0);
 
     const totalCost = (baseCost + featureCost) * businessMult * timelineMult;
-    
-    setEstimate({
-      min: Math.round(totalCost * 0.85),
-      max: Math.round(totalCost * 1.15)
-    });
-    setShowEstimate(true);
-  };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(price);
+    const nextRecommendation: ScopeRecommendation =
+      totalCost < 2500
+        ? {
+            tier: "Starter",
+            summary: "Best for a lean marketing site or small brochure build with a few core pages."
+          }
+        : totalCost < 6000
+          ? {
+              tier: "Growth",
+              summary:
+                "Ideal for multi-page sites with integrations (forms, CMS, analytics) and conversion-focused UX."
+            }
+          : {
+              tier: "Scale",
+              summary:
+                "Great for complex builds like e-commerce, custom dashboards, auth, or advanced integrations."
+            };
+
+    setRecommendation(nextRecommendation);
+    setShowEstimate(true);
   };
 
   return (
@@ -102,11 +114,14 @@ export default function PricingCalculator() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
             <Calculator className="w-4 h-4" />
-            <span>Project Estimator</span>
+            <span>Project Planner</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">How Much Will Your Project Cost?</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Plan Your Project</h2>
           <p className="text-xl text-muted-foreground">
-            Get an instant estimate based on your specific needs
+            Stack smarter. Move faster.
+          </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            We fix broken workflows and build systems your team actually uses.
           </p>
         </div>
 
@@ -180,9 +195,6 @@ export default function PricingCalculator() {
                     </div>
                     <div className="flex-1">
                       <div className="font-medium">{feature.label}</div>
-                      {feature.cost > 0 && (
-                        <div className="text-xs text-muted-foreground">+${feature.cost}</div>
-                      )}
                     </div>
                   </button>
                 ))}
@@ -213,7 +225,7 @@ export default function PricingCalculator() {
             {/* Email */}
             <div>
               <label htmlFor="calc-email" className="block text-sm font-medium mb-3">
-                Email (to see detailed breakdown) *
+                Email (to receive your quote) *
               </label>
               <div className="flex gap-3">
                 <div className="flex-1 relative">
@@ -235,21 +247,19 @@ export default function PricingCalculator() {
               onClick={calculateEstimate}
               className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
             >
-              Calculate Estimate
+              Get Scope Recommendation
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
 
           {/* Estimate Display */}
-          {showEstimate && (
+          {showEstimate && recommendation && (
             <div className="mt-8 p-6 rounded-xl bg-primary/10 border-2 border-primary/20 animate-fadeIn">
               <div className="text-center">
-                <div className="text-sm font-medium text-primary mb-2">Estimated Project Cost</div>
-                <div className="text-4xl font-bold mb-4">
-                  {formatPrice(estimate.min)} - {formatPrice(estimate.max)}
-                </div>
+                <div className="text-sm font-medium text-primary mb-2">Recommended Scope</div>
+                <div className="text-4xl font-bold mb-4">{recommendation.tier}</div>
                 <p className="text-sm text-muted-foreground mb-6">
-                  This is a ballpark estimate. Final pricing depends on specific requirements and complexity.
+                  {recommendation.summary} We’ll follow up with a custom quote based on your exact requirements.
                 </p>
                 <a
                   href="#contact"

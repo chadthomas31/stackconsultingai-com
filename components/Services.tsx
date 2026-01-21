@@ -29,9 +29,12 @@ export default function Services() {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Smarter Stacks for Growing Businesses</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Comprehensive web solutions tailored to your business needs
+            Clear systems, practical AI, and real ROI—without enterprise complexity.
+          </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            We don’t sell AI. We fix stacks.
           </p>
         </div>
 

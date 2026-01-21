@@ -2,16 +2,16 @@ import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Mike Rodriguez",
+    name: "Paul Ries",
     business: "Fix It San Clemente",
     role: "Owner",
     content: "Stack Consulting AI transformed our online presence. The booking system they built has increased our appointments by 40%. Their attention to detail and understanding of our business needs was exceptional.",
     rating: 5
   },
   {
-    name: "Sarah Chen",
+    name: "Kate McCluskey",
     business: "Mid-Pacific Cleaning",
-    role: "Operations Manager",
+    role: "Owner",
     content: "Working with Stack Consulting AI was seamless. They delivered a beautiful, functional website that perfectly represents our brand. Our leads have doubled since launch.",
     rating: 5
   },

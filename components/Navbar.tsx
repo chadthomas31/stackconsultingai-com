@@ -25,7 +25,9 @@ export default function Navbar() {
   const navLinks = [
     { label: "Services", id: "services" },
     { label: "Portfolio", id: "portfolio" },
-    { label: "Pricing", id: "pricing" },
+    { label: "Videos", id: "videos" },
+    { label: "VOIP", id: "voip" },
+    { label: "Estimator", id: "pricing" },
     { label: "Contact", id: "contact" },
   ];
 

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#bg)"/>
+
+  <!-- subtle grid -->
+  <g opacity="0.12" stroke="#ffffff">
+    <path d="M0 120H1200M0 240H1200M0 360H1200M0 480H1200M0 600H1200M0 720H1200"/>
+    <path d="M120 0V800M240 0V800M360 0V800M480 0V800M600 0V800M720 0V800M840 0V800M960 0V800M1080 0V800"/>
+  </g>
+
+  <!-- card -->
+  <rect x="120" y="140" width="960" height="520" rx="28" fill="#0f172a" stroke="#1f2937" stroke-width="3"/>
+  <rect x="120" y="140" width="960" height="18" rx="9" fill="url(#accent)" opacity="0.9"/>
+
+  <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial">
+    <text x="180" y="280" font-size="54" fill="#e5e7eb" font-weight="700">Project Screenshot</text>
+    <text x="180" y="340" font-size="28" fill="#94a3b8">
+      Add a real thumbnail in public/screenshots and update the image path.
+    </text>
+
+    <g opacity="0.9">
+      <text x="180" y="440" font-size="22" fill="#cbd5e1">Recommended: 600x400 PNG, &lt; 200KB</text>
+      <text x="180" y="482" font-size="22" fill="#cbd5e1">Tip: capture the hero section / landing view</text>
+    </g>
+  </g>
+
+  <!-- simple icon -->
+  <g transform="translate(860 260)">
+    <rect x="0" y="0" width="170" height="170" rx="22" fill="#111827" stroke="#334155" stroke-width="3"/>
+    <path d="M38 98c18-32 36-48 54-48s36 16 54 48" fill="none" stroke="#6366f1" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="54" cy="72" r="10" fill="#22c55e"/>
+    <circle cx="116" cy="72" r="10" fill="#22c55e"/>
+    <path d="M52 124h66" stroke="#94a3b8" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>
+

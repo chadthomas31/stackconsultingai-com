@@ -10,6 +10,20 @@ const projects = [
     url: "https://fixitsanclemente.com"
   },
   {
+    name: "Elysium Ranch",
+    description: "Holistic wellness retreat website with offerings, testimonials, and booking CTA",
+    image: "/screenshots/elysiumranch.png",
+    tags: ["Website", "SEO", "UX"],
+    url: "https://elysiumranch.org/"
+  },
+  {
+    name: "Strategic Sync",
+    description: "Business systems and strategy website",
+    image: "/screenshots/strategicsync.png",
+    tags: ["Website", "Brand", "Performance"],
+    url: "https://strategicsync.com"
+  },
+  {
     name: "Tito's Automotive Services",
     description: "Professional automotive repair shop with service scheduling and quotes",
     image: "/screenshots/titosautomotive.png",
@@ -68,7 +82,10 @@ export default function Portfolio() {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Work</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Delivering results for businesses across South Orange County
+            We turn disconnected tools into intelligent, streamlined systems.
+          </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Strategy, automation, and integration built for your business.
           </p>
         </div>
 

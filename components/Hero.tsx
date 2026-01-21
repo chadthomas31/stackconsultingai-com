@@ -26,19 +26,23 @@ export default function Hero() {
 
         {/* Main Heading */}
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent leading-tight">
-          Modern Web Solutions
-          <br />
-          for South Orange County
-          <br />
-          Businesses
+          Who’s in your stack?
         </h1>
 
         {/* Subheading */}
         <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-          Professional Next.js, TypeScript, and Supabase development.
+          You don’t need more tools. You need a better stack.
           <br />
-          Fast, modern, and built to grow your business.
+          AI that fits your stack—designed to work in the real world.
         </p>
+
+        {/* Supporting Copy */}
+        <div className="mb-12 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground">
+            Smarter stacks for growing businesses: clear systems, practical AI, and real ROI—without enterprise
+            complexity.
+          </p>
+        </div>
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">

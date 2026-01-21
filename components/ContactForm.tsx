@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Send } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -14,6 +13,7 @@ export default function ContactForm() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("Thank you! We'll get back to you soon.");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,20 +21,25 @@ export default function ContactForm() {
     setErrorMessage("");
 
     try {
-      const { error } = await supabase
-        .from("contact_submissions")
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            project_type: formData.projectType,
-            message: formData.message,
-            created_at: new Date().toISOString()
-          }
-        ]);
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          projectType: formData.projectType,
+          message: formData.message
+        })
+      });
 
-      if (error) throw error;
+      const json = await res.json().catch(() => ({}));
+
+      if (!res.ok || json?.success === false) {
+        throw new Error(json?.error || "Failed to submit form. Please try again.");
+      }
+
+      if (json?.message) setSuccessMessage(json.message);
 
       setStatus("success");
       setFormData({
@@ -66,9 +71,9 @@ export default function ContactForm() {
       <div className="max-w-3xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Let's Work Together</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Let’s Fix Your Stack</h2>
           <p className="text-xl text-muted-foreground">
-            Ready to transform your business? Get in touch today.
+            Tell us what’s broken and what “better” looks like. We’ll recommend a practical plan.
           </p>
         </div>
 
@@ -170,7 +175,7 @@ export default function ContactForm() {
           {/* Status Messages */}
           {status === "success" && (
             <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-primary">
-              Thank you! We'll get back to you soon.
+              {successMessage}
             </div>
           )}
 
