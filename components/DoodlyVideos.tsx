@@ -4,21 +4,24 @@ type VideoDemo = {
   title: string;
   client: string;
   description: string;
-  url: string;
+  url: string; // click-through URL
+  embedUrl: string; // iframe URL
 };
 
 const videos: VideoDemo[] = [
   {
     title: "Doodly Explainer Demo",
     client: "Elevance Financial",
-    description: "Animated explainer video (hosted on Cloudflare CDN).",
-    url: "https://pub-839f69762f974efeb3875c1e059eebce.r2.dev"
+    description: "Animated explainer video (YouTube).",
+    url: "https://www.youtube.com/watch?v=SHpygNMwT9M&t=15s",
+    embedUrl: "https://www.youtube.com/embed/SHpygNMwT9M?start=15"
   },
   {
     title: "Doodly Explainer Demo",
     client: "Continental Interior Services",
     description: "Animated explainer video (hosted on Cloudflare CDN).",
-    url: "https://pub-c5eedf881b8347bba2035fa85112690d.r2.dev"
+    url: "https://pub-c5eedf881b8347bba2035fa85112690d.r2.dev",
+    embedUrl: "https://pub-c5eedf881b8347bba2035fa85112690d.r2.dev"
   }
 ];
 
@@ -71,12 +74,12 @@ export default function DoodlyVideos() {
               <div className="rounded-xl overflow-hidden border border-border bg-background">
                 <div className="relative w-full pt-[56.25%]">
                   <iframe
-                    src={video.url}
+                    src={video.embedUrl}
                     title={`${video.client} video demo`}
                     className="absolute inset-0 w-full h-full"
                     loading="lazy"
-                    referrerPolicy="no-referrer"
-                    allow="autoplay; fullscreen; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
                   />
                 </div>
               </div>
