@@ -1,9 +1,9 @@
 export default function StructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": "LocalBusiness",
     "name": "Stack Consulting AI",
-    "description": "Professional Next.js, TypeScript, and Supabase web development for small businesses in South Orange County",
+    "description": "AI automation and custom websites for small businesses in South Orange County",
     "url": "https://stackconsultingai.com",
     "telephone": "+1-949-804-8225",
     "email": "hello@stackconsultingai.com",
@@ -24,12 +24,15 @@ export default function StructuredData() {
     },
     "priceRange": "$$",
     "serviceType": [
+      "AI Consulting",
       "Web Development",
       "Business Automation",
       "E-commerce Development",
       "Website Maintenance"
     ],
     "knowsAbout": [
+      "Artificial Intelligence",
+      "AI Automation",
       "Next.js",
       "TypeScript",
       "Supabase",
