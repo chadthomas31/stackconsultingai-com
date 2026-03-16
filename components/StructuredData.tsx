@@ -5,7 +5,7 @@ export default function StructuredData() {
     "name": "Stack Consulting AI",
     "description": "AI automation and custom websites for small businesses in South Orange County",
     "url": "https://stackconsultingai.com",
-    "telephone": "+1-949-804-8225",
+    "telephone": "+1-949-749-0001",
     "email": "hello@stackconsultingai.com",
     "address": {
       "@type": "PostalAddress",

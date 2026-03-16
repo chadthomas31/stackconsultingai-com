@@ -32,11 +32,11 @@ export default function Footer() {
                 <span>hello@stackconsultingai.com</span>
               </a>
               <a
-                href="tel:+19498048225"
+                href="tel:+19497490001"
                 className="flex items-center gap-2 text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200"
               >
                 <Phone className="w-4 h-4" />
-                <span>(949) 804-8225</span>
+                <span>(949) 749-0001</span>
               </a>
             </div>
           </div>
