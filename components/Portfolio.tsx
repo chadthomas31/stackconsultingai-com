@@ -70,7 +70,7 @@ const projects = [
     description: "Artisan cream puff specialty bakery with online ordering system",
     image: "/screenshots/the-puffery.png",
     tags: ["Next.js", "TypeScript", "E-commerce"],
-    url: "#"
+    url: "https://the-puffery.vercel.app"
   }
 ];
 
