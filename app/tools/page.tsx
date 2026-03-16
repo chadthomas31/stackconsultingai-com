@@ -11,62 +11,68 @@ const tools = [
     badgeColor: "bg-primary text-primary-foreground",
     stats: "~5 minutes",
     href: "/tools/cost-calculator",
-    active: true
+    active: true,
+    cta: "Calculate Now"
   },
   {
     id: "speed-checker",
     icon: Zap,
     title: "Website Speed Checker",
     description: "Analyze your website's performance and get actionable recommendations to improve speed.",
-    badge: "Coming Soon",
-    badgeColor: "bg-muted text-muted-foreground",
+    badge: "New",
+    badgeColor: "bg-primary text-primary-foreground",
     stats: "~2 minutes",
-    href: "#",
-    active: false
+    href: "/tools/speed-checker",
+    active: true,
+    cta: "Check Speed"
   },
   {
     id: "seo-audit",
     icon: Search,
     title: "SEO Quick Audit",
     description: "Get a free SEO health check with insights on meta tags, mobile-friendliness, and more.",
-    badge: "Coming Soon",
-    badgeColor: "bg-muted text-muted-foreground",
+    badge: "New",
+    badgeColor: "bg-primary text-primary-foreground",
     stats: "~3 minutes",
-    href: "#",
-    active: false
+    href: "/tools/seo-audit",
+    active: true,
+    cta: "Run Audit"
   },
   {
     id: "roi-calculator",
     icon: TrendingUp,
     title: "ROI Calculator",
     description: "Calculate the potential return on investment for your new website or redesign project.",
-    badge: "Coming Soon",
-    badgeColor: "bg-muted text-muted-foreground",
+    badge: "New",
+    badgeColor: "bg-primary text-primary-foreground",
     stats: "~4 minutes",
-    href: "#",
-    active: false
+    href: "/tools/roi-calculator",
+    active: true,
+    cta: "Calculate ROI"
   },
   {
     id: "timeline-estimator",
     icon: Calendar,
     title: "Project Timeline Estimator",
     description: "Get realistic timelines for your web project based on scope and requirements.",
-    badge: "Coming Soon",
-    badgeColor: "bg-muted text-muted-foreground",
+    badge: "New",
+    badgeColor: "bg-primary text-primary-foreground",
     stats: "~3 minutes",
-    href: "#",
-    active: false
+    href: "/tools/timeline-estimator",
+    active: true,
+    cta: "Estimate Timeline"
   },
   {
     id: "tech-stack",
     icon: Code,
     title: "Tech Stack Recommender",
     description: "Find the perfect technology stack for your business needs and budget.",
-    badge: "Coming Soon",
-    badgeColor: "bg-muted text-muted-foreground",
+    badge: "New",
+    badgeColor: "bg-primary text-primary-foreground",
     stats: "~5 minutes",
-    href: "#",
-    active: false
+    href: "/tools/tech-stack",
+    active: true,
+    cta: "Get Recommendation"
   }
 ];
 
@@ -145,7 +151,7 @@ export default function ToolsPage() {
                       href={tool.href}
                       className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all w-full justify-center"
                     >
-                      Calculate Now
+                      {tool.cta}
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   ) : (

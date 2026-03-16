@@ -18,37 +18,51 @@ const projects = [
   },
   {
     name: "Strategic Sync",
-    description: "Business systems and strategy website",
+    description: "AI consulting platform with multi-provider integration and booking system",
     image: "/screenshots/strategicsync.png",
-    tags: ["Website", "Brand", "Performance"],
+    tags: ["Next.js", "AI", "Full-Stack"],
     url: "https://strategicsync.com"
+  },
+  {
+    name: "Mid-Pacific Cleaning",
+    description: "Commercial cleaning services website with service area mapping and eco-friendly focus",
+    image: "/screenshots/mid-pacific-cleaning.png",
+    tags: ["Next.js", "TypeScript", "SEO"],
+    url: "https://mid-pacific-cleaning-com.vercel.app"
+  },
+  {
+    name: "CG ModelTek",
+    description: "Aerospace precision manufacturing platform showcasing CNC machining capabilities",
+    image: "/screenshots/cgmodeltekv3.png",
+    tags: ["Next.js", "TypeScript", "Aerospace"],
+    url: "https://cgmodeltekv3.vercel.app"
+  },
+  {
+    name: "Dr. Woods Psychiatry",
+    description: "Concierge psychiatry practice with personalized care and online scheduling",
+    image: "/screenshots/dr-woods.png",
+    tags: ["Next.js", "Healthcare", "SEO"],
+    url: "https://dr-woods-website.vercel.app"
+  },
+  {
+    name: "AnyFix Chicago",
+    description: "North Shore handyman service with full-service home repair and booking",
+    image: "/screenshots/anyfix.png",
+    tags: ["Next.js", "TypeScript", "Local SEO"],
+    url: "https://anyfix.vercel.app"
   },
   {
     name: "Tito's Automotive Services",
     description: "Professional automotive repair shop with service scheduling and quotes",
     image: "/screenshots/titosautomotive.png",
     tags: ["Next.js", "TypeScript", "SEO"],
-    url: "https://titosautomotiveservices.com"
-  },
-  {
-    name: "DKBR Services",
-    description: "Commercial and residential services with project management portal",
-    image: "/screenshots/dkbr-services.png",
-    tags: ["Next.js", "Supabase", "Dashboard"],
-    url: "https://dkbr.services"
-  },
-  {
-    name: "The Puffery",
-    description: "E-commerce platform for premium vaping products with custom ordering system",
-    image: "/screenshots/the-puffery.png",
-    tags: ["Next.js", "TypeScript", "E-commerce"],
     url: "#"
   },
   {
-    name: "Mid-Pacific Cleaning",
-    description: "Commercial cleaning services website with service area mapping",
-    image: "/screenshots/mid-pacific-cleaning.png",
-    tags: ["Next.js", "TypeScript", "SEO"],
+    name: "The Puffery",
+    description: "Artisan cream puff specialty bakery with online ordering system",
+    image: "/screenshots/the-puffery.png",
+    tags: ["Next.js", "TypeScript", "E-commerce"],
     url: "#"
   },
   {
@@ -57,20 +71,6 @@ const projects = [
     image: "/screenshots/venturai.png",
     tags: ["React", "Supabase", "AI"],
     url: "#"
-  },
-  {
-    name: "Quadra Touch",
-    description: "Modern business solutions platform with custom features",
-    image: "/screenshots/quadratouch.png",
-    tags: ["Next.js", "TypeScript", "Supabase"],
-    url: "#"
-  },
-  {
-    name: "CG ModelTek",
-    description: "Aerospace engineering proof of concept platform showcasing technical capabilities",
-    image: "/screenshots/cgmodeltekv3.png",
-    tags: ["Next.js", "TypeScript", "Aerospace"],
-    url: "https://cgmodeltekv3.vercel.app"
   }
 ];
 
@@ -106,6 +106,19 @@ export default function Portfolio() {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent"></div>
+                {project.url !== "#" && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-lg font-semibold text-sm hover:bg-primary/90 transition-all"
+                    >
+                      View Live Site
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                )}
               </div>
 
               {/* Content */}
