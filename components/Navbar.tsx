@@ -35,8 +35,8 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? "bg-background/95 backdrop-blur-md border-b border-border shadow-lg"
-          : "bg-transparent"
+          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/5"
+          : "bg-transparent border-b border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 py-4">
@@ -55,14 +55,14 @@ export default function Navbar() {
               <button
                 key={link.id}
                 onClick={() => scrollToSection(link.id)}
-                className="text-muted-foreground hover:text-primary transition-colors font-medium"
+                className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 {link.label}
               </button>
             ))}
             <button
               onClick={() => scrollToSection("contact")}
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 shadow-lg shadow-primary/20"
             >
               Get Started
             </button>
