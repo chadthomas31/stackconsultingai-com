@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { Send, CheckCircle, Clock, Phone, Mail, ArrowRight } from "lucide-react";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -13,7 +13,7 @@ export default function ContactForm() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("Thank you! We'll get back to you soon.");
+  const [submittedName, setSubmittedName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,18 +39,8 @@ export default function ContactForm() {
         throw new Error(json?.error || "Failed to submit form. Please try again.");
       }
 
-      if (json?.message) setSuccessMessage(json.message);
-
+      setSubmittedName(formData.name.split(" ")[0]);
       setStatus("success");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        projectType: "",
-        message: ""
-      });
-
-      setTimeout(() => setStatus("idle"), 5000);
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setStatus("error");
@@ -77,8 +67,65 @@ export default function ContactForm() {
           </p>
         </div>
 
+        {/* Success Confirmation */}
+        {status === "success" && (
+          <div className="bg-card border border-border rounded-xl p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-8 h-8 text-primary" />
+            </div>
+            <h3 className="text-2xl font-bold mb-2">
+              Thanks{submittedName ? `, ${submittedName}` : ""}! We got your message.
+            </h3>
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+              Your project details are in our queue. Here's what happens next:
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
+                <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
+                <div className="font-semibold text-sm">Within 24 Hours</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  We'll review your project details and prepare a response
+                </p>
+              </div>
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
+                <Phone className="w-5 h-5 text-primary mx-auto mb-2" />
+                <div className="font-semibold text-sm">Quick Call or Email</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Expect a personal follow-up to discuss your needs
+                </p>
+              </div>
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
+                <Mail className="w-5 h-5 text-primary mx-auto mb-2" />
+                <div className="font-semibold text-sm">Custom Proposal</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  You'll receive a tailored plan with timeline and pricing
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-6">
+              Need something urgent? Call us directly at{" "}
+              <a href="tel:+19497490001" className="text-primary hover:underline font-medium">
+                (949) 749-0001
+              </a>
+            </p>
+
+            <button
+              onClick={() => {
+                setStatus("idle");
+                setFormData({ name: "", email: "", phone: "", projectType: "", message: "" });
+              }}
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Submit another request
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className={`space-y-6 ${status === "success" ? "hidden" : ""}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name */}
             <div>
@@ -173,12 +220,6 @@ export default function ContactForm() {
           </div>
 
           {/* Status Messages */}
-          {status === "success" && (
-            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-primary">
-              {successMessage}
-            </div>
-          )}
-
           {status === "error" && (
             <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
               {errorMessage}
