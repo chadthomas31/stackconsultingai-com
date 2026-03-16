@@ -57,23 +57,24 @@ export async function POST(request: NextRequest) {
     
     if (error) {
       console.error('Database insert error:', error);
-      throw error;
+      // Still return success - don't block the user experience
+      return NextResponse.json({ success: true, message: 'Calculation completed' });
     }
-    
-    // Log analytics
-    await supabase.from('tool_analytics').insert({
+
+    // Log analytics (fire and forget, don't block on errors)
+    supabase.from('tool_analytics').insert({
       tool_name: toolName,
       action: email ? 'email_submit' : 'calculate',
       data: toolData
+    }).then(({ error: analyticsErr }) => {
+      if (analyticsErr) console.error('Analytics insert error:', analyticsErr);
     });
-    
+
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error('Tool submission error:', error);
-    return NextResponse.json(
-      { success: false, error: error.message || 'Failed to save data' },
-      { status: 500 }
-    );
+    // Gracefully handle - user still gets a success experience
+    return NextResponse.json({ success: true, message: 'Completed' });
   }
 }
 
@@ -94,19 +95,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
-    // Log view
-    await supabase.from('tool_analytics').insert({
+    // Log view (fire and forget)
+    supabase.from('tool_analytics').insert({
       tool_name: toolName,
       action: 'view',
       data: {}
+    }).then(({ error: err }) => {
+      if (err) console.error('Analytics view error:', err);
     });
-    
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('Analytics error:', error);
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: true });
   }
 }

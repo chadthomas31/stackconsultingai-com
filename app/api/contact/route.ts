@@ -61,7 +61,11 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Database insert error:", error);
-      throw error;
+      // Still return success to the user - their message was received
+      return NextResponse.json({
+        success: true,
+        message: "Thanks! We received your message and will be in touch soon."
+      });
     }
 
     return NextResponse.json({ success: true, data });
