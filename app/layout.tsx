@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Analytics from "@/components/Analytics";
 import CookieConsent from "@/components/CookieConsent";
 import StructuredData from "@/components/StructuredData";
@@ -65,6 +67,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager (noscript) */}
 
         <Analytics />
+        <VercelAnalytics />
+        <SpeedInsights />
         <CookieConsent />
         {children}
 
