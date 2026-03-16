@@ -53,23 +53,23 @@ const projects = [
   },
   {
     name: "Tito's Automotive Services",
-    description: "Professional automotive repair shop with service scheduling and quotes",
+    description: "Family-owned auto repair shop with ASE-certified technicians and warranty tracking",
     image: "/screenshots/titosautomotive.png",
     tags: ["Next.js", "TypeScript", "SEO"],
-    url: "#"
+    url: "https://titosautomotiveservices-com.vercel.app"
+  },
+  {
+    name: "VenturAI",
+    description: "Hyperlocal market intelligence platform to find profitable business gaps in your city",
+    image: "/screenshots/venturai.png",
+    tags: ["React", "Supabase", "AI"],
+    url: "https://venturai-tech.vercel.app"
   },
   {
     name: "The Puffery",
     description: "Artisan cream puff specialty bakery with online ordering system",
     image: "/screenshots/the-puffery.png",
     tags: ["Next.js", "TypeScript", "E-commerce"],
-    url: "#"
-  },
-  {
-    name: "VenturAI",
-    description: "AI-powered business idea generator with Stripe integration",
-    image: "/screenshots/venturai.png",
-    tags: ["React", "Supabase", "AI"],
     url: "#"
   }
 ];
