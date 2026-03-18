@@ -6,6 +6,7 @@ const projects = [
     name: "Fix It San Clemente",
     description: "Local mobile auto repair and maintenance service with online booking",
     image: "/screenshots/fixitsanclemente.png",
+    alt: "Fix It San Clemente - mobile auto repair website with online booking built by Stack Consulting AI",
     tags: ["Next.js", "TypeScript", "Booking"],
     url: "https://fixitsanclemente.com"
   },
@@ -13,6 +14,7 @@ const projects = [
     name: "Elysium Ranch",
     description: "Holistic wellness retreat website with offerings, testimonials, and booking CTA",
     image: "/screenshots/elysiumranch.png",
+    alt: "Elysium Ranch - holistic wellness retreat website design with SEO optimization",
     tags: ["Website", "SEO", "UX"],
     url: "https://elysiumranch.org/"
   },
@@ -20,6 +22,7 @@ const projects = [
     name: "Strategic Sync",
     description: "AI consulting platform with multi-provider integration and booking system",
     image: "/screenshots/strategicsync.png",
+    alt: "Strategic Sync - AI consulting platform with multi-provider integration built with Next.js",
     tags: ["Next.js", "AI", "Full-Stack"],
     url: "https://strategicsync.com"
   },
@@ -27,6 +30,7 @@ const projects = [
     name: "Mid-Pacific Cleaning",
     description: "Commercial cleaning services website with service area mapping and eco-friendly focus",
     image: "/screenshots/mid-pacific-cleaning.png",
+    alt: "Mid-Pacific Cleaning - commercial cleaning services website with local SEO and service mapping",
     tags: ["Next.js", "TypeScript", "SEO"],
     url: "https://mid-pacific-cleaning-com.vercel.app"
   },
@@ -34,6 +38,7 @@ const projects = [
     name: "CG ModelTek",
     description: "Aerospace precision manufacturing platform showcasing CNC machining capabilities",
     image: "/screenshots/cgmodeltekv3.png",
+    alt: "CG ModelTek - aerospace precision manufacturing website with CNC machining showcase",
     tags: ["Next.js", "TypeScript", "Aerospace"],
     url: "https://cgmodeltek-v2.vercel.app/"
   },
@@ -41,6 +46,7 @@ const projects = [
     name: "Dr. Woods Psychiatry",
     description: "Concierge psychiatry practice with personalized care and online scheduling",
     image: "/screenshots/dr-woods.png",
+    alt: "Dr. Woods Psychiatry - concierge psychiatry website with online scheduling system",
     tags: ["Next.js", "Healthcare", "SEO"],
     url: "https://dr-woods-website.vercel.app"
   },
@@ -48,6 +54,7 @@ const projects = [
     name: "AnyFix Chicago",
     description: "North Shore handyman service with full-service home repair and booking",
     image: "/screenshots/anyfix.png",
+    alt: "AnyFix Chicago - North Shore handyman service website with online booking",
     tags: ["Next.js", "TypeScript", "Local SEO"],
     url: "https://anyfix.vercel.app"
   },
@@ -55,6 +62,7 @@ const projects = [
     name: "Tito's Automotive Services",
     description: "Family-owned auto repair shop with ASE-certified technicians and warranty tracking",
     image: "/screenshots/titosautomotive.png",
+    alt: "Tito's Automotive Services - auto repair shop website with warranty tracking system",
     tags: ["Next.js", "TypeScript", "SEO"],
     url: "https://titosautomotiveservices-com.vercel.app"
   },
@@ -62,6 +70,7 @@ const projects = [
     name: "VenturAI",
     description: "Hyperlocal market intelligence platform to find profitable business gaps in your city",
     image: "/screenshots/venturai.png",
+    alt: "VenturAI - AI-powered hyperlocal market intelligence platform built with React and Supabase",
     tags: ["React", "Supabase", "AI"],
     url: "https://venturai-tech.vercel.app"
   },
@@ -69,6 +78,7 @@ const projects = [
     name: "Continental Interior Services",
     description: "Commercial interior construction and renovation firm specializing in drywall, framing, and tenant improvements",
     image: "/screenshots/dkbr-services.png",
+    alt: "Continental Interior Services - commercial construction website for drywall and tenant improvements",
     tags: ["Next.js", "TypeScript", "Construction"],
     url: "https://dkbr-services.vercel.app/"
   },
@@ -76,6 +86,7 @@ const projects = [
     name: "The Puffery",
     description: "Artisan cream puff specialty bakery with online ordering system",
     image: "/screenshots/the-puffery.png",
+    alt: "The Puffery - artisan bakery e-commerce website with online ordering system",
     tags: ["Next.js", "TypeScript", "E-commerce"],
     url: "https://the-puffery.vercel.app"
   }
@@ -107,10 +118,10 @@ export default function Portfolio() {
               <div className="relative h-48 overflow-hidden bg-secondary">
                 <Image
                   src={project.image}
-                  alt={project.name}
+                  alt={project.alt}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent"></div>
                 {project.url !== "#" && (

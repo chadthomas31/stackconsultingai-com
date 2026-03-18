@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Analytics from "@/components/Analytics";
+
 import CookieConsent from "@/components/CookieConsent";
 import StructuredData from "@/components/StructuredData";
 
@@ -12,22 +12,29 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stackconsultingai.com"),
-  title: "AI Consulting & Web Development | South Orange County | Stack Consulting AI",
-  description: "AI automation and custom websites for small businesses in South Orange County. Save time with smarter systems. Free consultation.",
-  keywords: ["AI consulting", "web development", "business automation", "Next.js", "TypeScript", "Supabase", "Orange County", "small business", "AI automation"],
+  title: "AI Consulting & Web Development | Southern California | Stack Consulting AI",
+  description: "AI automation, custom web development, and business process automation for small businesses in Southern California and Orange County. Smarter systems, real ROI. Free consultation.",
+  keywords: ["AI consulting", "web development", "business automation", "Southern California", "Orange County", "AI automation", "Next.js", "TypeScript", "small business", "web development Orange County", "AI consulting Southern California", "business process automation"],
   authors: [{ name: "Stack Consulting AI" }],
   openGraph: {
-    title: "AI Consulting & Web Development | South Orange County | Stack Consulting AI",
-    description: "AI automation and custom websites for small businesses in South Orange County. Save time with smarter systems.",
+    title: "AI Consulting & Web Development | Southern California | Stack Consulting AI",
+    description: "AI automation, custom web development, and business process automation for small businesses in Southern California. Smarter systems, real ROI.",
     type: "website",
     url: "https://stackconsultingai.com",
     siteName: "Stack Consulting AI",
     locale: "en_US",
+    images: [{
+      url: "https://stackconsultingai.com/og-image.png",
+      width: 1200,
+      height: 630,
+      alt: "Stack Consulting AI - AI Consulting & Web Development in Southern California",
+    }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Consulting & Web Development | South Orange County",
-    description: "AI automation and custom websites for small businesses in South Orange County. Save time with smarter systems.",
+    title: "AI Consulting & Web Development | Southern California",
+    description: "AI automation, custom web development, and business process automation for small businesses in Southern California. Smarter systems, real ROI.",
+    images: ["https://stackconsultingai.com/og-image.png"],
   },
   alternates: {
     canonical: "https://stackconsultingai.com",
@@ -66,8 +73,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {/* End Google Tag Manager */}
 
-        {/* Google Analytics (direct gtag.js) */}
-        <Analytics />
+        {/* GA managed via GTM — standalone gtag.js removed to avoid double-counting */}
         <VercelAnalytics />
         <SpeedInsights />
         <CookieConsent />

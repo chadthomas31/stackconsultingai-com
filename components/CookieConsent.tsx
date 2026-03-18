@@ -7,18 +7,15 @@ export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Check if user has already made a choice
     const consent = localStorage.getItem("cookie-consent");
     if (!consent) {
       setShowBanner(true);
     } else if (consent === "accepted") {
-      // Load analytics if already accepted
       loadAnalytics();
     }
   }, []);
 
   const loadAnalytics = () => {
-    // Dispatch event to load Google Analytics
     window.dispatchEvent(new Event("cookie-consent-granted"));
   };
 
@@ -36,72 +33,38 @@ export default function CookieConsent() {
   if (!showBanner) return null;
 
   return (
-    <>
-      {/* Backdrop Overlay */}
-      <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-fadeIn"
-        aria-hidden="true"
-      />
-
-      {/* Modal */}
-      <div 
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Cookie consent"
-      >
-        <div className="bg-card border-2 border-primary/30 rounded-2xl shadow-2xl max-w-2xl w-full p-8 md:p-10 animate-slideUp">
-          {/* Icon */}
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-              <Cookie className="w-10 h-10 text-primary" />
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              We Value Your Privacy
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              We use cookies and analytics to improve your experience and understand how visitors interact with our site.
-              Your data helps us build better solutions for our clients.
-            </p>
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="flex items-center justify-center gap-6 mb-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-primary" />
-              <span>Secure & Private</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Cookie className="w-5 h-5 text-primary" />
-              <span>Google Analytics Only</span>
-            </div>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={handleDecline}
-              className="flex-1 px-8 py-4 bg-secondary text-secondary-foreground rounded-xl font-semibold text-lg hover:bg-secondary/80 transition-all border-2 border-border"
-            >
-              Decline
-            </button>
-            <button
-              onClick={handleAccept}
-              className="flex-1 px-8 py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-lg hover:bg-primary/90 transition-all shadow-2xl shadow-primary/30 border-2 border-primary"
-            >
-              Accept & Continue
-            </button>
-          </div>
-
-          <p className="text-xs text-muted-foreground text-center mt-6">
-            By accepting, you agree to our use of cookies for analytics purposes.
+    <div
+      className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-slideUp"
+      role="dialog"
+      aria-label="Cookie consent"
+    >
+      <div className="max-w-4xl mx-auto bg-card border border-border rounded-xl shadow-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center gap-4">
+        <Cookie className="w-8 h-8 text-primary shrink-0 hidden sm:block" />
+        <div className="flex-1 text-center sm:text-left">
+          <p className="text-sm text-muted-foreground">
+            We use cookies and analytics to improve your experience.
+            <span className="hidden md:inline"> Your data helps us build better solutions for our clients.</span>
           </p>
+          <div className="flex items-center justify-center sm:justify-start gap-4 mt-1 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1"><Shield className="w-3 h-3 text-primary" /> Secure & Private</span>
+            <span className="flex items-center gap-1"><Cookie className="w-3 h-3 text-primary" /> Google Analytics Only</span>
+          </div>
+        </div>
+        <div className="flex gap-3 shrink-0">
+          <button
+            onClick={handleDecline}
+            className="px-5 py-2 bg-secondary text-secondary-foreground rounded-lg text-sm font-medium hover:bg-secondary/80 transition-all border border-border"
+          >
+            Decline
+          </button>
+          <button
+            onClick={handleAccept}
+            className="px-5 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+          >
+            Accept
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

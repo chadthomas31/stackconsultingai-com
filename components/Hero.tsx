@@ -31,14 +31,14 @@ export default function Hero() {
 
         {/* Main Heading */}
         <h1 className="animate-fade-in-up animation-delay-100 text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent leading-tight animate-gradient-text">
-          Who&#39;s in your stack?
+          AI Consulting & Web Development for Southern California Businesses
         </h1>
 
         {/* Subheading */}
         <p className="animate-fade-in-up animation-delay-200 text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
           You don&#39;t need more tools. You need a better stack.
           <br />
-          AI that fits your stack—designed to work in the real world.
+          Practical AI automation, custom websites, and smarter systems—built for the real world.
         </p>
 
         {/* Supporting Copy */}
