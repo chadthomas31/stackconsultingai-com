@@ -70,7 +70,7 @@ const projects = [
     description: "Commercial interior construction and renovation firm specializing in drywall, framing, and tenant improvements",
     image: "/screenshots/dkbr-services.png",
     tags: ["Next.js", "TypeScript", "Construction"],
-    url: "https://dkbr.services"
+    url: "https://dkbr-services.vercel.app/"
   },
   {
     name: "The Puffery",
