@@ -1,5 +1,11 @@
 "use client";
 
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[];
+  }
+}
+
 import { useState } from "react";
 import { Send, CheckCircle, Clock, Phone, Mail, ArrowRight } from "lucide-react";
 
@@ -41,6 +47,15 @@ export default function ContactForm() {
 
       setSubmittedName(formData.name.split(" ")[0]);
       setStatus("success");
+
+      // Push lead event to GTM dataLayer for GA4 conversion tracking
+      if (typeof window !== "undefined" && window.dataLayer) {
+        window.dataLayer.push({
+          event: "generate_lead",
+          lead_source: "contact_form",
+          lead_project_type: formData.projectType,
+        });
+      }
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setStatus("error");

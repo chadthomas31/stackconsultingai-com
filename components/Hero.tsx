@@ -5,6 +5,9 @@ import { ArrowRight, Code2, Database, Sparkles } from "lucide-react";
 export default function Hero() {
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    if (typeof window !== "undefined" && window.dataLayer) {
+      window.dataLayer.push({ event: "cta_click", cta_text: "Start Your Project" });
+    }
   };
 
   return (
