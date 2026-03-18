@@ -6,6 +6,7 @@ import DoodlyVideos from "@/components/DoodlyVideos";
 import Testimonials from "@/components/Testimonials";
 import VoipIvr from "@/components/VoipIvr";
 import PricingCalculator from "@/components/PricingCalculator";
+import Newsletter from "@/components/Newsletter";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Testimonials />
       <VoipIvr />
       <PricingCalculator />
+      <Newsletter />
       <ContactForm />
       <Footer />
     </main>
