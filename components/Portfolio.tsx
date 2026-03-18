@@ -66,6 +66,13 @@ const projects = [
     url: "https://venturai-tech.vercel.app"
   },
   {
+    name: "Continental Interior Services",
+    description: "Commercial interior construction and renovation firm specializing in drywall, framing, and tenant improvements",
+    image: "/screenshots/dkbr-services.png",
+    tags: ["Next.js", "TypeScript", "Construction"],
+    url: "https://dkbr.services"
+  },
+  {
     name: "The Puffery",
     description: "Artisan cream puff specialty bakery with online ordering system",
     image: "/screenshots/the-puffery.png",
