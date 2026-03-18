@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { supabaseAdmin as supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 function getClientIp(request: NextRequest): string | null {

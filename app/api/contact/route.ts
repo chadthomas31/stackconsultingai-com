@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { supabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
 function getClientIp(request: NextRequest): string | null {
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       message
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("tool_leads")
       .insert({
         tool_name: "contact",
