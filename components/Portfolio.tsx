@@ -35,7 +35,7 @@ const projects = [
     description: "Aerospace precision manufacturing platform showcasing CNC machining capabilities",
     image: "/screenshots/cgmodeltekv3.png",
     tags: ["Next.js", "TypeScript", "Aerospace"],
-    url: "https://cgmodeltekv3.vercel.app"
+    url: "https://cgmodeltek-v2.vercel.app/"
   },
   {
     name: "Dr. Woods Psychiatry",
