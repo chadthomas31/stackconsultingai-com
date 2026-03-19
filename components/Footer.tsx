@@ -46,22 +46,22 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Services</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <a href="/services/web-development" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Web Development
                 </a>
               </li>
               <li>
-                <a href="#services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <a href="/services/business-automation" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Business Automation
                 </a>
               </li>
               <li>
-                <a href="#services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <a href="/services/ecommerce" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   E-commerce
                 </a>
               </li>
               <li>
-                <a href="#services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <a href="/services/maintenance" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Maintenance
                 </a>
               </li>
