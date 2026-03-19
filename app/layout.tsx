@@ -50,19 +50,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <StructuredData />
-        {/* Google Tag Manager - in head as Google requires */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5N9G6XQ4');`,
-          }}
-        />
       </head>
       <body className={inter.className}>
-        {/* Google Tag Manager (noscript) - immediately after opening body */}
+        {/* Google Tag Manager (noscript fallback) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5N9G6XQ4"
@@ -71,25 +61,49 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        {/* End Google Tag Manager */}
 
-        {/* GA managed via GTM — standalone gtag.js removed to avoid double-counting */}
         <VercelAnalytics />
         <SpeedInsights />
         <CookieConsent />
         {children}
 
-        {/* ElevenLabs ConvAI Voice Agent */}
-        <div
-          // Render custom element without JSX typing issues
+        {/* GTM - deferred to after first paint to avoid render blocking */}
+        <Script
+          id="gtm-script"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
-            __html:
-              '<elevenlabs-convai agent-id="agent_9101kfg9f05ef038danc3c20ysyd"></elevenlabs-convai>'
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5N9G6XQ4');`,
           }}
         />
+
+        {/* ElevenLabs ConvAI - lazy loaded on user interaction */}
         <Script
-          src="https://unpkg.com/@elevenlabs/convai-widget-embed"
-          strategy="afterInteractive"
+          id="elevenlabs-loader"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function loadElevenLabs() {
+                if (document.querySelector('elevenlabs-convai')) return;
+                var el = document.createElement('elevenlabs-convai');
+                el.setAttribute('agent-id', 'agent_9101kfg9f05ef038danc3c20ysyd');
+                document.body.appendChild(el);
+                var s = document.createElement('script');
+                s.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
+                document.body.appendChild(s);
+              }
+              if (document.readyState === 'complete') {
+                setTimeout(loadElevenLabs, 3000);
+              } else {
+                window.addEventListener('load', function() {
+                  setTimeout(loadElevenLabs, 3000);
+                });
+              }
+            `,
+          }}
         />
       </body>
     </html>
