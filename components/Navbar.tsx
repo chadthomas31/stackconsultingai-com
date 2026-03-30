@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -56,9 +57,16 @@ export default function Navbar() {
           <a
             href="/"
             onClick={handleLogoClick}
-            className="text-xl font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
           >
-            Stack Consulting AI
+            <Image
+              src="/stack-logo-full.png"
+              alt="Stack Consulting AI"
+              width={200}
+              height={50}
+              className="h-10 w-auto"
+              priority
+            />
           </a>
 
           {/* Desktop Navigation */}

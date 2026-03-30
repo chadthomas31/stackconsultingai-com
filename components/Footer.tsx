@@ -1,4 +1,5 @@
 import { Mail, Phone } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,9 +12,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
-              Stack Consulting AI
-            </h3>
+            <Image
+              src="/stack-logo-full.png"
+              alt="Stack Consulting AI"
+              width={200}
+              height={50}
+              className="h-10 w-auto mb-2"
+            />
             <p className="text-muted-foreground">
               You don’t need more tools. You need a better stack.
             </p>
