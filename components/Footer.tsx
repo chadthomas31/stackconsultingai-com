@@ -13,11 +13,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Image
-              src="/stack-logo-full.png"
+              src="/stack-logo-white.png"
               alt="Stack Consulting AI"
-              width={200}
-              height={50}
-              className="h-10 w-auto mb-2"
+              width={600}
+              height={150}
+              className="h-[120px] w-auto mb-2"
             />
             <p className="text-muted-foreground">
               You don’t need more tools. You need a better stack.
