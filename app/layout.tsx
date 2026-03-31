@@ -82,31 +82,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        {/* ElevenLabs ConvAI - lazy loaded on user interaction */}
-        <Script
-          id="elevenlabs-loader"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-              function loadElevenLabs() {
-                if (document.querySelector('elevenlabs-convai')) return;
-                var el = document.createElement('elevenlabs-convai');
-                el.setAttribute('agent-id', 'agent_9101kfg9f05ef038danc3c20ysyd');
-                document.body.appendChild(el);
-                var s = document.createElement('script');
-                s.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
-                document.body.appendChild(s);
-              }
-              if (document.readyState === 'complete') {
-                setTimeout(loadElevenLabs, 3000);
-              } else {
-                window.addEventListener('load', function() {
-                  setTimeout(loadElevenLabs, 3000);
-                });
-              }
-            `,
-          }}
-        />
+        {/* ElevenLabs ConvAI - disabled, replaced by GHL chat widget */}
 
         {/* GHL Chat Widget */}
         <Script
