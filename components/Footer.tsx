@@ -75,8 +75,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border text-center text-muted-foreground">
+        <div className="pt-8 border-t border-border text-center text-muted-foreground space-y-2">
           <p>© {currentYear} Stack Consulting AI. All rights reserved.</p>
+          <div className="flex justify-center gap-4 text-sm">
+            <a href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</a>
+            <span>|</span>
+            <a href="/terms" className="hover:text-primary transition-colors">Terms of Service</a>
+          </div>
         </div>
       </div>
     </footer>
