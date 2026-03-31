@@ -6,6 +6,7 @@ import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import CookieConsent from "@/components/CookieConsent";
+import LeadBanner from "@/components/LeadBanner";
 import StructuredData from "@/components/StructuredData";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -65,6 +66,7 @@ export default function RootLayout({
         <VercelAnalytics />
         <SpeedInsights />
         <CookieConsent />
+        <LeadBanner />
         {children}
 
         {/* GTM - deferred to after first paint to avoid render blocking */}
