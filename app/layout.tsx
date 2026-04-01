@@ -71,7 +71,24 @@ export default function RootLayout({
         <div id="main-content"></div>
         {children}
 
-        {/* GTM - deferred to after first paint to avoid render blocking */}
+        {/* Google Analytics 4 */}
+        <Script
+          id="ga4-script"
+          src="https://www.googletagmanager.com/gtag/js?id=G-GKBVKQ49ND"
+          strategy="lazyOnload"
+        />
+        <Script
+          id="ga4-config"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-GKBVKQ49ND');`,
+          }}
+        />
+
+        {/* GTM */}
         <Script
           id="gtm-script"
           strategy="lazyOnload"
