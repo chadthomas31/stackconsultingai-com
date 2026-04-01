@@ -283,9 +283,9 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    // Fire-and-forget Supabase save
+    // Await Supabase save to avoid dropping leads on serverless
     if (isSupabaseConfigured()) {
-      supabaseAdmin
+      const { error: dbError } = await supabaseAdmin
         .from("tool_leads")
         .insert({
           tool_name: "site-audit",
@@ -300,10 +300,11 @@ export async function POST(request: NextRequest) {
           business_name: name,
           ip_address: getClientIp(request),
           user_agent: request.headers.get("user-agent"),
-        })
-        .then(({ error }) => {
-          if (error) console.error("Supabase insert error:", error);
         });
+
+      if (dbError) {
+        console.error("Supabase insert error:", dbError);
+      }
     }
 
     return NextResponse.json(result);

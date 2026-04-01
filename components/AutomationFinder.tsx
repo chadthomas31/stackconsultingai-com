@@ -1179,8 +1179,9 @@ export default function AutomationFinder() {
                 </button>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Report sent to{" "}
+                Results generated for{" "}
                 <span className="text-foreground font-medium">{data.email}</span>
+                {" "}&mdash; we&rsquo;ll follow up within 24 hours
               </p>
             </div>
           </div>

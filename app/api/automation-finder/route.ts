@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Fire-and-forget Supabase save
+    // Await Supabase save to avoid dropping leads on serverless
     if (isSupabaseConfigured()) {
-      supabaseAdmin
+      const { error: dbError } = await supabaseAdmin
         .from("tool_leads")
         .insert({
           tool_name: "automation-finder",
@@ -75,16 +75,18 @@ export async function POST(request: NextRequest) {
             pain_points: painPoints,
             other_pain_point: otherPainPoint || null,
             current_tools: currentTools,
+            contact_name: name,
           },
           email,
           phone: phone || null,
           business_name: businessName || name,
           ip_address: getClientIp(request),
           user_agent: request.headers.get("user-agent"),
-        })
-        .then(({ error }) => {
-          if (error) console.error("Supabase insert error:", error);
         });
+
+      if (dbError) {
+        console.error("Supabase insert error:", dbError);
+      }
     }
 
     return NextResponse.json({ success: true });
