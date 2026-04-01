@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Image
-              src="/stack-logo-white.png"
+              src="/stack-logo-white.webp"
               alt="Stack Consulting AI"
               width={600}
               height={150}

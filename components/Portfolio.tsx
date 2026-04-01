@@ -5,7 +5,7 @@ const projects = [
   {
     name: "Fix It San Clemente",
     description: "Mobile auto repair with online booking — 40% more appointments after launch",
-    image: "/screenshots/fixitsanclemente.png",
+    image: "/screenshots/fixitsanclemente.webp",
     alt: "Fix It San Clemente - mobile auto repair website with online booking built by Stack Consulting AI",
     tags: ["Next.js", "Booking", "Local SEO"],
     url: "https://fixitsanclemente.com"
@@ -13,7 +13,7 @@ const projects = [
   {
     name: "Strategic Sync",
     description: "AI consulting platform with multi-provider integration and booking system",
-    image: "/screenshots/strategicsync.png",
+    image: "/screenshots/strategicsync.webp",
     alt: "Strategic Sync - AI consulting platform with multi-provider integration built with Next.js",
     tags: ["Next.js", "AI", "Full-Stack"],
     url: "https://strategicsync.com"
@@ -21,7 +21,7 @@ const projects = [
   {
     name: "Elysium Ranch",
     description: "Holistic wellness retreat with offerings, testimonials, and booking CTA",
-    image: "/screenshots/elysiumranch.png",
+    image: "/screenshots/elysiumranch.webp",
     alt: "Elysium Ranch - holistic wellness retreat website design with SEO optimization",
     tags: ["Website", "SEO", "UX"],
     url: "https://elysiumranch.org/"
@@ -29,7 +29,7 @@ const projects = [
   {
     name: "CG ModelTek",
     description: "Aerospace precision manufacturing — CNC machining capabilities showcase",
-    image: "/screenshots/cgmodeltekv3.png",
+    image: "/screenshots/cgmodeltekv3.webp",
     alt: "CG ModelTek - aerospace precision manufacturing website with CNC machining showcase",
     tags: ["Next.js", "Manufacturing", "B2B"],
     url: "https://cgmodeltek-v2.vercel.app/"
@@ -37,7 +37,7 @@ const projects = [
   {
     name: "Dr. Robert Woods MD",
     description: "Concierge psychiatry practice with personalized care and online scheduling",
-    image: "/screenshots/dr-woods.png",
+    image: "/screenshots/dr-woods.webp",
     alt: "Dr. Robert Woods MD - concierge psychiatry website with online scheduling system",
     tags: ["Next.js", "Healthcare", "SEO"],
     url: "https://robertwoodsmd.help"
@@ -45,7 +45,7 @@ const projects = [
   {
     name: "The Puffery",
     description: "Artisan cream puff bakery with full online ordering system",
-    image: "/screenshots/the-puffery.png",
+    image: "/screenshots/the-puffery.webp",
     alt: "The Puffery - artisan bakery e-commerce website with online ordering system",
     tags: ["Next.js", "E-commerce", "Ordering"],
     url: "https://the-puffery.vercel.app"
@@ -53,7 +53,7 @@ const projects = [
   {
     name: "AnyFix Chicago",
     description: "North Shore handyman service with full-service home repair and booking",
-    image: "/screenshots/anyfix.png",
+    image: "/screenshots/anyfix.webp",
     alt: "AnyFix Chicago - North Shore handyman service website with online booking",
     tags: ["Next.js", "Local SEO", "Booking"],
     url: "https://anyfix.vercel.app"
@@ -61,7 +61,7 @@ const projects = [
   {
     name: "Tito's Automotive",
     description: "Family-owned auto repair shop with ASE-certified technicians",
-    image: "/screenshots/titosautomotive.png",
+    image: "/screenshots/titosautomotive.webp",
     alt: "Tito's Automotive Services - auto repair shop website with warranty tracking",
     tags: ["Next.js", "Automotive", "SEO"],
     url: "https://titosautomotiveservices-com.vercel.app"
@@ -69,7 +69,7 @@ const projects = [
   {
     name: "DKBR Services",
     description: "Commercial construction firm — drywall, framing, and tenant improvements",
-    image: "/screenshots/dkbr-services.png",
+    image: "/screenshots/dkbr-services.webp",
     alt: "DKBR Services - commercial construction website",
     tags: ["Next.js", "Construction", "B2B"],
     url: "https://dkbr-services.vercel.app/"
@@ -77,7 +77,7 @@ const projects = [
   {
     name: "Continental Interior Service",
     description: "Commercial interior construction — drywall, framing, and tenant improvements",
-    image: "/screenshots/continental-interior-service.png",
+    image: "/screenshots/continental-interior-service.webp",
     alt: "Continental Interior Service - commercial construction website",
     tags: ["Astro", "Construction", "B2B"],
     url: "https://continental-interior-services.vercel.app"
