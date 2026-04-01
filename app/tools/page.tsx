@@ -1,13 +1,37 @@
 import Link from "next/link";
-import { Calculator, Zap, Search, TrendingUp, Calendar, Code, Gift, UserX, Award, ArrowRight } from "lucide-react";
+import { Calculator, Zap, Search, TrendingUp, Calendar, Code, BarChart3, Workflow, Gift, UserX, Award, ArrowRight } from "lucide-react";
 
 const tools = [
+  {
+    id: "site-audit",
+    icon: BarChart3,
+    title: "Free AI Site Audit",
+    description: "Get a comprehensive performance, SEO, and accessibility audit powered by Google Lighthouse.",
+    badge: "Featured",
+    badgeColor: "bg-accent text-accent-foreground",
+    stats: "~15 seconds",
+    href: "/tools/site-audit",
+    active: true,
+    cta: "Run Free Audit"
+  },
+  {
+    id: "automation-finder",
+    icon: Workflow,
+    title: "Automation Opportunity Finder",
+    description: "Describe your business and get personalized automation recommendations with estimated savings.",
+    badge: "Featured",
+    badgeColor: "bg-accent text-accent-foreground",
+    stats: "~3 minutes",
+    href: "/tools/automation-finder",
+    active: true,
+    cta: "Find Opportunities"
+  },
   {
     id: "cost-calculator",
     icon: Calculator,
     title: "Website Cost Calculator",
     description: "Get an instant estimate for your web development project. See pricing breakdowns and timelines.",
-    badge: "Most Popular",
+    badge: "Popular",
     badgeColor: "bg-primary text-primary-foreground",
     stats: "~5 minutes",
     href: "/tools/cost-calculator",
@@ -19,7 +43,7 @@ const tools = [
     icon: Zap,
     title: "Website Speed Checker",
     description: "Analyze your website's performance and get actionable recommendations to improve speed.",
-    badge: "New",
+    badge: "",
     badgeColor: "bg-primary text-primary-foreground",
     stats: "~2 minutes",
     href: "/tools/speed-checker",
@@ -31,7 +55,7 @@ const tools = [
     icon: Search,
     title: "SEO Quick Audit",
     description: "Get a free SEO health check with insights on meta tags, mobile-friendliness, and more.",
-    badge: "New",
+    badge: "",
     badgeColor: "bg-primary text-primary-foreground",
     stats: "~3 minutes",
     href: "/tools/seo-audit",
@@ -125,11 +149,13 @@ export default function ToolsPage() {
                   }`}
                 >
                   {/* Badge */}
-                  <div className="absolute top-4 right-4">
-                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${tool.badgeColor}`}>
-                      {tool.badge}
-                    </span>
-                  </div>
+                  {tool.badge && (
+                    <div className="absolute top-4 right-4">
+                      <span className={`text-xs font-medium px-3 py-1 rounded-full ${tool.badgeColor}`}>
+                        {tool.badge}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Icon */}
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
