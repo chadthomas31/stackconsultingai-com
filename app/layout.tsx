@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import CookieConsent from "@/components/CookieConsent";
-import LeadBanner from "@/components/LeadBanner";
 import StructuredData from "@/components/StructuredData";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stackconsultingai.com"),
@@ -52,7 +52,9 @@ export default function RootLayout({
       <head>
         <StructuredData />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className}`}>
+        <a href="#main-content" className="skip-nav">Skip to main content</a>
+
         {/* Google Tag Manager (noscript fallback) */}
         <noscript>
           <iframe
@@ -66,7 +68,7 @@ export default function RootLayout({
         <VercelAnalytics />
         <SpeedInsights />
         <CookieConsent />
-        <LeadBanner />
+        <div id="main-content"></div>
         {children}
 
         {/* GTM - deferred to after first paint to avoid render blocking */}

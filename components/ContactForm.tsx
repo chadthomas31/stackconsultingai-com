@@ -56,10 +56,9 @@ export default function ContactForm() {
           lead_project_type: formData.projectType,
         });
       }
-    } catch (error: any) {
-      console.error("Error submitting form:", error);
+    } catch (error) {
       setStatus("error");
-      setErrorMessage(error.message || "Failed to submit form. Please try again.");
+      setErrorMessage(error instanceof Error ? error.message : "Failed to submit form. Please try again.");
       setTimeout(() => setStatus("idle"), 5000);
     }
   };
@@ -72,11 +71,11 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 bg-secondary/30">
+    <section id="contact" className="py-24 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Let’s Fix Your Stack</h2>
+          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 tracking-tight">Let&rsquo;s Fix Your Stack</h2>
           <p className="text-xl text-muted-foreground">
             Tell us what’s broken and what “better” looks like. We’ll recommend a practical plan.
           </p>
@@ -245,7 +244,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {status === "loading" ? (
               <>

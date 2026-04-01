@@ -25,41 +25,44 @@ const services = [
 
 export default function Services() {
   return (
-    <section id="services" className="py-20 px-4 bg-secondary/30">
+    <section id="services" className="py-24 px-4 bg-secondary/30">
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Smarter Stacks for Growing Businesses</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Clear systems, practical AI, and real ROI—without enterprise complexity.
-          </p>
-          <p className="mt-4 text-sm text-muted-foreground">
-            We don&apos;t sell AI. We fix stacks.
-          </p>
-        </div>
+        {/* Split layout: copy left, services right */}
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-20">
+          {/* Left: Section Copy */}
+          <div className="lg:w-2/5 lg:sticky lg:top-32 lg:self-start">
+            <p className="text-sm font-medium text-primary mb-4 tracking-wide uppercase">What we do</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight tracking-tight">
+              Smarter Stacks for Growing Businesses
+            </h2>
+            <p className="text-lg text-muted-foreground mb-4">
+              Clear systems, practical AI, and real ROI—without enterprise complexity.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              We don&rsquo;t sell AI. We fix stacks.
+            </p>
+          </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            const delayClass = `animation-delay-${(index + 1) * 100}`;
-            return (
-              <div
-                key={index}
-                className={`animate-fade-in-up ${delayClass} group p-8 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(34,197,94,0.12)] hover:-translate-y-1`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300">
-                    <Icon className="w-6 h-6" />
+          {/* Right: Services List */}
+          <div className="lg:w-3/5 space-y-4">
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={index}
+                  className="group flex items-start gap-5 p-6 rounded-xl border border-transparent hover:border-border hover:bg-card/50 transition-all duration-300"
+                >
+                  <div className="p-3 rounded-lg bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">{service.title}</h3>
-                    <p className="text-muted-foreground">{service.description}</p>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1.5 group-hover:text-primary transition-colors duration-300">{service.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{service.description}</p>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

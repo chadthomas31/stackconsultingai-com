@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Cookie, Shield } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Shield, BarChart3 } from "lucide-react";
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const acceptRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const consent = localStorage.getItem("cookie-consent");
@@ -12,6 +14,32 @@ export default function CookieConsent() {
       setShowBanner(true);
     } else if (consent === "accepted") {
       loadAnalytics();
+    }
+  }, []);
+
+  // Focus the accept button when modal opens
+  useEffect(() => {
+    if (showBanner) {
+      acceptRef.current?.focus();
+    }
+  }, [showBanner]);
+
+  // Trap focus inside the modal
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== "Tab" || !dialogRef.current) return;
+
+    const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+      "button, a[href], [tabindex]:not([tabindex='-1'])"
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
     }
   }, []);
 
@@ -34,36 +62,63 @@ export default function CookieConsent() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-slideUp"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
       role="dialog"
+      aria-modal="true"
       aria-label="Cookie consent"
+      onKeyDown={handleKeyDown}
+      ref={dialogRef}
     >
-      <div className="max-w-4xl mx-auto bg-card border border-border rounded-xl shadow-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center gap-4">
-        <Cookie className="w-8 h-8 text-primary shrink-0 hidden sm:block" />
-        <div className="flex-1 text-center sm:text-left">
-          <p className="text-sm text-muted-foreground">
-            We use cookies and analytics to improve your experience.
-            <span className="hidden md:inline"> Your data helps us build better solutions for our clients.</span>
-          </p>
-          <div className="flex items-center justify-center sm:justify-start gap-4 mt-1 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><Shield className="w-3 h-3 text-primary" /> Secure & Private</span>
-            <span className="flex items-center gap-1"><Cookie className="w-3 h-3 text-primary" /> Google Analytics Only</span>
-          </div>
+      <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-2xl p-8 text-center">
+        {/* Icon */}
+        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-5">
+          <BarChart3 className="w-7 h-7 text-primary" />
         </div>
-        <div className="flex gap-3 shrink-0">
+
+        {/* Heading */}
+        <h2 className="font-heading text-xl font-bold mb-2">We value your privacy</h2>
+
+        {/* Description */}
+        <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+          We use analytics to understand how visitors use our site so we can build better experiences. No personal data is sold — ever.
+        </p>
+
+        {/* Trust signals */}
+        <div className="flex items-center justify-center gap-5 mb-6 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <Shield className="w-3.5 h-3.5 text-primary" />
+            Secure & Private
+          </span>
+          <span className="flex items-center gap-1.5">
+            <BarChart3 className="w-3.5 h-3.5 text-primary" />
+            Analytics Only
+          </span>
+        </div>
+
+        {/* Buttons — Accept is prominent */}
+        <div className="flex flex-col gap-3">
+          <button
+            ref={acceptRef}
+            onClick={handleAccept}
+            className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200"
+          >
+            Accept Analytics
+          </button>
           <button
             onClick={handleDecline}
-            className="px-5 py-2 bg-secondary text-secondary-foreground rounded-lg text-sm font-medium hover:bg-secondary/80 transition-all border border-border"
+            className="w-full px-6 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
           >
-            Decline
-          </button>
-          <button
-            onClick={handleAccept}
-            className="px-5 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
-          >
-            Accept
+            No thanks
           </button>
         </div>
+
+        {/* Legal link */}
+        <a
+          href="/privacy"
+          className="inline-block mt-4 text-xs text-muted-foreground hover:text-primary transition-colors"
+        >
+          Privacy Policy
+        </a>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function Footer() {
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-[200px] w-auto mb-2"
+              className="h-[160px] w-auto mb-2"
             />
             <p className="text-muted-foreground">
               You don’t need more tools. You need a better stack.

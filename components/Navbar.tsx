@@ -7,14 +7,35 @@ import Image from "next/image";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+
+    const sectionIds = ["services", "portfolio", "testimonials", "contact"];
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const handleSectionClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
@@ -36,9 +57,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Services", id: "services" },
     { label: "Portfolio", id: "portfolio" },
-    { label: "Videos", id: "videos" },
-    { label: "VOIP", id: "voip" },
-    { label: "Estimator", id: "pricing" },
+    { label: "Testimonials", id: "testimonials" },
     { label: "Contact", id: "contact" },
   ];
 
@@ -64,7 +83,7 @@ export default function Navbar() {
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-[200px] w-auto"
+              className="h-[160px] w-auto"
               priority
             />
           </a>
@@ -76,7 +95,11 @@ export default function Navbar() {
                 key={link.id}
                 href={`/#${link.id}`}
                 onClick={(e) => handleSectionClick(e, link.id)}
-                className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                className={`transition-colors duration-200 font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 ${
+                  activeSection === link.id
+                    ? "text-primary after:w-full"
+                    : "text-muted-foreground hover:text-primary after:w-0 hover:after:w-full"
+                }`}
               >
                 {link.label}
               </a>
@@ -84,7 +107,7 @@ export default function Navbar() {
             <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 shadow-lg shadow-primary/20"
+              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200"
             >
               Get Started
             </a>
@@ -117,7 +140,7 @@ export default function Navbar() {
             <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
-              className="block w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 text-center"
+              className="block w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200 text-center"
             >
               Get Started
             </a>
