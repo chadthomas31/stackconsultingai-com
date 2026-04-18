@@ -2,33 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Palette — extracted from retellai.com via designlang
+   Primary navy #00122e, Accent blue #3e6aef, Soft #f5f5fa
+   See /CLAUDE.md for the full design system
+   ============================================================ */
 @layer base {
   :root {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 96%;
-    --card: 217 33% 14%;
-    --card-foreground: 210 40% 96%;
-    --primary: 199 89% 48%;
+    --background: 0 0% 100%;              /* #ffffff */
+    --foreground: 0 0% 0%;                /* #000000 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 51% 19%;       /* #1a1b45 */
+
+    --muted: 240 33% 97%;                 /* #f5f5fa */
+    --muted-foreground: 0 0% 20%;         /* #333333 */
+
+    --primary: 217 100% 9%;               /* #00122e navy */
     --primary-foreground: 0 0% 100%;
-    --secondary: 215 25% 20%;
-    --secondary-foreground: 210 40% 96%;
-    --muted: 215 25% 20%;
-    --muted-foreground: 215 20% 60%;
-    --accent: 38 92% 50%;
-    --accent-foreground: 38 10% 10%;
-    --border: 215 20% 20%;
-    --input: 215 20% 20%;
-    --ring: 199 89% 48%;
-    --radius: 0.5rem;
+
+    --accent: 225 85% 59%;                /* #3e6aef blue */
+    --accent-foreground: 0 0% 100%;
+
+    --secondary: 240 33% 97%;             /* light grey background */
+    --secondary-foreground: 217 100% 9%;
+
+    --border: 0 0% 89%;                   /* #e2e2e2 */
+    --input: 0 0% 89%;
+    --ring: 225 85% 59%;
+
+    --radius: 0.375rem;                   /* 6px */
   }
 
   * {
     border-color: hsl(var(--border));
   }
-  
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, Inter, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -36,52 +54,34 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ===== Keyframe Animations ===== */
+/* ============================================================
+   Keyframes
+   ============================================================ */
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(62, 106, 239, 0.55); }
+  50%      { box-shadow: 0 0 0 10px rgba(62, 106, 239, 0); }
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-}
+/* ============================================================
+   Utilities
+   ============================================================ */
 
-/* ===== Utility Classes ===== */
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out both; }
+.animate-fade-in    { animation: fadeIn 0.5s ease-out both; }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.7s ease-out both;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out both;
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-/* Staggered entrance delays */
 .animation-delay-100 { animation-delay: 100ms; }
 .animation-delay-200 { animation-delay: 200ms; }
 .animation-delay-300 { animation-delay: 300ms; }
@@ -89,17 +89,96 @@ html {
 .animation-delay-500 { animation-delay: 500ms; }
 .animation-delay-600 { animation-delay: 600ms; }
 
-/* Respect reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* Spring easing via linear() */
+:root {
+  --spring-smooth: linear(
+    0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%,
+    0.938, 1.077, 1.134, 1.129, 1.079, 1.01, 0.958, 0.936,
+    0.942, 0.969, 1.006, 1.019, 1
+  );
 }
 
-/* Skip nav link */
+/* Client-logo marquee */
+.marquee-track {
+  animation: marquee 38s linear infinite;
+  width: max-content;
+}
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Live dot */
+.live-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: #3e6aef;
+  animation: pulse-dot 1.8s ease-out infinite;
+}
+
+/* Buttons */
+.btn-primary {
+  background: #00122e;
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  transition: transform 300ms var(--spring-smooth), background 200ms ease;
+}
+.btn-primary:hover {
+  background: #18225a;
+  transform: translateY(-1px);
+}
+.btn-accent {
+  background: #3e6aef;
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  transition: transform 300ms var(--spring-smooth), background 200ms ease;
+}
+.btn-accent:hover {
+  background: #2f54c9;
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  color: #00122e;
+  border: 1px solid #e2e2e2;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+.btn-ghost:hover {
+  border-color: #00122e;
+  background: #f5f5fa;
+}
+
+/* Section kickers */
+.section-kicker {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3e6aef;
+}
+
+/* Soft card */
+.soft-card {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 300ms var(--spring-smooth);
+}
+.soft-card:hover {
+  border-color: #c1c1c1;
+  box-shadow: 0 20px 40px -24px rgba(0, 18, 46, 0.18);
+  transform: translateY(-2px);
+}
+
+/* Skip-nav link (accessibility) */
 .skip-nav {
   position: absolute;
   top: -100%;
@@ -116,4 +195,13 @@ html {
 }
 .skip-nav:focus {
   top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -25,7 +25,7 @@ export default function Navbar() {
       { rootMargin: "-40% 0px -55% 0px" }
     );
 
-    const sectionIds = ["services", "portfolio", "testimonials", "contact"];
+    const sectionIds = ["call-me", "services", "portfolio", "testimonials", "faq", "contact"];
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -55,10 +55,10 @@ export default function Navbar() {
   };
 
   const navLinks = [
+    { label: "Live demo", id: "call-me" },
     { label: "Services", id: "services" },
-    { label: "Portfolio", id: "portfolio" },
-    { label: "Testimonials", id: "testimonials" },
-    { label: "Contact", id: "contact" },
+    { label: "Work", id: "portfolio" },
+    { label: "FAQ", id: "faq" },
   ];
 
   return (
@@ -66,39 +66,39 @@ export default function Navbar() {
       aria-label="Main navigation"
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/5"
+          ? "bg-white/85 backdrop-blur-xl border-b border-border"
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo — dark version for light bg */}
           <a
             href="/"
             onClick={handleLogoClick}
             className="hover:opacity-80 transition-opacity"
           >
             <Image
-              src="/stack-logo-white.webp"
+              src="/stack-logo.png"
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-[160px] w-auto"
+              className="h-[72px] md:h-[96px] w-auto"
               priority
             />
           </a>
 
-          {/* Desktop Navigation */}
+          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.id}
                 href={`/#${link.id}`}
                 onClick={(e) => handleSectionClick(e, link.id)}
-                className={`transition-colors duration-200 font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 ${
+                className={`text-sm transition-colors duration-200 font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 ${
                   activeSection === link.id
-                    ? "text-primary after:w-full"
-                    : "text-muted-foreground hover:text-primary after:w-0 hover:after:w-full"
+                    ? "text-navy-900 after:w-full"
+                    : "text-navy-900/70 hover:text-navy-900 after:w-0 hover:after:w-full"
                 }`}
               >
                 {link.label}
@@ -107,16 +107,15 @@ export default function Navbar() {
             <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200"
+              className="btn-accent text-sm"
             >
               Get Started
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+            className="md:hidden p-2 text-navy-900"
             aria-expanded={isMobileMenuOpen}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
@@ -124,15 +123,14 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 space-y-3">
+          <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 space-y-2">
             {navLinks.map((link) => (
               <a
                 key={link.id}
                 href={`/#${link.id}`}
                 onClick={(e) => handleSectionClick(e, link.id)}
-                className="block w-full text-left px-4 py-2 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-colors font-medium"
+                className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
               >
                 {link.label}
               </a>
@@ -140,7 +138,7 @@ export default function Navbar() {
             <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
-              className="block w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200 text-center"
+              className="btn-accent block w-full text-center"
             >
               Get Started
             </a>

@@ -1,52 +1,63 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 
 export default function Hero() {
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     if (typeof window !== "undefined" && window.dataLayer) {
-      window.dataLayer.push({ event: "cta_click", cta_text: "Start Your Project" });
+      window.dataLayer.push({ event: "cta_click", cta_text: id });
     }
   };
 
   return (
-    <section className="relative flex items-center px-4 py-32 md:py-40 overflow-hidden">
-      {/* Subtle background — single gradient, no orbs */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background"></div>
+    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+      {/* Soft backdrop — no orbs per CLAUDE.md */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-soft via-white to-white" />
 
-      {/* Content — left-aligned, dramatic scale */}
-      <div className="relative max-w-6xl mx-auto w-full z-10">
-        <p className="animate-fade-in-up text-sm font-medium text-primary tracking-wide uppercase mb-6">
-          AI Consulting &middot; Southern California
-        </p>
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Kicker pill */}
+        <div className="animate-fade-in-up inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-white text-navy-900 text-xs font-medium mb-8">
+          <span className="live-dot" aria-hidden="true" />
+          <span>AI Consulting &amp; Web Dev · Southern California</span>
+        </div>
 
-        <h1 className="animate-fade-in-up animation-delay-100 font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground leading-[1.05] tracking-tight mb-8 max-w-5xl">
-          You don&rsquo;t need more tools.
+        {/* Headline — left-aligned, builder voice, no animated gradient per CLAUDE.md */}
+        <h1 className="animate-fade-in-up animation-delay-100 font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-navy-900 leading-[1.02] mb-6 max-w-5xl">
+          You don&rsquo;t need more AI tools.
           <br />
-          You need a <span className="text-accent">better stack.</span>
+          You need a <span className="text-brand">better stack.</span>
         </h1>
 
-        <p className="animate-fade-in-up animation-delay-200 text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl leading-relaxed">
-          Practical AI automation, custom websites, and smarter systems for growing businesses — built for the real world, not the demo.
+        {/* Subhead — concrete, builder voice */}
+        <p className="animate-fade-in-up animation-delay-200 text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed">
+          Practical AI automation, custom websites, and FreeSWITCH voice agents
+          — built cleanly for small businesses that want systems their team
+          will actually use.
         </p>
 
-        {/* CTAs */}
-        <div className="animate-fade-in-up animation-delay-300 flex flex-col sm:flex-row gap-4 items-start">
+        {/* CTAs — primary is "try the demo" per CLAUDE.md conversion hierarchy */}
+        <div className="animate-fade-in-up animation-delay-300 flex flex-col sm:flex-row gap-3 items-start mb-14">
           <button
-            onClick={scrollToContact}
-            className="group px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all duration-200 flex items-center gap-2"
+            onClick={() => scrollTo("call-me")}
+            className="btn-accent inline-flex items-center gap-2 text-base"
           >
-            Start Your Project
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <Phone className="w-4 h-4" />
+            Try the live AI demo
           </button>
-          <a
-            href="#portfolio"
-            className="px-8 py-4 text-muted-foreground font-semibold text-lg hover:text-foreground transition-colors duration-200"
+          <button
+            onClick={() => scrollTo("contact")}
+            className="btn-ghost inline-flex items-center gap-2 text-base"
           >
-            View Our Work
-          </a>
+            Talk to Chad
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
+
+        {/* Proof line */}
+        <p className="animate-fade-in animation-delay-500 text-sm text-muted-foreground">
+          10+ Southern California businesses shipping on this stack since 2025.
+        </p>
       </div>
     </section>
   );

@@ -32,69 +32,64 @@ export default function Newsletter() {
   };
 
   return (
-    <section id="newsletter" className="py-20 px-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 p-8 md:p-12">
-          {/* Background accent */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-
-          <div className="relative z-10 text-center">
-            {/* Icon */}
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-              <Mail className="w-7 h-7 text-primary" />
-            </div>
-
-            {/* Header */}
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">The Stack Report</h2>
-            <p className="text-lg text-muted-foreground mb-2">
-              Practical AI, business tech, and productivity insights for growing businesses.
-            </p>
-            <p className="text-sm text-muted-foreground mb-8">
-              Delivered every other week. No fluff, no spam — just actionable ideas.
-            </p>
-
-            {/* Tags */}
-            <div className="flex justify-center gap-3 mb-8">
-              <span className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">AI</span>
-              <span className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">Business Tech</span>
-              <span className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">Productivity</span>
-            </div>
-
-            {/* Form */}
-            {status === "success" ? (
-              <div className="flex items-center justify-center gap-2 text-primary">
-                <CheckCircle className="w-5 h-5" />
-                <span className="font-semibold">You're in! Check your inbox to confirm.</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  className="flex-1 px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-center sm:text-left"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-50"
-                >
-                  {status === "loading" ? "Subscribing..." : (
-                    <>
-                      Subscribe
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
-
-            <p className="text-xs text-muted-foreground mt-4">
-              Join free. Unsubscribe anytime.
-            </p>
+    <section id="newsletter" className="py-20 md:py-28 bg-white">
+      <div className="max-w-3xl mx-auto px-4">
+        <div className="relative rounded-xl bg-soft border border-border p-8 md:p-12 text-center">
+          <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-5">
+            <Mail className="w-5 h-5 text-brand" />
           </div>
+          <span className="section-kicker">Newsletter</span>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-2 mb-3">
+            The Stack Report
+          </h2>
+          <p className="text-muted-foreground mb-2">
+            Practical AI, business tech, and productivity — every other week.
+          </p>
+          <p className="text-sm text-muted-foreground mb-8">
+            No fluff, no spam. Just actionable ideas.
+          </p>
+
+          <div className="flex justify-center gap-2 mb-8">
+            <span className="px-3 py-1 text-xs font-medium bg-white border border-border rounded-full text-navy-900">AI</span>
+            <span className="px-3 py-1 text-xs font-medium bg-white border border-border rounded-full text-navy-900">Business Tech</span>
+            <span className="px-3 py-1 text-xs font-medium bg-white border border-border rounded-full text-navy-900">Productivity</span>
+          </div>
+
+          {status === "success" ? (
+            <div className="inline-flex items-center justify-center gap-2 text-brand">
+              <CheckCircle className="w-5 h-5" />
+              <span className="font-semibold">You&apos;re in! Check your inbox to confirm.</span>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                className="flex-1 px-4 py-3 rounded-md bg-white border border-border focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="btn-accent inline-flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {status === "loading" ? (
+                  "Subscribing..."
+                ) : (
+                  <>
+                    Subscribe
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+
+          <p className="text-xs text-muted-foreground mt-4">
+            Join free. Unsubscribe anytime.
+          </p>
         </div>
       </div>
     </section>
