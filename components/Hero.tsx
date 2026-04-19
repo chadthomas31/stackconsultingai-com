@@ -49,7 +49,7 @@ export default function Hero() {
             onClick={() => scrollTo("contact")}
             className="btn-ghost inline-flex items-center gap-2 text-base"
           >
-            Talk to Chad
+            Talk to an AI expert
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
