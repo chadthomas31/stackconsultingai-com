@@ -193,9 +193,10 @@ ${input.transcript}`;
     createdAt: new Date().toISOString(),
     business: parsed.business,
     executiveSummary: parsed.executiveSummary,
-    painPoints: parsed.painPoints,
+    // Zod guards the 1-5 range at runtime; cast to the literal-union TS type.
+    painPoints: parsed.painPoints as Assessment["painPoints"],
     quickWins: parsed.quickWins,
-    fourDayPlan: parsed.fourDayPlan,
+    fourDayPlan: parsed.fourDayPlan as Assessment["fourDayPlan"],
     financialImpact: parsed.financialImpact,
     majorProjects: parsed.majorProjects,
     rawTranscript: input.transcript,
