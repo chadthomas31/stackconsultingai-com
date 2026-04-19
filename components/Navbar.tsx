@@ -70,7 +70,7 @@ export default function Navbar() {
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="w-full px-4 md:px-20 lg:px-32 xl:px-40 py-3">
+      <div className="w-full px-4 md:px-32 lg:px-52 xl:px-72 py-3">
         <div className="flex items-center justify-between">
           {/* Logo — dark version for light bg */}
           <a
