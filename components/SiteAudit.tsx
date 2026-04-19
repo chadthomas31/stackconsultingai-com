@@ -44,6 +44,35 @@ interface AuditResult {
   desktop: { scores: Scores; findings: Finding[] };
 }
 
+/* ---------- Finding descriptions (plain-English) ---------- */
+
+const FINDING_DESCRIPTIONS: Record<string, string> = {
+  "First Contentful Paint":
+    "How long before anything visible appears on screen. Under 1.8s feels fast.",
+  "Largest Contentful Paint":
+    "Time until the biggest element (usually the hero image) finishes loading. Under 2.5s is the target.",
+  "Cumulative Layout Shift":
+    "How much the page jumps around while it loads. Lower is better — visitors hate clicking the wrong thing.",
+  "Total Blocking Time":
+    "How long the page is frozen and unresponsive during load. Under 200ms feels snappy.",
+  "Speed Index":
+    "How quickly the visible page fills in. Lower score = users see content sooner.",
+  "Meta Description":
+    "The short blurb Google shows under your title in search results. Missing = lost click-through.",
+  "Document Title":
+    "Your page's name in the browser tab and in search results. Should describe what the page is about.",
+  "Image Alt Attributes":
+    "Text descriptions for images — required for blind visitors and for image SEO.",
+  HTTPS:
+    "Secure encrypted connection. Required by Google, trusted by users, and non-negotiable.",
+  "Viewport Meta Tag":
+    "Tells mobile browsers how to render the page. Missing it = the site looks broken on phones.",
+  "Render-Blocking Resources":
+    "Scripts or stylesheets that delay the page from showing. Fewer = faster first paint.",
+  "CSS Minification":
+    "Stripped-down stylesheets transfer faster and render sooner.",
+};
+
 /* ---------- Helpers ---------- */
 
 function normalizeUrl(raw: string): string {
@@ -685,25 +714,34 @@ export default function SiteAudit() {
                 {result.mobile.findings.map((finding, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-background border border-border"
+                    className="flex items-start gap-3 p-3 rounded-lg bg-background border border-border"
                   >
-                    <StatusIcon status={finding.status} />
-                    <div className="flex-1 min-w-0">
-                      <span className="text-sm font-medium text-foreground">
-                        {finding.label}
-                      </span>
+                    <div className="mt-0.5">
+                      <StatusIcon status={finding.status} />
                     </div>
-                    <span
-                      className={`text-sm font-mono font-medium shrink-0 ${
-                        finding.status === "pass"
-                          ? "text-emerald-400"
-                          : finding.status === "warning"
-                            ? "text-amber-400"
-                            : "text-red-400"
-                      }`}
-                    >
-                      {finding.value}
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-sm font-medium text-foreground">
+                          {finding.label}
+                        </span>
+                        <span
+                          className={`text-sm font-mono font-medium shrink-0 ${
+                            finding.status === "pass"
+                              ? "text-emerald-400"
+                              : finding.status === "warning"
+                                ? "text-amber-400"
+                                : "text-red-400"
+                          }`}
+                        >
+                          {finding.value}
+                        </span>
+                      </div>
+                      {FINDING_DESCRIPTIONS[finding.label] && (
+                        <p className="mt-1 text-xs text-muted-foreground leading-snug">
+                          {FINDING_DESCRIPTIONS[finding.label]}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
