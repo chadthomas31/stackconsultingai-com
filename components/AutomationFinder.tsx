@@ -62,14 +62,15 @@ interface Recommendation extends AutomationRec {
 /* ---------- Constants ---------- */
 
 const INDUSTRIES = [
-  "Restaurant / Food",
-  "Retail / E-commerce",
-  "Professional Services",
-  "Healthcare",
-  "Construction / Trades",
-  "Real Estate",
-  "Auto / Repair",
-  "Other",
+  { label: "Restaurant / Food", emoji: "🍽️" },
+  { label: "Retail / E-commerce", emoji: "🛒" },
+  { label: "Professional Services", emoji: "⚙️" },
+  { label: "Healthcare", emoji: "🩺" },
+  { label: "Construction / Trades", emoji: "🔨" },
+  { label: "Real Estate", emoji: "🏠" },
+  { label: "Auto / Repair", emoji: "🔧" },
+  { label: "Hotel / Hospitality", emoji: "🏨" },
+  { label: "Other", emoji: "✨" },
 ];
 
 const TEAM_SIZES = ["Just me", "2-5", "6-15", "16-50", "50+"];
@@ -700,8 +701,8 @@ export default function AutomationFinder() {
                   >
                     <option value="">Select your industry</option>
                     {INDUSTRIES.map((ind) => (
-                      <option key={ind} value={ind}>
-                        {ind}
+                      <option key={ind.label} value={ind.label}>
+                        {ind.emoji} {ind.label}
                       </option>
                     ))}
                   </select>
