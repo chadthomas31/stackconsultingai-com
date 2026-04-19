@@ -1,0 +1,320 @@
+"use client";
+
+import { useState } from "react";
+import {
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Copy,
+  Download,
+  ExternalLink,
+  Wand2,
+} from "lucide-react";
+
+interface DraftResponse {
+  ok: boolean;
+  error?: string;
+  videoUrl?: string;
+  meta?: { title: string | null; channel: string | null };
+  transcriptWordCount?: number;
+  draft?: {
+    subject: string;
+    preheader: string;
+    markdown_body: string;
+  };
+}
+
+export default function NewsletterGeneratorPage() {
+  const [secret, setSecret] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
+  const [customInstructions, setCustomInstructions] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
+    "idle",
+  );
+  const [error, setError] = useState<string>("");
+  const [result, setResult] = useState<DraftResponse | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    setError("");
+    setResult(null);
+    try {
+      const res = await fetch("/api/newsletter/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-secret": secret,
+        },
+        body: JSON.stringify({
+          videoUrl: videoUrl.trim(),
+          customInstructions: customInstructions.trim() || undefined,
+        }),
+        signal: AbortSignal.timeout(120000),
+      });
+      const data = (await res.json()) as DraftResponse;
+      if (!res.ok || !data.ok) {
+        setError(data.error || "Generation failed.");
+        setStatus("error");
+        return;
+      }
+      setResult(data);
+      setStatus("done");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Network error");
+      setStatus("error");
+    }
+  }
+
+  function copyToClipboard(text: string, field: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1800);
+    });
+  }
+
+  function downloadMarkdown() {
+    if (!result?.draft) return;
+    const date = new Date().toISOString().slice(0, 10);
+    const safeTitle = result.meta?.title
+      ? result.meta.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase().slice(0, 40)
+      : "newsletter";
+    const frontmatter = `---
+subject: ${result.draft.subject.replace(/"/g, "'")}
+preheader: ${result.draft.preheader.replace(/"/g, "'")}
+source_url: ${result.videoUrl}
+generated: ${new Date().toISOString()}
+---
+
+`;
+    const blob = new Blob([frontmatter + result.draft.markdown_body], {
+      type: "text/markdown",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${date}-${safeTitle}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  return (
+    <main className="min-h-screen bg-white text-navy-900 pb-24">
+      <div className="max-w-3xl mx-auto px-4 pt-16">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand/10 border border-brand/25 text-brand text-xs font-semibold tracking-[0.16em] uppercase mb-5">
+          <Wand2 className="w-3 h-3" />
+          Admin Tool
+        </div>
+        <h1 className="font-heading text-4xl md:text-5xl font-bold tracking-tight mb-4">
+          Newsletter Generator
+        </h1>
+        <p className="text-lg text-muted-foreground mb-10 max-w-2xl">
+          Paste a YouTube URL. We pull the captions, send them through Claude
+          with The Stack Report&apos;s voice guide, and hand you back a
+          ready-to-paste newsletter draft.
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-5 mb-12">
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Admin secret
+            </label>
+            <input
+              type="password"
+              value={secret}
+              onChange={(e) => setSecret(e.target.value)}
+              placeholder="NEWSLETTER_ADMIN_SECRET value"
+              required
+              className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              YouTube URL
+            </label>
+            <input
+              type="url"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=..."
+              required
+              className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Custom instructions{" "}
+              <span className="text-muted-foreground font-normal">
+                (optional)
+              </span>
+            </label>
+            <textarea
+              value={customInstructions}
+              onChange={(e) => setCustomInstructions(e.target.value)}
+              placeholder="e.g., 'Highlight tools that save marketing teams time.' Leave blank for default."
+              rows={3}
+              className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none resize-y"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="btn-accent inline-flex items-center gap-2 disabled:opacity-50"
+          >
+            {status === "loading" ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Generating (20–60s)…
+              </>
+            ) : (
+              <>
+                <Wand2 className="w-4 h-4" />
+                Generate draft
+              </>
+            )}
+          </button>
+        </form>
+
+        {status === "error" && (
+          <div
+            role="alert"
+            className="mb-10 rounded-md border border-red-200 bg-red-50 p-4 flex items-start gap-3"
+          >
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <div className="font-semibold text-red-800 mb-1">
+                Generation failed
+              </div>
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {status === "done" && result?.draft && (
+          <div className="space-y-6">
+            <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4 flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-emerald-900">
+                <div className="font-semibold mb-1">
+                  Draft generated from {result.transcriptWordCount} words of
+                  transcript
+                </div>
+                <div>
+                  Source: {result.meta?.title || "(untitled)"}
+                  {result.meta?.channel ? ` · ${result.meta.channel}` : ""}{" "}
+                  <a
+                    href={result.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 underline"
+                  >
+                    open <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <FieldBlock
+              label="Subject line"
+              value={result.draft.subject}
+              onCopy={() => copyToClipboard(result.draft!.subject, "subject")}
+              copied={copiedField === "subject"}
+            />
+            <FieldBlock
+              label="Preheader"
+              value={result.draft.preheader}
+              onCopy={() =>
+                copyToClipboard(result.draft!.preheader, "preheader")
+              }
+              copied={copiedField === "preheader"}
+            />
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-semibold">
+                  Markdown body
+                </label>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={downloadMarkdown}
+                    className="inline-flex items-center gap-1.5 text-xs text-brand hover:text-brand-hover font-semibold"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Download .md
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(result.draft!.markdown_body, "body")
+                    }
+                    className="inline-flex items-center gap-1.5 text-xs text-brand hover:text-brand-hover font-semibold"
+                  >
+                    {copiedField === "body" ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        Copy
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+              <textarea
+                readOnly
+                value={result.draft.markdown_body}
+                rows={24}
+                className="w-full px-4 py-3 rounded-md border border-border bg-soft font-mono text-xs leading-relaxed resize-y"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
+
+function FieldBlock({
+  label,
+  value,
+  onCopy,
+  copied,
+}: {
+  label: string;
+  value: string;
+  onCopy: () => void;
+  copied: boolean;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <label className="block text-sm font-semibold">{label}</label>
+        <button
+          type="button"
+          onClick={onCopy}
+          className="inline-flex items-center gap-1.5 text-xs text-brand hover:text-brand-hover font-semibold"
+        >
+          {copied ? (
+            <>
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Copied
+            </>
+          ) : (
+            <>
+              <Copy className="w-3.5 h-3.5" />
+              Copy
+            </>
+          )}
+        </button>
+      </div>
+      <div className="px-4 py-3 rounded-md border border-border bg-soft text-sm text-navy-900 font-medium">
+        {value}
+      </div>
+    </div>
+  );
+}
