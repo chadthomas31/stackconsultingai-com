@@ -79,7 +79,7 @@ export default function Navbar() {
             className="hover:opacity-80 transition-opacity md:-my-16 lg:-my-24 relative z-10"
           >
             <Image
-              src="/stack-logo.png"
+              src="/stack-logo.png?v=4"
               alt="Stack Consulting AI"
               width={600}
               height={150}
