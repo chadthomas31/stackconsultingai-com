@@ -27,16 +27,15 @@ import type {
 } from "@/lib/assessment-schema";
 import { getToolById, type Tool } from "@/lib/tool-catalog";
 import { DEMO_ASSESSMENT } from "@/lib/demo-assessment";
+import { getAssessmentById } from "@/lib/assessments-db";
 
 /* ============================================================
-   Data access — for now, demo is the only slug that resolves.
-   When the webhook + Supabase table land, swap this for a
-   real lookup (see /lib/assessments-db.ts in the PRD).
+   Data access — demo slug serves the baked sample; real UUIDs
+   are fetched from Supabase (populated by /api/call-ended).
    ============================================================ */
 async function loadAssessment(uuid: string): Promise<Assessment | null> {
   if (uuid === "demo") return DEMO_ASSESSMENT;
-  // TODO: fetch from Supabase once migrations/20260418_assessments.sql ships
-  return null;
+  return getAssessmentById(uuid);
 }
 
 export async function generateMetadata({
