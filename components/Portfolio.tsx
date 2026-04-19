@@ -37,7 +37,7 @@ const projects = [
   {
     name: "Dr. Robert Woods MD",
     description: "Concierge psychiatry practice with personalized care and online scheduling",
-    image: "/screenshots/dr-woods.webp",
+    image: "/screenshots/dr-woods.webp?v=2",
     alt: "Dr. Robert Woods MD - concierge psychiatry website with online scheduling system",
     tags: ["Next.js", "Healthcare", "SEO"],
     url: "https://robertwoodsmd.help"
