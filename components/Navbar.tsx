@@ -64,7 +64,7 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Main navigation"
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-40 overflow-visible transition-all duration-300 ${
         isScrolled
           ? "bg-white/85 backdrop-blur-xl border-b border-border"
           : "bg-transparent border-b border-transparent"
@@ -76,14 +76,14 @@ export default function Navbar() {
           <a
             href="/"
             onClick={handleLogoClick}
-            className="hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity md:-my-16 lg:-my-24 relative z-10"
           >
             <Image
               src="/stack-logo.png"
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-28 md:h-56 lg:h-72 w-auto"
+              className="h-20 md:h-56 lg:h-72 w-auto"
               priority
             />
           </a>
