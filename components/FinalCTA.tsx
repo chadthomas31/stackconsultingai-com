@@ -13,7 +13,7 @@ export default function FinalCTA() {
         <div className="relative rounded-[16px] bg-navy-900 text-white overflow-hidden p-10 md:p-16">
           <div
             aria-hidden="true"
-            className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand/25 blur-3xl"
+            className="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full bg-brand/20 blur-2xl pointer-events-none"
           />
           <div className="relative max-w-3xl">
             <span className="text-xs uppercase tracking-[0.2em] text-brand-soft">

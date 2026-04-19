@@ -2,21 +2,26 @@
 
 import {
   Phone,
-  Loader2,
-  CheckCircle2,
   AlertCircle,
   Sparkles,
   LayoutGrid,
   CalendarCheck,
   TrendingUp,
+  Mail,
+  Clock,
+  FileText,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { INDUSTRY_OPTIONS } from "@/lib/interview-scripts";
+import CallOpsConsole, {
+  type ConsoleStage,
+  type StageStatus,
+} from "./CallOpsConsole";
 
 const STACKS_PHONE = "+14422121616";
 const STACKS_PHONE_DISPLAY = "(442) 212-1616";
 
-type State = "idle" | "calling" | "connected" | "error";
+type ViewState = "form" | "streaming" | "done" | "error";
 
 const WHAT_YOU_GET = [
   {
@@ -41,13 +46,79 @@ const WHAT_YOU_GET = [
   },
 ];
 
+const NEXT_STEPS = [
+  {
+    icon: Mail,
+    title: "Pager ping sent to Chad",
+    detail: "Your industry and number are in the dispatch queue now.",
+  },
+  {
+    icon: Clock,
+    title: "Callback inside 2–4 hours",
+    detail: "Local time, daylight hours. Voicemail if we miss you.",
+  },
+  {
+    icon: FileText,
+    title: "Written report within 24h",
+    detail: "Executive summary, Impact-Effort matrix, 4-day Quick Wins plan.",
+  },
+];
+
+// Placeholder stages shown before the stream starts responding
+const DEFAULT_STAGES: ConsoleStage[] = [
+  {
+    id: "validated",
+    label: "Number validated",
+    detail: "E.164 format accepted",
+    status: "pending",
+  },
+  {
+    id: "queued",
+    label: "Request queued in dispatcher",
+    detail: "Stacks backlog check",
+    status: "pending",
+  },
+  {
+    id: "notified",
+    label: "Chad paged via SMS",
+    detail: "Builder pager ping",
+    status: "pending",
+  },
+  {
+    id: "scheduled",
+    label: "Call window confirmed",
+    detail: "Callback window",
+    status: "pending",
+  },
+];
+
+/**
+ * Wraps state updates in a View Transition when supported.
+ * Gracefully falls back to a direct update.
+ */
+function withViewTransition(cb: () => void) {
+  if (typeof document !== "undefined") {
+    const startVT = document.startViewTransition;
+    if (typeof startVT === "function") {
+      startVT.call(document, cb);
+      return;
+    }
+  }
+  cb();
+}
+
 export default function FreeAssessmentOffer() {
-  const [state, setState] = useState<State>("idle");
+  const [view, setView] = useState<ViewState>("form");
   const [industry, setIndustry] = useState<string>(
-    INDUSTRY_OPTIONS[0]?.id ?? "other"
+    INDUSTRY_OPTIONS[0]?.id ?? "other",
   );
   const [phone, setPhone] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [stages, setStages] = useState<ConsoleStage[]>(DEFAULT_STAGES);
+  const [streamPhone, setStreamPhone] = useState<string>("");
+  const [streamIndustry, setStreamIndustry] = useState<string>("");
+  const [totalMs, setTotalMs] = useState<number | undefined>(undefined);
+  const abortRef = useRef<AbortController | null>(null);
 
   const normalize = (p: string) => p.replace(/[^\d]/g, "");
   const valid = normalize(phone).length >= 10;
@@ -62,41 +133,139 @@ export default function FreeAssessmentOffer() {
     }
   };
 
-  const handleCallback = async () => {
+  const markStage = useCallback(
+    (id: string, patch: Partial<ConsoleStage>) => {
+      setStages((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, ...patch } : s)),
+      );
+    },
+    [],
+  );
+
+  const setActive = useCallback((id: string) => {
+    setStages((prev) =>
+      prev.map((s) => {
+        if (s.id === id) return { ...s, status: "active" satisfies StageStatus };
+        return s;
+      }),
+    );
+  }, []);
+
+  const runStream = useCallback(async () => {
     setErrorMsg(null);
     if (!valid) {
       setErrorMsg("Please enter a valid US phone number.");
       return;
     }
-    setState("calling");
+
+    const digits = normalize(phone);
+    const e164 = digits.length === 11 ? `+${digits}` : `+1${digits}`;
+
+    setStreamPhone(e164);
+    setStreamIndustry(industry);
+    setStages(DEFAULT_STAGES.map((s) => ({ ...s, status: "pending" })));
+    setTotalMs(undefined);
+
+    withViewTransition(() => setView("streaming"));
+
+    // Light it up: first stage begins "active" immediately so the console isn't empty
+    // while we wait for the first SSE frame
+    const kickoffId = DEFAULT_STAGES[0].id;
+    setTimeout(() => setActive(kickoffId), 60);
+
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const res = await fetch("/api/call-me", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ phone: normalize(phone), industry }),
+        body: JSON.stringify({ phone: digits, industry }),
+        signal: controller.signal,
       });
 
-      if (res.status === 404) {
-        // Backend not live yet — treat as "we got your request" UX.
-        await new Promise((r) => setTimeout(r, 1800));
-        setState("connected");
-        return;
-      }
-      if (!res.ok) {
+      if (!res.ok || !res.body) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || "Request could not be submitted.");
+        throw new Error(body.error ?? "Request could not be submitted.");
       }
-      setState("connected");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let nextIdx = 0;
+
+      const stageOrder = DEFAULT_STAGES.map((s) => s.id);
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const frames = buffer.split("\n\n");
+        buffer = frames.pop() ?? "";
+
+        for (const frame of frames) {
+          if (!frame.trim()) continue;
+          const lines = frame.split("\n");
+          let ev = "message";
+          let payload = "";
+          for (const line of lines) {
+            if (line.startsWith("event:")) ev = line.slice(6).trim();
+            else if (line.startsWith("data:")) payload = line.slice(5).trim();
+          }
+          let parsed: Record<string, unknown> = {};
+          try {
+            parsed = payload ? JSON.parse(payload) : {};
+          } catch {
+            /* ignore */
+          }
+
+          if (ev === "stage") {
+            const id = String(parsed.id ?? "");
+            const elapsedMs = Number(parsed.elapsedMs ?? 0);
+            const label = String(parsed.label ?? "");
+            const detail = String(parsed.detail ?? "");
+            markStage(id, {
+              status: "done",
+              elapsedMs,
+              label,
+              detail,
+            });
+            // Activate the next one
+            const idx = stageOrder.indexOf(id);
+            const next = stageOrder[idx + 1];
+            nextIdx = idx + 1;
+            if (next) setActive(next);
+          } else if (ev === "done") {
+            const t = Number(parsed.totalMs ?? 0);
+            setTotalMs(t);
+            // In case any remaining stages didn't receive explicit events
+            for (let i = nextIdx; i < stageOrder.length; i++) {
+              markStage(stageOrder[i], { status: "done" });
+            }
+            withViewTransition(() => setView("done"));
+          }
+        }
+      }
     } catch (e) {
-      setErrorMsg(e instanceof Error ? e.message : "Something went wrong.");
-      setState("error");
+      if (controller.signal.aborted) return;
+      setErrorMsg(
+        e instanceof Error ? e.message : "Something went wrong — please retry.",
+      );
+      withViewTransition(() => setView("error"));
+    } finally {
+      abortRef.current = null;
     }
-  };
+  }, [industry, markStage, phone, setActive, valid]);
 
   const reset = () => {
-    setState("idle");
-    setErrorMsg(null);
+    abortRef.current?.abort();
+    withViewTransition(() => {
+      setView("form");
+      setErrorMsg(null);
+      setStages(DEFAULT_STAGES.map((s) => ({ ...s, status: "pending" })));
+      setTotalMs(undefined);
+    });
   };
 
   return (
@@ -149,9 +318,9 @@ export default function FreeAssessmentOffer() {
             </div>
           </div>
 
-          {/* Right: Phone-first CTA + secondary callback form */}
+          {/* Right: Phone-first CTA + live ops submission */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Primary: Call now */}
+            {/* Primary: Call now (unchanged — the preferred path is outbound) */}
             <div className="rounded-md bg-navy-900 text-white p-6 md:p-8">
               <div className="flex items-center gap-2 text-brand text-xs font-semibold uppercase tracking-wider mb-3">
                 <span className="live-dot" aria-hidden="true" />
@@ -182,115 +351,149 @@ export default function FreeAssessmentOffer() {
               </a>
             </div>
 
-            {/* Secondary: Request a callback */}
-            <details className="soft-card p-5 md:p-6 group">
-              <summary className="cursor-pointer list-none flex items-center justify-between gap-3">
-                <span className="font-semibold text-navy-900">
-                  Can&rsquo;t call right now? Request a callback.
-                </span>
-                <span
-                  className="text-xs text-muted-foreground group-open:hidden"
-                  aria-hidden="true"
+            {/* Secondary: the cinematic live-ops callback flow */}
+            {view === "form" || view === "error" ? (
+              <details
+                className="soft-card p-5 md:p-6 group"
+                open={view === "error"}
+              >
+                <summary
+                  className="cursor-pointer list-none flex items-center justify-between gap-3"
+                  style={{ viewTransitionName: "assessment-card" }}
                 >
-                  Expand
-                </span>
-                <span
-                  className="text-xs text-muted-foreground hidden group-open:inline"
-                  aria-hidden="true"
-                >
-                  Collapse
-                </span>
-              </summary>
-
-              <div className="mt-5 pt-5 border-t border-border">
-                <label className="block mb-4">
-                  <span className="block text-sm font-semibold text-navy-900 mb-2">
-                    Industry
+                  <span className="font-semibold text-navy-900">
+                    Can&rsquo;t call right now? Request a callback.
                   </span>
-                  <select
-                    value={industry}
-                    onChange={(e) => setIndustry(e.target.value)}
-                    disabled={state === "calling" || state === "connected"}
-                    className="w-full px-4 py-3 rounded-md border border-border bg-white text-navy-900 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Industry"
+                  <span
+                    className="flex items-center justify-center w-8 h-8 rounded-full border border-border text-navy-900 transition-transform group-open:rotate-180"
+                    aria-hidden="true"
                   >
-                    {INDUSTRY_OPTIONS.map((opt) => (
-                      <option key={opt.id} value={opt.id}>
-                        {opt.emoji} {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block mb-4">
-                  <span className="block text-sm font-semibold text-navy-900 mb-2">
-                    Your US phone number
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
                   </span>
-                  <div className="flex items-center gap-2 px-4 py-3 rounded-md border border-border bg-white focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20 transition-all">
-                    <Phone className="w-4 h-4 text-muted-foreground" />
-                    <input
-                      type="tel"
-                      inputMode="tel"
-                      placeholder="(555) 555-5555"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      disabled={state === "calling" || state === "connected"}
-                      className="w-full bg-transparent outline-none text-navy-900 placeholder:text-muted-foreground disabled:cursor-not-allowed"
-                      aria-label="Phone number"
-                    />
-                  </div>
-                </label>
+                </summary>
 
-                {state === "idle" || state === "error" ? (
+                <div className="mt-5 pt-5 border-t border-border">
+                  <label className="block mb-4">
+                    <span className="block text-sm font-semibold text-navy-900 mb-2">
+                      Industry
+                    </span>
+                    <select
+                      value={industry}
+                      onChange={(e) => setIndustry(e.target.value)}
+                      className="w-full px-4 py-3 rounded-md border border-border bg-white text-navy-900 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all"
+                      aria-label="Industry"
+                    >
+                      {INDUSTRY_OPTIONS.map((opt) => (
+                        <option key={opt.id} value={opt.id}>
+                          {opt.emoji} {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="block mb-4">
+                    <span className="block text-sm font-semibold text-navy-900 mb-2">
+                      Your US phone number
+                    </span>
+                    <div className="flex items-center gap-2 px-4 py-3 rounded-md border border-border bg-white focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20 transition-all">
+                      <Phone className="w-4 h-4 text-muted-foreground" />
+                      <input
+                        type="tel"
+                        inputMode="tel"
+                        placeholder="(555) 555-5555"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full bg-transparent outline-none text-navy-900 placeholder:text-muted-foreground"
+                        aria-label="Phone number"
+                      />
+                    </div>
+                  </label>
+
                   <button
-                    onClick={handleCallback}
+                    onClick={runStream}
                     disabled={!valid}
-                    className="w-full btn-ghost inline-flex items-center justify-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full btn-accent inline-flex items-center justify-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid="assessment-submit"
                   >
                     Request callback
                   </button>
-                ) : null}
 
-                {state === "calling" ? (
-                  <div
-                    role="status"
-                    aria-live="polite"
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-md bg-navy-900 text-white font-semibold"
-                  >
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Sending your request&hellip;
-                  </div>
-                ) : null}
-
-                {state === "connected" ? (
-                  <div
-                    role="status"
-                    aria-live="polite"
-                    className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 rounded-md bg-brand/10 border border-brand/30"
-                  >
-                    <div className="inline-flex items-center gap-2 text-navy-900 font-semibold">
-                      <CheckCircle2 className="w-5 h-5 text-brand" />
-                      Got it — Chad will call you back within a few hours.
+                  {errorMsg ? (
+                    <div className="mt-3 inline-flex items-center gap-2 text-sm text-red-700">
+                      <AlertCircle className="w-4 h-4" />
+                      {errorMsg}
                     </div>
-                    <button onClick={reset} className="btn-ghost text-sm">
-                      New request
-                    </button>
-                  </div>
-                ) : null}
+                  ) : null}
 
-                {errorMsg ? (
-                  <div className="mt-3 inline-flex items-center gap-2 text-sm text-red-700">
-                    <AlertCircle className="w-4 h-4" />
-                    {errorMsg}
-                  </div>
-                ) : null}
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    Or just pick up and dial {STACKS_PHONE_DISPLAY} &mdash; Stacks
+                    is on every day, all day.
+                  </p>
+                </div>
+              </details>
+            ) : null}
 
-                <p className="mt-4 text-xs text-muted-foreground">
-                  Or just pick up and dial {STACKS_PHONE_DISPLAY} &mdash; Stacks
-                  is on every day, all day.
-                </p>
+            {view === "streaming" || view === "done" ? (
+              <CallOpsConsole
+                phone={streamPhone}
+                industry={streamIndustry}
+                stages={stages}
+                isStreaming={view === "streaming"}
+                totalMs={totalMs}
+              />
+            ) : null}
+
+            {view === "done" ? (
+              <div className="soft-card p-5 md:p-6">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <h4 className="font-heading text-lg font-semibold text-navy-900">
+                    What happens next
+                  </h4>
+                  <button
+                    onClick={reset}
+                    className="text-xs text-muted-foreground hover:text-navy-900 transition-colors"
+                  >
+                    New request
+                  </button>
+                </div>
+                <ul className="space-y-3">
+                  {NEXT_STEPS.map((step, i) => {
+                    const Icon = step.icon;
+                    return (
+                      <li
+                        key={step.title}
+                        className="next-step flex items-start gap-3"
+                        style={{ animationDelay: `${i * 140 + 120}ms` }}
+                      >
+                        <div className="flex-shrink-0 w-8 h-8 rounded-md bg-brand/10 text-brand flex items-center justify-center">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-navy-900 text-sm">
+                            {step.title}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            {step.detail}
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-            </details>
+            ) : null}
           </div>
         </div>
       </div>

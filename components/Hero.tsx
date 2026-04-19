@@ -23,9 +23,9 @@ export default function Hero() {
         </div>
 
         {/* Headline — left-aligned, builder voice, no animated gradient per CLAUDE.md */}
-        <h1 className="animate-fade-in-up animation-delay-100 font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-navy-900 leading-[1.02] mb-6 max-w-5xl">
+        <h1 className="animate-fade-in-up animation-delay-100 font-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-navy-900 leading-[1.05] md:leading-[1.02] mb-6 max-w-5xl">
           You don&rsquo;t need more AI tools.
-          <br />
+          <br className="hidden sm:inline" />{" "}
           You need a <span className="text-brand">better stack.</span>
         </h1>
 

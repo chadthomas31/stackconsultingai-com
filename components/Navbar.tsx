@@ -70,7 +70,7 @@ export default function Navbar() {
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="w-full px-4 md:px-6 py-3">
+      <div className="w-full px-4 md:px-12 lg:px-20 py-3">
         <div className="flex items-center justify-between">
           {/* Logo — dark version for light bg */}
           <a
@@ -83,7 +83,7 @@ export default function Navbar() {
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-[96px] md:h-[128px] w-auto"
+              className="h-12 md:h-16 lg:h-20 w-auto"
               priority
             />
           </a>
@@ -115,7 +115,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-navy-900"
+            className="md:hidden p-3 -mr-2 text-navy-900 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
             aria-expanded={isMobileMenuOpen}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
