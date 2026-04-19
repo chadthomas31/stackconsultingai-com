@@ -70,7 +70,7 @@ export default function Navbar() {
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="w-full px-4 md:px-12 lg:px-20 py-3">
+      <div className="w-full px-4 md:px-20 lg:px-32 xl:px-40 py-3">
         <div className="flex items-center justify-between">
           {/* Logo — dark version for light bg */}
           <a
@@ -83,7 +83,7 @@ export default function Navbar() {
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-12 md:h-16 lg:h-20 w-auto"
+              className="h-14 md:h-20 lg:h-24 w-auto"
               priority
             />
           </a>
