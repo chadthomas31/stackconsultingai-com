@@ -330,7 +330,16 @@ export default function SiteAudit() {
             email,
             phone: phone || undefined,
           }),
+          signal: AbortSignal.timeout(90000),
         });
+
+        if (!res.ok && res.status >= 500) {
+          setError(
+            "The audit took too long — that usually means the target site is slow. Try again, or try a different URL."
+          );
+          setLoading(false);
+          return;
+        }
 
         const data = await res.json();
 
@@ -359,8 +368,14 @@ export default function SiteAudit() {
             resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
           }, 200);
         }, 400);
-      } catch {
-        setError("Network error. Please check your connection and try again.");
+      } catch (err: unknown) {
+        const isTimeout =
+          err instanceof DOMException && err.name === "TimeoutError";
+        setError(
+          isTimeout
+            ? "The audit timed out. PageSpeed is slow — try again in a moment."
+            : "Network error. Please check your connection and try again."
+        );
         setLoading(false);
       }
     },
