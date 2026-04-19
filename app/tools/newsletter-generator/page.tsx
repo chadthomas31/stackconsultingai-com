@@ -17,6 +17,8 @@ interface DraftResponse {
   videoUrl?: string;
   meta?: { title: string | null; channel: string | null };
   transcriptWordCount?: number;
+  source?: "gemini+transcript" | "transcript-only";
+  reposExtracted?: number | null;
   draft?: {
     subject: string;
     preheader: string;
@@ -51,7 +53,7 @@ export default function NewsletterGeneratorPage() {
           videoUrl: videoUrl.trim(),
           customInstructions: customInstructions.trim() || undefined,
         }),
-        signal: AbortSignal.timeout(120000),
+        signal: AbortSignal.timeout(300000),
       });
       const data = (await res.json()) as DraftResponse;
       if (!res.ok || !data.ok) {
@@ -165,7 +167,7 @@ generated: ${new Date().toISOString()}
             {status === "loading" ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Generating (20–60s)…
+                Generating (1–3 min — Gemini watches the video)…
               </>
             ) : (
               <>
@@ -197,8 +199,21 @@ generated: ${new Date().toISOString()}
               <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-emerald-900">
                 <div className="font-semibold mb-1">
-                  Draft generated from {result.transcriptWordCount} words of
-                  transcript
+                  Draft generated
+                  {result.source === "gemini+transcript" && (
+                    <>
+                      {" "}
+                      — Gemini watched the video and found{" "}
+                      {result.reposExtracted ?? 0} repos
+                    </>
+                  )}
+                  {result.source === "transcript-only" && (
+                    <>
+                      {" "}
+                      from {result.transcriptWordCount} words of transcript
+                      (Gemini unavailable)
+                    </>
+                  )}
                 </div>
                 <div>
                   Source: {result.meta?.title || "(untitled)"}

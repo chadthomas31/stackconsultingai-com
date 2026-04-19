@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import type { YouTubeVideoMeta } from "./youtube-transcript";
+import type { VideoAnalysis } from "./gemini-video-extract";
+import { formatAnalysisForClaude } from "./gemini-video-extract";
 
 export const NewsletterDraftSchema = z.object({
   subject: z.string().max(70),
@@ -67,13 +69,20 @@ OUTPUT:
 - JSON matching the provided schema. No commentary outside the JSON.`;
 
 export async function generateNewsletter(opts: {
-  transcript: string;
+  transcript?: string;
+  analysis?: VideoAnalysis;
   videoMeta: YouTubeVideoMeta;
   videoUrl: string;
   customInstructions?: string;
   apiKey?: string;
   model?: string;
 }): Promise<NewsletterDraft> {
+  if (!opts.transcript && !opts.analysis) {
+    throw new Error(
+      "generateNewsletter needs either a transcript or a Gemini analysis.",
+    );
+  }
+
   const client = new Anthropic({
     apiKey: opts.apiKey ?? process.env.ANTHROPIC_API_KEY,
   });
@@ -86,6 +95,20 @@ export async function generateNewsletter(opts: {
     .filter(Boolean)
     .join("\n");
 
+  const sourceBlock = opts.analysis
+    ? [
+        "Gemini watched the video (both audio and on-screen visuals) and extracted the following structured data. Prefer this over the raw transcript when they conflict — it includes repo names shown on screen that the host may not have said aloud.",
+        "",
+        formatAnalysisForClaude(opts.analysis),
+        opts.transcript
+          ? "\nRaw transcript (supplementary, may fill in host commentary or quotes):\n" +
+            opts.transcript
+          : "",
+      ]
+        .filter(Boolean)
+        .join("\n")
+    : `TRANSCRIPT:\n${opts.transcript}`;
+
   const userMessage = [
     contextBlock,
     "",
@@ -93,8 +116,7 @@ export async function generateNewsletter(opts: {
       ? `Additional guidance: ${opts.customInstructions}`
       : "",
     "",
-    "TRANSCRIPT:",
-    opts.transcript,
+    sourceBlock,
     "",
     "Return the newsletter draft as JSON matching the schema.",
   ]

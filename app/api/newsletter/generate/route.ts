@@ -5,10 +5,14 @@ import {
   fetchVideoMeta,
 } from "@/lib/youtube-transcript";
 import { generateNewsletter } from "@/lib/newsletter-gen";
+import {
+  analyzeYouTubeVideo,
+  type VideoAnalysis,
+} from "@/lib/gemini-video-extract";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 90;
+export const maxDuration = 300;
 
 interface GenerateRequest {
   videoUrl?: string;
@@ -18,7 +22,7 @@ interface GenerateRequest {
 
 function authorize(req: NextRequest, body: GenerateRequest) {
   const required = process.env.NEWSLETTER_ADMIN_SECRET;
-  if (!required) return true; // Dev/unconfigured — allow (useful locally)
+  if (!required) return true;
   const headerSecret = req.headers.get("x-admin-secret");
   const urlSecret = new URL(req.url).searchParams.get("secret");
   return (
@@ -57,7 +61,11 @@ export async function POST(req: NextRequest) {
   const videoId = extractVideoId(videoUrl);
   if (!videoId) {
     return NextResponse.json(
-      { ok: false, error: "Could not extract a YouTube video id from that URL" },
+      {
+        ok: false,
+        error:
+          "Paste a single YouTube video URL (watch?v=... or youtu.be/...). Channel URLs aren't supported yet.",
+      },
       { status: 400 },
     );
   }
@@ -67,53 +75,72 @@ export async function POST(req: NextRequest) {
       {
         ok: false,
         error:
-          "ANTHROPIC_API_KEY is not set in the server environment. Add it in Vercel → Settings → Environment Variables.",
+          "ANTHROPIC_API_KEY is not set. Add it in Vercel → Settings → Environment Variables.",
       },
       { status: 503 },
     );
   }
 
-  // 1. Fetch transcript + metadata in parallel
-  let transcript: string;
-  let meta;
-  try {
-    [transcript, meta] = await Promise.all([
-      fetchTranscript(videoId),
-      fetchVideoMeta(videoId),
-    ]);
-  } catch (err) {
+  const canonicalUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+  const [metaResult, transcriptResult, analysisResult] = await Promise.allSettled([
+    fetchVideoMeta(videoId),
+    fetchTranscript(videoId),
+    process.env.GEMINI_API_KEY
+      ? analyzeYouTubeVideo({ videoUrl: canonicalUrl })
+      : Promise.reject(new Error("GEMINI_API_KEY not configured")),
+  ]);
+
+  const meta =
+    metaResult.status === "fulfilled"
+      ? metaResult.value
+      : { videoId, title: null, channel: null };
+
+  const transcript =
+    transcriptResult.status === "fulfilled" ? transcriptResult.value : null;
+  const transcriptError =
+    transcriptResult.status === "rejected"
+      ? transcriptResult.reason instanceof Error
+        ? transcriptResult.reason.message
+        : String(transcriptResult.reason)
+      : null;
+
+  const analysis: VideoAnalysis | null =
+    analysisResult.status === "fulfilled" ? analysisResult.value : null;
+  const analysisError =
+    analysisResult.status === "rejected"
+      ? analysisResult.reason instanceof Error
+        ? analysisResult.reason.message
+        : String(analysisResult.reason)
+      : null;
+
+  if (!analysis && !transcript) {
     return NextResponse.json(
       {
         ok: false,
-        stage: "transcript",
+        stage: "source",
         error:
-          err instanceof Error
-            ? err.message
-            : "Could not fetch captions for this video.",
+          "Could not analyze this video. Gemini failed" +
+          (analysisError ? ` (${analysisError})` : "") +
+          " and captions" +
+          (transcriptError ? ` (${transcriptError})` : " were empty") +
+          ".",
       },
       { status: 400 },
     );
   }
 
-  const wordCount = transcript.split(/\s+/).filter(Boolean).length;
-  if (wordCount < 80) {
-    return NextResponse.json(
-      {
-        ok: false,
-        stage: "transcript",
-        error: `Transcript is too short (${wordCount} words). Try a longer video.`,
-      },
-      { status: 400 },
-    );
-  }
+  const wordCount = transcript
+    ? transcript.split(/\s+/).filter(Boolean).length
+    : 0;
 
-  // 2. Generate newsletter via Claude
   let draft;
   try {
     draft = await generateNewsletter({
-      transcript,
+      transcript: transcript ?? undefined,
+      analysis: analysis ?? undefined,
       videoMeta: meta,
-      videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+      videoUrl: canonicalUrl,
       customInstructions: body.customInstructions,
     });
   } catch (err) {
@@ -130,9 +157,13 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     videoId,
-    videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+    videoUrl: canonicalUrl,
     meta,
     transcriptWordCount: wordCount,
+    source: analysis ? "gemini+transcript" : "transcript-only",
+    reposExtracted: analysis?.total_repos_mentioned ?? null,
+    analysisError,
+    transcriptError,
     draft,
   });
 }
