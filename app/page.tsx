@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ClientLogoStrip from "@/components/ClientLogoStrip";
 import FreeAssessmentOffer from "@/components/FreeAssessmentOffer";
+import FoundingClientSpecial from "@/components/FoundingClientSpecial";
 import StackComparison from "@/components/StackComparison";
 import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
@@ -21,6 +22,7 @@ export default function Home() {
       <Hero />
       <ClientLogoStrip />
       <FreeAssessmentOffer />
+      <FoundingClientSpecial />
       <StackComparison />
       <Services />
       <Portfolio />
