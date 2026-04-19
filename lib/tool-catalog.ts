@@ -279,7 +279,7 @@ export const TOOLS: Tool[] = [
     setupMinutes: 2400,
     weeklyHoursSaved: 8,
     recommendationBlurb:
-      "Our signature build — a custom VoIP AI voice agent we design and deploy for you. Books appointments, routes after-hours, hands off to humans when it gets confused. Owned by you.",
+      "Our signature build — a custom VoIP AI voice agent we design and deploy for you. Books appointments, routes after-hours, and transfers seamlessly to your team when a human touch is the right call. Owned by you.",
   },
   {
     id: "zapier-make-automation",
