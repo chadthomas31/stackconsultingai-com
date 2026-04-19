@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ClientLogoStrip from "@/components/ClientLogoStrip";
-import CallMeDemo from "@/components/CallMeDemo";
+import FreeAssessmentOffer from "@/components/FreeAssessmentOffer";
 import StackComparison from "@/components/StackComparison";
 import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
@@ -20,7 +20,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <ClientLogoStrip />
-      <CallMeDemo />
+      <FreeAssessmentOffer />
       <StackComparison />
       <Services />
       <Portfolio />

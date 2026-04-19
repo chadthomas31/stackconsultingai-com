@@ -36,11 +36,11 @@ export default function FinalCTA() {
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
-                onClick={() => scrollTo("call-me")}
+                onClick={() => scrollTo("assessment")}
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-white/30 text-white font-semibold hover:bg-white/10 transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                Hear the AI IVR first
+                Get a free AI assessment first
               </button>
             </div>
           </div>

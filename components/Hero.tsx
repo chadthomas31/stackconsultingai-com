@@ -39,11 +39,11 @@ export default function Hero() {
         {/* CTAs — primary is "try the demo" per CLAUDE.md conversion hierarchy */}
         <div className="animate-fade-in-up animation-delay-300 flex flex-col sm:flex-row gap-3 items-start mb-14">
           <button
-            onClick={() => scrollTo("call-me")}
+            onClick={() => scrollTo("assessment")}
             className="btn-accent inline-flex items-center gap-2 text-base"
           >
             <Phone className="w-4 h-4" />
-            Try the live AI demo
+            Get your free AI assessment
           </button>
           <button
             onClick={() => scrollTo("contact")}

@@ -25,7 +25,7 @@ export default function Navbar() {
       { rootMargin: "-40% 0px -55% 0px" }
     );
 
-    const sectionIds = ["call-me", "services", "portfolio", "testimonials", "faq", "contact"];
+    const sectionIds = ["assessment", "services", "portfolio", "testimonials", "faq", "contact"];
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -55,7 +55,7 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: "Live demo", id: "call-me" },
+    { label: "Free assessment", id: "assessment" },
     { label: "Services", id: "services" },
     { label: "Work", id: "portfolio" },
     { label: "FAQ", id: "faq" },
