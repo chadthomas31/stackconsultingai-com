@@ -151,8 +151,13 @@ function ReportHeader({ assessment }: { assessment: Assessment }) {
     year: "numeric",
   });
   return (
-    <section className="relative px-4 md:px-6 pt-8 md:pt-14 pb-10 md:pb-16">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative px-4 md:px-6 pt-8 md:pt-14 pb-12 md:pb-20 overflow-hidden">
+      {/* Abstract tech/analytics backdrop — echo of Gamma hero illustration */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-60">
+        <HeroBackdrop />
+      </div>
+
+      <div className="relative max-w-5xl mx-auto">
         <div className="inline-flex items-center gap-2 rounded-full bg-rose-600 text-white text-xs font-semibold tracking-[0.15em] uppercase px-4 py-2 mb-8 shadow-[0_6px_20px_-6px_rgba(220,38,38,0.5)]">
           <Sparkles className="w-3.5 h-3.5" />
           Personalized Report
@@ -218,18 +223,23 @@ function ExecutiveSummary({ assessment }: { assessment: Assessment }) {
             </p>
           </div>
         </div>
-        <div className="md:col-span-2 flex flex-col gap-4">
-          <GlanceStat
+        <div className="md:col-span-2 flex flex-col gap-8 py-2">
+          <div className="text-center md:text-left">
+            <div className="text-xs font-semibold text-neutral-600 mb-1">
+              The Opportunity at a Glance
+            </div>
+          </div>
+          <StackStat
             valueLabel={`${financialImpact.weeklyHoursReclaimed}+`}
             label="Hours Reclaimed"
             sub="per week through targeted automation"
           />
-          <GlanceStat
+          <StackStat
             valueLabel={`$${financialImpact.monthlyToolCost}`}
             label="Monthly Tool Cost"
             sub="total investment across all four tools"
           />
-          <GlanceStat
+          <StackStat
             valueLabel={`${quickWins.length}`}
             label="Quick Wins"
             sub="high-impact, low-effort solutions"
@@ -277,8 +287,64 @@ function ImpactEffortMatrix({
         <span className="text-rose-600 font-semibold">Quick Wins</span> — the
         fixes that deliver the highest value with the least effort.
       </p>
-      <div className="grid grid-cols-2 gap-3 md:gap-4">
-        <QuadrantCard
+
+      {/* 2D Axis visualization — Gamma-style chart */}
+      <div className="relative mx-auto max-w-xl aspect-square mb-10 px-2">
+        {/* Y-axis (Impact) */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-300" />
+        <div className="absolute left-1/2 -translate-x-1/2 top-0 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-neutral-400" />
+        <div className="absolute -top-1 left-1/2 translate-x-3 text-[10px] font-bold tracking-[0.12em] uppercase text-neutral-500">
+          High Impact
+        </div>
+        <div className="absolute bottom-1 left-1/2 translate-x-3 text-[10px] font-bold tracking-[0.12em] uppercase text-neutral-500">
+          Low Impact
+        </div>
+
+        {/* X-axis (Effort) */}
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-neutral-300" />
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-neutral-400" />
+        <div className="absolute top-1/2 -translate-y-6 left-0 text-[10px] font-bold tracking-[0.12em] uppercase text-neutral-500">
+          Low Effort
+        </div>
+        <div className="absolute top-1/2 -translate-y-6 right-4 text-[10px] font-bold tracking-[0.12em] uppercase text-neutral-500">
+          High Effort
+        </div>
+
+        {/* Quadrant icons — positioned in each quadrant */}
+        <QuadrantIcon
+          top="18%"
+          left="25%"
+          emoji="⚡"
+          label="Quick Wins"
+          count={quadrants["quick-win"].length}
+          highlight
+        />
+        <QuadrantIcon
+          top="18%"
+          left="75%"
+          emoji="🎁"
+          label="Major Projects"
+          count={quadrants["major-project"].length}
+        />
+        <QuadrantIcon
+          top="78%"
+          left="25%"
+          emoji="📋"
+          label="Fill-Ins"
+          count={quadrants["fill-in"].length}
+        />
+        <QuadrantIcon
+          top="78%"
+          left="75%"
+          emoji="🚫"
+          label="Ignore"
+          count={quadrants.ignore.length}
+        />
+      </div>
+
+      {/* 2x2 legend grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-[16px] overflow-hidden border border-rose-100">
+        <QuadrantLegendRow
           emoji="⚡"
           title="Quick Wins"
           subtitle="High Impact, Low Effort"
@@ -286,31 +352,32 @@ function ImpactEffortMatrix({
           tone="rose-strong"
           items={quadrants["quick-win"].map((p) => p.area)}
         />
-        <QuadrantCard
+        <QuadrantLegendRow
           emoji="🎁"
           title="Major Projects"
           subtitle="High Impact, High Effort"
           description="Worth pursuing after quick wins are stable. Requires planning and setup time."
-          tone="rose-soft"
+          tone="rose-strong"
           items={quadrants["major-project"].map((p) => p.area)}
         />
-        <QuadrantCard
+        <QuadrantLegendRow
           emoji="📋"
           title="Fill-Ins"
           subtitle="Low Impact, Low Effort"
           description="Nice to have when bandwidth allows. Not a priority."
-          tone="neutral"
+          tone="rose-soft"
           items={quadrants["fill-in"].map((p) => p.area)}
         />
-        <QuadrantCard
+        <QuadrantLegendRow
           emoji="🚫"
           title="Ignore"
           subtitle="Low Impact, High Effort"
           description="Skip entirely. Not worth the investment at this stage."
-          tone="neutral"
+          tone="rose-soft"
           items={quadrants.ignore.map((p) => p.area)}
         />
       </div>
+
       {quickWinItems.length > 0 && (
         <div className="mt-5 rounded-[12px] bg-sky-50 border border-sky-200 px-5 py-3 flex items-start gap-3">
           <div className="w-5 h-5 rounded-full bg-sky-500 text-white inline-flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
@@ -366,66 +433,135 @@ function RecommendedSolutions({
 }
 
 function FourDayPlan({ plan }: { plan: AssessmentFourDayStep[] }) {
+  const sorted = [...plan].sort((a, b) => a.day - b.day);
   return (
     <div>
       <SectionHeader title="Your 4-Day Quick Wins Plan" />
-      <p className="text-base md:text-lg text-neutral-700 max-w-3xl mb-10 leading-relaxed">
+      <p className="text-base md:text-lg text-neutral-700 max-w-3xl mb-12 leading-relaxed">
         Follow this sequence to implement all four tools in one focused week.
         Each day requires 15–120 minutes — no technical expertise needed.
       </p>
-      <ol className="space-y-4">
-        {plan
-          .sort((a, b) => a.day - b.day)
-          .map((step) => {
-            const tool = getToolById(step.toolId);
-            return (
-              <li
-                key={step.day}
-                className="group relative flex gap-5 rounded-[18px] border border-rose-100 bg-rose-50/60 p-6 transition-all hover:bg-rose-50 hover:border-rose-200"
-              >
-                <div className="flex-shrink-0 w-14 h-14 rounded-[14px] bg-rose-600 text-white font-heading font-black text-2xl flex items-center justify-center shadow-[0_6px_16px_-4px_rgba(220,38,38,0.45)]">
+
+      {/* Zig-zag timeline — desktop */}
+      <div className="hidden md:block relative">
+        {/* Central connector line */}
+        <div className="absolute left-1/2 top-6 bottom-6 w-px bg-rose-200" />
+        {sorted.map((step, idx) => {
+          const tool = getToolById(step.toolId);
+          const isLeft = idx % 2 === 0;
+          return (
+            <div
+              key={step.day}
+              className="relative grid grid-cols-[1fr_auto_1fr] gap-8 mb-10 last:mb-0 items-start"
+            >
+              <div className={isLeft ? "text-right pr-4" : "order-3 pl-4"}>
+                {isLeft && (
+                  <FourDayStepContent step={step} tool={tool} align="right" />
+                )}
+              </div>
+              <div className="col-start-2 relative flex flex-col items-center">
+                <div className="w-14 h-14 rounded-full bg-rose-600 text-white font-heading font-black text-xl flex items-center justify-center shadow-[0_8px_24px_-6px_rgba(220,38,38,0.55)] ring-4 ring-white z-10">
                   {step.day}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-2 mb-2">
-                    <span className="text-xs font-bold uppercase tracking-[0.12em] text-rose-700">
-                      Day {step.day}
-                    </span>
-                    {tool && (
-                      <span className="text-xs text-neutral-600">
-                        · Tool: {tool.name}
-                      </span>
-                    )}
-                    <span className="ml-auto inline-flex items-center gap-1 text-xs text-neutral-600 font-mono">
-                      <Clock className="w-3 h-3" />~{step.estimatedMinutes} min
-                    </span>
-                  </div>
-                  <h3 className="font-heading text-lg md:text-xl font-bold text-neutral-900 mb-3">
-                    {step.title}
-                  </h3>
-                  <ul className="space-y-1.5">
-                    {step.actionSteps.map((a, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2 text-sm text-neutral-700 leading-relaxed"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
-                        <span>{a}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            );
-          })}
+              </div>
+              <div className={isLeft ? "order-3 pl-4" : "text-right pr-4"}>
+                {!isLeft && (
+                  <FourDayStepContent step={step} tool={tool} align="left" />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Mobile — stacked */}
+      <ol className="md:hidden space-y-4">
+        {sorted.map((step) => {
+          const tool = getToolById(step.toolId);
+          return (
+            <li
+              key={step.day}
+              className="relative flex gap-4 rounded-[18px] border border-rose-100 bg-rose-50/60 p-5"
+            >
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-rose-600 text-white font-heading font-black text-xl flex items-center justify-center shadow-[0_6px_16px_-4px_rgba(220,38,38,0.45)]">
+                {step.day}
+              </div>
+              <div className="flex-1 min-w-0">
+                <FourDayStepContent step={step} tool={tool} align="left" compact />
+              </div>
+            </li>
+          );
+        })}
       </ol>
-      <div className="mt-6 rounded-[14px] bg-emerald-50 border border-emerald-200 px-5 py-4 flex items-start gap-3">
+
+      <div className="mt-10 rounded-[14px] bg-emerald-50 border border-emerald-200 px-5 py-4 flex items-start gap-3">
         <CheckCircle2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" />
         <p className="text-sm text-emerald-900 leading-relaxed">
           <span className="font-bold">By end of Day 4,</span> all tools are
           live and your first full week of reclaimed time begins automatically.
         </p>
       </div>
+    </div>
+  );
+}
+
+function FourDayStepContent({
+  step,
+  tool,
+  align,
+  compact,
+}: {
+  step: AssessmentFourDayStep;
+  tool: Tool | undefined;
+  align: "left" | "right";
+  compact?: boolean;
+}) {
+  return (
+    <div className={align === "right" ? "md:text-right" : "md:text-left"}>
+      <div
+        className={`flex flex-wrap items-baseline gap-2 mb-2 ${
+          align === "right" ? "md:justify-end" : "md:justify-start"
+        }`}
+      >
+        <span className="text-xs font-bold uppercase tracking-[0.12em] text-rose-700">
+          Day {step.day}
+        </span>
+        {tool && (
+          <span className="text-xs text-neutral-600">· Tool: {tool.name}</span>
+        )}
+        {compact && (
+          <span className="ml-auto inline-flex items-center gap-1 text-xs text-neutral-600 font-mono">
+            <Clock className="w-3 h-3" />~{step.estimatedMinutes} min
+          </span>
+        )}
+      </div>
+      <h3 className="font-heading text-lg md:text-xl font-bold text-neutral-900 mb-2">
+        {step.title}
+      </h3>
+      {!compact && (
+        <p className="text-xs text-neutral-500 mb-3 inline-flex items-center gap-1">
+          <Clock className="w-3 h-3" />~{step.estimatedMinutes} minutes
+        </p>
+      )}
+      <ul
+        className={`space-y-1.5 ${
+          align === "right"
+            ? "md:ml-auto md:max-w-sm"
+            : "md:mr-auto md:max-w-sm"
+        }`}
+      >
+        {step.actionSteps.map((a, i) => (
+          <li
+            key={i}
+            className={`flex items-start gap-2 text-sm text-neutral-700 leading-relaxed ${
+              align === "right" ? "md:flex-row-reverse md:text-right" : ""
+            }`}
+          >
+            <CheckCircle2 className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+            <span>{a}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -452,9 +588,11 @@ function MajorProjects({
           return (
             <div
               key={i}
-              className="rounded-[18px] border border-rose-100 bg-rose-50/40 p-6 flex flex-col"
+              className="relative rounded-[18px] border border-rose-100 bg-white pt-8 p-6 flex flex-col"
             >
-              <div className="w-12 h-12 rounded-[12px] bg-rose-600 text-white flex items-center justify-center mb-5 shadow-[0_6px_16px_-4px_rgba(220,38,38,0.45)]">
+              {/* Gamma-style red underline bar on top */}
+              <div className="absolute top-0 left-6 right-6 h-1 rounded-b-full bg-gradient-to-r from-rose-400 to-rose-200" />
+              <div className="w-11 h-11 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center mb-4 ring-2 ring-white">
                 {projectIcon(p.toolId)}
               </div>
               <h3 className="font-heading text-lg font-bold text-neutral-900 mb-3">
@@ -463,7 +601,7 @@ function MajorProjects({
               <p className="text-sm text-neutral-700 leading-relaxed mb-5 flex-1">
                 {p.why}
               </p>
-              <div className="pt-4 border-t border-rose-200/60">
+              <div className="pt-4 border-t border-rose-100">
                 <span className="text-[10px] uppercase tracking-[0.12em] font-bold text-neutral-500">
                   Estimated cost
                 </span>
@@ -516,32 +654,50 @@ function FinancialImpact({ assessment }: { assessment: Assessment }) {
         </div>
         <div className="md:col-span-3 bg-white border border-rose-100 rounded-[20px] p-8 md:p-10">
           <h3 className="font-heading text-xl md:text-2xl font-bold text-neutral-900 mb-1">
-            Time Savings Breakdown
+            Time Savings Breakdown by Tool
           </h3>
-          <p className="text-sm text-neutral-600 mb-6">
+          <p className="text-sm text-neutral-600 mb-8">
             Hours saved per week per recommended tool.
           </p>
-          <div className="space-y-4">
-            {rows.map((r) => (
-              <div key={r.name}>
-                <div className="flex justify-between items-baseline mb-1.5">
-                  <span className="text-sm text-neutral-900 font-semibold">
-                    {r.name}
-                  </span>
-                  <span className="text-xs text-neutral-600 font-mono">
-                    {r.hours} hrs/wk
-                  </span>
-                </div>
-                <div className="h-3 w-full rounded-full bg-rose-50 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-rose-500 to-rose-600 rounded-full"
-                    style={{ width: `${(r.hours / maxHours) * 100}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+
+          {/* Chart — Gamma style with labeled Y-axis and x-axis ticks */}
+          <div className="relative pl-24">
+            <div className="space-y-3">
+              {rows.map((r) => {
+                const pct = (r.hours / maxHours) * 100;
+                return (
+                  <div key={r.name} className="relative flex items-center gap-0">
+                    {/* Y-axis label (tool name) */}
+                    <span className="absolute -left-24 top-1/2 -translate-y-1/2 text-xs text-neutral-900 font-semibold w-[90px] truncate text-right pr-2">
+                      {r.name}
+                    </span>
+                    {/* Bar */}
+                    <div className="flex-1 relative h-7 bg-rose-50 rounded-sm overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-rose-700 to-rose-600 flex items-center justify-end pr-2"
+                        style={{ width: `${pct}%` }}
+                      >
+                        <span className="text-xs font-bold text-white">
+                          {r.hours}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* X-axis */}
+            <div className="mt-2 flex justify-between text-[10px] text-neutral-500 font-mono border-t border-neutral-200 pt-1">
+              <span>0</span>
+              <span>{Math.round(maxHours / 2)}</span>
+              <span>{maxHours}</span>
+            </div>
+            <div className="text-center text-[10px] uppercase tracking-[0.12em] font-bold text-neutral-500 mt-1">
+              Hours Saved / Week
+            </div>
           </div>
-          <p className="text-xs text-neutral-500 mt-6 leading-relaxed">
+
+          <p className="text-xs text-neutral-500 mt-8 leading-relaxed">
             The highest-leverage tool is prioritized first in your 4-Day Plan.
             ROI is calculated using an effective hourly rate of $
             {financialImpact.hourlyRateAssumed}.
@@ -651,7 +807,7 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-function GlanceStat({
+function StackStat({
   valueLabel,
   label,
   sub,
@@ -661,12 +817,14 @@ function GlanceStat({
   sub: string;
 }) {
   return (
-    <div className="rounded-[18px] border border-rose-100 bg-white p-6 text-center flex-1 flex flex-col justify-center">
-      <div className="font-heading text-4xl md:text-5xl font-black text-neutral-900 mb-2 tracking-[-0.02em]">
+    <div className="text-center">
+      <div className="font-heading text-5xl md:text-6xl font-black text-neutral-900 mb-1 tracking-[-0.02em] leading-none">
         {valueLabel}
       </div>
-      <div className="text-sm font-bold text-neutral-900 mb-1">{label}</div>
-      <p className="text-xs text-neutral-600 leading-snug">{sub}</p>
+      <div className="text-sm font-bold text-neutral-900">{label}</div>
+      <p className="text-xs text-neutral-600 leading-snug mt-1 max-w-[220px] mx-auto">
+        {sub}
+      </p>
     </div>
   );
 }
@@ -693,7 +851,50 @@ function BigStat({
   );
 }
 
-function QuadrantCard({
+function QuadrantIcon({
+  top,
+  left,
+  emoji,
+  label,
+  count,
+  highlight,
+}: {
+  top: string;
+  left: string;
+  emoji: string;
+  label: string;
+  count: number;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1"
+      style={{ top, left }}
+    >
+      <div
+        className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-xl md:text-2xl shadow-[0_6px_18px_-6px_rgba(220,38,38,0.35)] ${
+          highlight
+            ? "bg-rose-600 ring-4 ring-rose-200"
+            : "bg-white border border-rose-100"
+        }`}
+      >
+        {emoji}
+      </div>
+      <div
+        className={`text-[10px] md:text-xs font-bold tracking-tight text-center whitespace-nowrap ${
+          highlight ? "text-rose-700" : "text-neutral-700"
+        }`}
+      >
+        {label}
+        {count > 0 && (
+          <span className="ml-1 text-neutral-500 font-normal">({count})</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function QuadrantLegendRow({
   emoji,
   title,
   subtitle,
@@ -706,30 +907,25 @@ function QuadrantCard({
   subtitle: string;
   description: string;
   items: string[];
-  tone: "rose-strong" | "rose-soft" | "neutral";
+  tone: "rose-strong" | "rose-soft";
 }) {
-  const styles = {
-    "rose-strong": "bg-rose-100/80 border-rose-200",
-    "rose-soft": "bg-rose-50 border-rose-100",
-    neutral: "bg-neutral-50 border-neutral-200",
-  }[tone];
+  const bg =
+    tone === "rose-strong" ? "bg-rose-50" : "bg-white";
 
   return (
-    <div
-      className={`rounded-[16px] border p-4 md:p-5 transition-all ${styles}`}
-    >
+    <div className={`${bg} p-5 border-t border-rose-100 first:border-t-0 md:[&:nth-child(2)]:border-t-0 md:[&:nth-child(-n+2)]:border-t-0`}>
       <div className="flex items-center gap-2 mb-1">
-        <span className="text-base md:text-lg">{emoji}</span>
+        <span className="text-lg">{emoji}</span>
         <h3 className="font-heading text-sm md:text-base font-bold text-neutral-900">
           {title}
         </h3>
       </div>
-      <p className="text-xs font-semibold text-neutral-700 mb-2">{subtitle}</p>
-      <p className="text-xs text-neutral-600 leading-relaxed mb-3">
+      <p className="text-xs font-semibold text-rose-700 mb-2">{subtitle}</p>
+      <p className="text-xs text-neutral-700 leading-relaxed mb-2">
         {description}
       </p>
       {items.length > 0 && (
-        <ul className="space-y-1">
+        <ul className="space-y-0.5 mt-2">
           {items.map((item, i) => (
             <li
               key={i}
@@ -811,15 +1007,16 @@ function NextStepCard({
   body: string;
 }) {
   return (
-    <div className="rounded-[18px] border border-rose-100 bg-white p-6 md:p-7">
-      <div className="flex items-start gap-3 mb-3">
-        <div className="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center font-heading font-black text-sm flex-shrink-0 shadow-[0_4px_12px_-2px_rgba(220,38,38,0.45)]">
-          {number}
-        </div>
-        <h3 className="font-heading text-lg md:text-xl font-bold text-neutral-900 pt-1">
-          {title}
-        </h3>
+    <div className="relative rounded-[18px] border border-rose-100 bg-white p-6 md:p-7 pt-10">
+      {/* Red numbered badge centered on top edge */}
+      <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center font-heading font-black text-sm shadow-[0_4px_12px_-2px_rgba(220,38,38,0.5)] ring-4 ring-white">
+        {number}
       </div>
+      {/* Red underline bar decoration */}
+      <div className="absolute top-0 left-6 right-6 h-1 rounded-b-full bg-gradient-to-r from-rose-500 via-rose-400 to-rose-500" />
+      <h3 className="font-heading text-lg md:text-xl font-bold text-neutral-900 mb-3 text-center md:text-left">
+        {title}
+      </h3>
       <p className="text-sm text-neutral-700 leading-relaxed">{body}</p>
     </div>
   );
@@ -857,6 +1054,88 @@ function GridBackground() {
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
+  );
+}
+
+/**
+ * Abstract "tech/analytics" backdrop for the hero — light rose-tinted
+ * SVG pattern of chart widgets, gauges, and data points. No AI imagery,
+ * just geometric graphics that echo the Gamma laptop-with-dashboards mood.
+ */
+function HeroBackdrop() {
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice"
+      viewBox="0 0 1200 600"
+    >
+      <defs>
+        <radialGradient id="heroGlow" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stopColor="#fda4af" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#fda4af" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="1200" height="600" fill="url(#heroGlow)" />
+      {/* Scattered chart tiles — rose-300 outlines at low opacity */}
+      <g stroke="#e11d48" strokeOpacity="0.12" strokeWidth="1.2" fill="none">
+        {/* Left cluster */}
+        <rect x="60" y="70" width="120" height="70" rx="6" />
+        <path d="M70 120 L90 95 L110 108 L140 82 L170 100" />
+        <circle cx="95" cy="200" r="32" />
+        <path d="M95 168 A 32 32 0 0 1 123 216" strokeOpacity="0.25" />
+        {/* Top bars */}
+        <g transform="translate(220,60)">
+          <rect x="0" y="0" width="180" height="6" rx="3" fill="#fecaca" fillOpacity="0.5" stroke="none" />
+          <rect x="0" y="14" width="140" height="6" rx="3" fill="#fecaca" fillOpacity="0.35" stroke="none" />
+          <rect x="0" y="28" width="90" height="6" rx="3" fill="#fecaca" fillOpacity="0.25" stroke="none" />
+        </g>
+        {/* Center laptop outline */}
+        <g transform="translate(470,190)">
+          <rect x="0" y="0" width="260" height="160" rx="10" />
+          <line x1="-20" y1="170" x2="280" y2="170" />
+          <rect x="20" y="20" width="220" height="120" rx="4" strokeOpacity="0.08" />
+          {/* little bars inside */}
+          <g strokeOpacity="0.18" fill="#e11d48" fillOpacity="0.08">
+            <rect x="40" y="115" width="20" height="20" />
+            <rect x="70" y="95" width="20" height="40" />
+            <rect x="100" y="75" width="20" height="60" />
+            <rect x="130" y="60" width="20" height="75" />
+            <rect x="160" y="45" width="20" height="90" />
+            <rect x="190" y="55" width="20" height="80" />
+          </g>
+        </g>
+        {/* Right cluster */}
+        <rect x="870" y="80" width="140" height="90" rx="6" />
+        <path d="M870 140 Q 900 100 940 130 T 1010 120" />
+        <circle cx="950" cy="240" r="28" />
+        <text
+          x="940"
+          y="246"
+          fontSize="14"
+          fill="#e11d48"
+          fillOpacity="0.18"
+          fontFamily="monospace"
+        >
+          78%
+        </text>
+        <g transform="translate(850,330)">
+          <rect x="0" y="0" width="180" height="6" rx="3" fill="#fecaca" fillOpacity="0.5" stroke="none" />
+          <rect x="0" y="14" width="140" height="6" rx="3" fill="#fecaca" fillOpacity="0.35" stroke="none" />
+          <rect x="0" y="28" width="90" height="6" rx="3" fill="#fecaca" fillOpacity="0.25" stroke="none" />
+        </g>
+        {/* Scatter dots */}
+        <g fill="#e11d48" fillOpacity="0.22" stroke="none">
+          <circle cx="40" cy="400" r="2" />
+          <circle cx="200" cy="420" r="2" />
+          <circle cx="320" cy="480" r="2" />
+          <circle cx="440" cy="440" r="2" />
+          <circle cx="780" cy="470" r="2" />
+          <circle cx="1080" cy="420" r="2" />
+          <circle cx="1100" cy="300" r="2" />
+        </g>
+      </g>
     </svg>
   );
 }
