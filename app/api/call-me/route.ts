@@ -41,7 +41,7 @@ const STAGES: Stage[] = [
   {
     id: "notified",
     label: "Chad paged via SMS",
-    detail: "Builder pager ping sent",
+    detail: "Expert notification sent",
     delayMs: 620,
   },
   {

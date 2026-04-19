@@ -49,7 +49,7 @@ const WHAT_YOU_GET = [
 const NEXT_STEPS = [
   {
     icon: Mail,
-    title: "Pager ping sent to Chad",
+    title: "AI expert paged",
     detail: "Your industry and number are in the dispatch queue now.",
   },
   {
@@ -80,8 +80,8 @@ const DEFAULT_STAGES: ConsoleStage[] = [
   },
   {
     id: "notified",
-    label: "Chad paged via SMS",
-    detail: "Builder pager ping",
+    label: "AI expert paged via SMS",
+    detail: "Expert notification sent",
     status: "pending",
   },
   {
