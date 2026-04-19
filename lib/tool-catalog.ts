@@ -269,7 +269,7 @@ export const TOOLS: Tool[] = [
   },
   {
     id: "freeswitch-ai-ivr",
-    name: "FreeSWITCH + OpenAI Realtime IVR",
+    name: "Custom AI Voice Agent",
     url: "https://stackconsultingai.com",
     tagline: "AI phone agent that books appointments and escalates to humans.",
     tier: "major-project",
@@ -279,7 +279,7 @@ export const TOOLS: Tool[] = [
     setupMinutes: 2400,
     weeklyHoursSaved: 8,
     recommendationBlurb:
-      "Our signature build — a custom AI IVR running on FreeSWITCH + OpenAI Realtime. Books appointments, routes after-hours, hands off to humans when it gets confused. Owned by you.",
+      "Our signature build — a custom VoIP AI voice agent we design and deploy for you. Books appointments, routes after-hours, hands off to humans when it gets confused. Owned by you.",
   },
   {
     id: "zapier-make-automation",

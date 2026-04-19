@@ -31,7 +31,7 @@ export default function Hero() {
 
         {/* Subhead — concrete, builder voice */}
         <p className="animate-fade-in-up animation-delay-200 text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed">
-          Practical AI automation, custom websites, and FreeSWITCH voice agents
+          Practical AI automation, custom websites, and VoIP voice agents we design and deploy
           — built cleanly for small businesses that want systems their team
           will actually use.
         </p>

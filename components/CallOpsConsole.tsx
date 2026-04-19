@@ -69,7 +69,7 @@ export default function CallOpsConsole({
           </span>
           <span className="text-white/40">/</span>
           <span className="text-white/70 font-mono tracking-tight">
-            FreeSWITCH dispatcher
+            VoIP dispatcher
           </span>
         </div>
         <div className="hidden sm:flex items-center gap-2 text-xs text-white/50 font-mono">

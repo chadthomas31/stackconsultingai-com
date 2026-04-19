@@ -182,7 +182,7 @@ export const DEMO_ASSESSMENT: Assessment = {
   majorProjects: [
     {
       toolId: "freeswitch-ai-ivr",
-      why: "A FreeSWITCH + OpenAI Realtime agent answers after-hours calls, confirms availability, and books reservations directly — preventing those inquiries from leaking to OTA bookings. This is the single biggest revenue lever for a small hotel.",
+      why: "A custom VoIP AI voice agent answers after-hours calls, confirms availability, and books reservations directly — preventing those inquiries from leaking to OTA bookings. This is the single biggest revenue lever for a small hotel.",
       estimatedSetupCost: "$150/mo + $3,000–5,000 setup",
     },
     {

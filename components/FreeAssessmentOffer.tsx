@@ -277,8 +277,8 @@ export default function FreeAssessmentOffer() {
             Call Stacks. Get a custom AI report.
           </h2>
           <p className="text-lg text-muted-foreground">
-            Pick up the phone. Stacks — our FreeSWITCH + OpenAI Realtime voice
-            agent — conducts a ten-minute business interview and turns it into
+            Pick up the phone. Stacks — our custom VoIP voice agent we
+            design and deploy — conducts a ten-minute business interview and turns it into
             a personalized written report, emailed to you within 24 hours.
           </p>
           <p className="mt-3 text-sm text-muted-foreground">

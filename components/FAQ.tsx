@@ -18,7 +18,7 @@ const QA = [
   },
   {
     q: "Is the AI phone-agent stuff production-ready?",
-    a: "Yes. The same FreeSWITCH + OpenAI Realtime stack you can call from the hero is deployed for real customers. It books appointments, routes after-hours calls, and can hand off to a human when it gets confused.",
+    a: "Yes. The same VoIP voice agent stack you can call from the hero is deployed for real customers. It books appointments, routes after-hours calls, and can hand off to a human when it gets confused.",
   },
   {
     q: "Who actually does the work?",
