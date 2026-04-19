@@ -83,7 +83,7 @@ export default function Navbar() {
               alt="Stack Consulting AI"
               width={600}
               height={150}
-              className="h-14 md:h-20 lg:h-24 w-auto"
+              className="h-20 md:h-32 lg:h-40 w-auto"
               priority
             />
           </a>
