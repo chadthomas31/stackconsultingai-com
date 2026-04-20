@@ -42,6 +42,7 @@ export default function NewsletterGeneratorPage() {
   const [error, setError] = useState<string>("");
   const [result, setResult] = useState<DraftResponse | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [progressStage, setProgressStage] = useState<string>("");
   const [publishStatus, setPublishStatus] = useState<
     "idle" | "publishing" | "published" | "error"
   >("idle");
@@ -56,46 +57,100 @@ export default function NewsletterGeneratorPage() {
     setStatus("loading");
     setError("");
     setResult(null);
+    setProgressStage("starting");
     setPublishStatus("idle");
     setPublishError("");
     setPublishedUrl(null);
     setPublishedIssueNumber(null);
+
     try {
       const res = await fetch("/api/newsletter/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-admin-secret": secret,
+          Accept: "text/event-stream",
         },
         body: JSON.stringify({
           videoUrl: videoUrl.trim(),
           customInstructions: customInstructions.trim() || undefined,
         }),
-        signal: AbortSignal.timeout(300000),
+        signal: AbortSignal.timeout(360000),
       });
-      const contentType = res.headers.get("content-type") || "";
-      if (!contentType.includes("application/json")) {
-        const text = await res.text();
-        const preview = text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 220);
+
+      if (!res.ok || !res.body) {
+        const preview = (await res.text())
+          .replace(/<[^>]+>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 220);
         setError(
-          `Server returned ${res.status} ${res.statusText} with non-JSON body (likely a platform timeout or 502). Check Vercel → Deployments → latest → Functions → /api/newsletter/generate for the real stack trace. Preview: ${preview || "(empty)"}`,
+          `Server returned ${res.status} ${res.statusText}. ${preview || "(empty body)"}`,
         );
         setStatus("error");
         return;
       }
-      const data = (await res.json()) as DraftResponse;
-      if (!res.ok || !data.ok) {
-        setError(data.error || `Generation failed (HTTP ${res.status}).`);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let final: DraftResponse | null = null;
+      let streamError: string | null = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const frames = buffer.split("\n\n");
+        buffer = frames.pop() ?? "";
+        for (const frame of frames) {
+          if (!frame.startsWith("data: ")) continue;
+          const payload = frame.slice(6);
+          let event: Record<string, unknown>;
+          try {
+            event = JSON.parse(payload);
+          } catch {
+            continue;
+          }
+          if (event.type === "progress") {
+            setProgressStage(String(event.stage ?? ""));
+          } else if (event.type === "error") {
+            streamError = String(event.error ?? "Generation failed");
+          } else if (event.type === "done") {
+            final = event as unknown as DraftResponse;
+          }
+        }
+      }
+
+      if (streamError) {
+        setError(streamError);
         setStatus("error");
         return;
       }
-      setResult(data);
+      if (!final) {
+        setError(
+          "Stream ended without a final draft. Check the Vercel function log.",
+        );
+        setStatus("error");
+        return;
+      }
+      setResult(final);
       setStatus("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Network error");
       setStatus("error");
     }
   }
+
+  const progressLabels: Record<string, string> = {
+    starting: "Starting…",
+    "resolving-url": "Resolving YouTube URL…",
+    resolved: "Video resolved",
+    "fetching-metadata-and-analysis":
+      "Gemini is watching the video (this is the long step)…",
+    "analysis-done": "Video analyzed — writing newsletter with Claude…",
+    "writing-newsletter": "Claude is drafting the newsletter…",
+  };
 
   async function handlePublish() {
     if (!result?.draft) return;
@@ -251,7 +306,8 @@ generated: ${new Date().toISOString()}
             {status === "loading" ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Generating (1–3 min — Gemini watches the video)…
+                {progressLabels[progressStage] ||
+                  "Generating (1–3 min — Gemini watches the video)…"}
               </>
             ) : (
               <>
