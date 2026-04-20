@@ -59,11 +59,19 @@ STRUCTURE:
   - 3-4 thematic sections, each with 2-3 featured items (H3 item names bolded, then 2-3 sentences)
   - A "Quick hits" section with 5-8 short one-liners
   - Sign-off (1-2 sentences) with an ask (e.g., "reply if any of these would actually help")
-  - Cite the source YouTube video at the end
+  - End with a source citation P.S. (see CITATION section).
 
 PICK WHAT MATTERS:
 - Audience cares most about: AI agent tooling, dev productivity, self-hostable alternatives to expensive SaaS, concrete automations, cost-savers. Less about: deep systems plumbing, very niche crypto, academic novelties (unless wildly clever).
 - From any transcript, pick 8-12 items worth featuring and 5-8 quick hits. Skip items that wouldn't land for the audience.
+
+CITATION (non-negotiable — always include at the end of the body):
+- Finish the body with an italicized P.S. that credits the source video and creator in good faith.
+- Use this exact template and fill in whatever values are provided in the video metadata:
+  "*P.S. — This roundup was curated from the **{video title}** episode on the {channel name} channel (published {Month Day, Year}). Their {X-minute | full} rundown is worth the watch: {full video URL}.*"
+- If any piece of the metadata is missing (no publish date, no duration), silently drop just that phrase — never fabricate. Do NOT write "(published unknown)" or similar placeholders.
+- Never claim independent discovery. Frame the issue as your own commentary built on top of the creator's curation. Position Stack Consulting AI as the voice adding context, not the scoop.
+- Never paraphrase the host's exact phrasing. Rewrite every repo description in your own words.
 
 OUTPUT:
 - JSON matching the provided schema. No commentary outside the JSON.`;
@@ -87,12 +95,29 @@ export async function generateNewsletter(opts: {
     apiKey: opts.apiKey ?? process.env.ANTHROPIC_API_KEY,
   });
 
+  const publishedPretty = opts.videoMeta.publishedAt
+    ? new Date(opts.videoMeta.publishedAt).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      })
+    : null;
+  const durationPretty =
+    opts.videoMeta.durationSeconds && opts.videoMeta.durationSeconds > 0
+      ? `${Math.round(opts.videoMeta.durationSeconds / 60)}-minute`
+      : null;
+
   const contextBlock = [
-    `Source video: ${opts.videoUrl}`,
-    opts.videoMeta.title ? `Title: ${opts.videoMeta.title}` : null,
-    opts.videoMeta.channel ? `Channel: ${opts.videoMeta.channel}` : null,
+    `Source video URL: ${opts.videoUrl}`,
+    opts.videoMeta.title ? `Video title: ${opts.videoMeta.title}` : null,
+    opts.videoMeta.channel ? `Channel name: ${opts.videoMeta.channel}` : null,
+    publishedPretty ? `Video publish date: ${publishedPretty}` : null,
+    durationPretty ? `Approximate duration: ${durationPretty}` : null,
+    "",
+    "Use those exact values when filling the P.S. citation template.",
   ]
-    .filter(Boolean)
+    .filter((x) => x !== null)
     .join("\n");
 
   const sourceBlock = opts.analysis

@@ -12,6 +12,7 @@ interface PublishRequest {
   source_video_url?: string | null;
   source_video_title?: string | null;
   source_channel?: string | null;
+  source_published_at?: string | null;
   secret?: string;
 }
 
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
       source_video_url: body.source_video_url ?? null,
       source_video_title: body.source_video_title ?? null,
       source_channel: body.source_channel ?? null,
+      source_published_at: body.source_published_at ?? null,
     });
     return NextResponse.json({
       ok: true,

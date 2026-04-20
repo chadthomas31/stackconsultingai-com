@@ -80,8 +80,15 @@ export default async function StackReportIssuePage({
         </p>
 
         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-10 pb-8 border-b border-border">
-          <time dateTime={issue.published_at}>
-            {formatDate(issue.published_at)}
+          <time
+            dateTime={issue.source_published_at ?? issue.published_at}
+            title={
+              issue.source_published_at
+                ? `Source video published ${formatDate(issue.source_published_at)} · This issue posted ${formatDate(issue.published_at)}`
+                : undefined
+            }
+          >
+            {formatDate(issue.source_published_at ?? issue.published_at)}
           </time>
           {issue.source_channel && (
             <>

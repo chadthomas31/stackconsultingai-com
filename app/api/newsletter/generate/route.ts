@@ -182,7 +182,13 @@ async function runPipeline(
   const meta =
     metaResult.status === "fulfilled"
       ? metaResult.value
-      : { videoId, title: null, channel: null };
+      : {
+          videoId,
+          title: null,
+          channel: null,
+          publishedAt: null,
+          durationSeconds: null,
+        };
 
   const transcript =
     transcriptResult.status === "fulfilled" ? transcriptResult.value : null;

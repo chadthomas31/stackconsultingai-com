@@ -71,8 +71,14 @@ export default async function StackReportIndexPage() {
                       Issue #{issue.issue_number}
                     </span>
                     <span>·</span>
-                    <time dateTime={issue.published_at}>
-                      {formatDate(issue.published_at)}
+                    <time
+                      dateTime={
+                        issue.source_published_at ?? issue.published_at
+                      }
+                    >
+                      {formatDate(
+                        issue.source_published_at ?? issue.published_at,
+                      )}
                     </time>
                   </div>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold tracking-tight leading-tight mb-2 group-hover:text-brand transition-colors">

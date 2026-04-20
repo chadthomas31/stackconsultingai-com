@@ -17,7 +17,12 @@ interface DraftResponse {
   ok: boolean;
   error?: string;
   videoUrl?: string;
-  meta?: { title: string | null; channel: string | null };
+  meta?: {
+    title: string | null;
+    channel: string | null;
+    publishedAt?: string | null;
+    durationSeconds?: number | null;
+  };
   transcriptWordCount?: number;
   source?: "gemini+transcript" | "transcript-only";
   reposExtracted?: number | null;
@@ -173,6 +178,7 @@ export default function NewsletterGeneratorPage() {
           source_video_url: result.videoUrl,
           source_video_title: result.meta?.title,
           source_channel: result.meta?.channel,
+          source_published_at: result.meta?.publishedAt ?? null,
         }),
         signal: AbortSignal.timeout(30000),
       });

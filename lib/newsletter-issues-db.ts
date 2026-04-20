@@ -11,6 +11,7 @@ export interface NewsletterIssue {
   source_video_url: string | null;
   source_video_title: string | null;
   source_channel: string | null;
+  source_published_at: string | null;
   published_at: string;
   created_at: string;
 }
@@ -69,6 +70,7 @@ export async function publishIssue(opts: {
   source_video_url?: string | null;
   source_video_title?: string | null;
   source_channel?: string | null;
+  source_published_at?: string | null;
 }): Promise<NewsletterIssue> {
   const slug = await buildUniqueSlug(opts.subject);
   const issue_number = await nextIssueNumber();
@@ -85,6 +87,7 @@ export async function publishIssue(opts: {
       source_video_url: opts.source_video_url ?? null,
       source_video_title: opts.source_video_title ?? null,
       source_channel: opts.source_channel ?? null,
+      source_published_at: opts.source_published_at ?? null,
     })
     .select()
     .single();

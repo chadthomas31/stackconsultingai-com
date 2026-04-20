@@ -4,6 +4,8 @@ export interface YouTubeVideoMeta {
   videoId: string;
   title: string | null;
   channel: string | null;
+  publishedAt: string | null;
+  durationSeconds: number | null;
 }
 
 export interface YouTubeResolveResult {
@@ -189,10 +191,99 @@ export async function fetchTranscript(videoId: string): Promise<string> {
     .join(" ");
 }
 
-/** Fetch basic metadata without auth via oEmbed endpoint. */
+/** Convert ISO 8601 duration (PT12M34S) to seconds. Returns null on bad input. */
+function parseIsoDuration(iso: string): number | null {
+  const m = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+  if (!m) return null;
+  const h = parseInt(m[1] ?? "0", 10);
+  const mn = parseInt(m[2] ?? "0", 10);
+  const s = parseInt(m[3] ?? "0", 10);
+  return h * 3600 + mn * 60 + s;
+}
+
+/**
+ * Fetch video metadata: title, channel, publish date, and duration.
+ * Primary path = watch-page JSON-LD (has everything including uploadDate).
+ * Fallback = oEmbed (title + channel only).
+ */
 export async function fetchVideoMeta(
   videoId: string,
 ): Promise<YouTubeVideoMeta> {
+  const empty: YouTubeVideoMeta = {
+    videoId,
+    title: null,
+    channel: null,
+    publishedAt: null,
+    durationSeconds: null,
+  };
+
+  // Attempt 1: watch page JSON-LD (gives us publish date + duration too)
+  try {
+    const res = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
+      headers: {
+        "User-Agent": BROWSER_UA,
+        "Accept-Language": "en-US,en;q=0.9",
+      },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (res.ok) {
+      const html = await res.text();
+      const ldMatch = html.match(
+        /<script type="application\/ld\+json"[^>]*>([\s\S]+?)<\/script>/,
+      );
+      if (ldMatch) {
+        try {
+          const ld = JSON.parse(ldMatch[1]);
+          const vList = Array.isArray(ld) ? ld : [ld];
+          for (const v of vList) {
+            if (
+              v &&
+              (v["@type"] === "VideoObject" || v.uploadDate || v.name)
+            ) {
+              return {
+                videoId,
+                title: v.name ?? null,
+                channel:
+                  (v.author?.name ?? (typeof v.author === "string" ? v.author : null)) ??
+                  null,
+                publishedAt: v.uploadDate ?? v.datePublished ?? null,
+                durationSeconds: v.duration ? parseIsoDuration(v.duration) : null,
+              };
+            }
+          }
+        } catch {
+          /* fall through */
+        }
+      }
+
+      // Secondary: meta/itemprop extraction from the same HTML
+      const dateMeta = html.match(
+        /<meta itemprop="datePublished" content="([^"]+)"/,
+      );
+      const titleOg = html.match(/<meta property="og:title" content="([^"]+)"/);
+      const channelJson = html.match(/"ownerChannelName":"([^"]+)"/);
+      const durationMeta = html.match(
+        /<meta itemprop="duration" content="([^"]+)"/,
+      );
+      if (dateMeta || titleOg || channelJson) {
+        return {
+          videoId,
+          title: titleOg?.[1] ?? null,
+          channel: channelJson?.[1]
+            ? channelJson[1].replace(/\\u0026/g, "&").replace(/\\"/g, '"')
+            : null,
+          publishedAt: dateMeta?.[1] ?? null,
+          durationSeconds: durationMeta?.[1]
+            ? parseIsoDuration(durationMeta[1])
+            : null,
+        };
+      }
+    }
+  } catch {
+    /* fall through */
+  }
+
+  // Attempt 2: oEmbed (title + channel only, no date)
   try {
     const res = await fetch(
       `https://www.youtube.com/oembed?url=${encodeURIComponent(
@@ -200,19 +291,17 @@ export async function fetchVideoMeta(
       )}&format=json`,
       { signal: AbortSignal.timeout(8000) },
     );
-    if (!res.ok) {
-      return { videoId, title: null, channel: null };
-    }
+    if (!res.ok) return empty;
     const data = (await res.json()) as {
       title?: string;
       author_name?: string;
     };
     return {
-      videoId,
+      ...empty,
       title: data.title || null,
       channel: data.author_name || null,
     };
   } catch {
-    return { videoId, title: null, channel: null };
+    return empty;
   }
 }
