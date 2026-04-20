@@ -10,6 +10,7 @@ import {
   getGeminiApiKey,
   type VideoAnalysis,
 } from "@/lib/gemini-video-extract";
+import { audit, type GenerationMode } from "@/lib/generation-mode";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,6 +19,7 @@ export const maxDuration = 300;
 interface GenerateRequest {
   videoUrl?: string;
   customInstructions?: string;
+  mode?: GenerationMode;
   secret?: string;
 }
 
@@ -168,16 +170,13 @@ async function runPipeline(
     return;
   }
 
-  send({ type: "progress", stage: "fetching-metadata-and-analysis" });
+  send({ type: "progress", stage: "fetching-metadata-and-captions" });
 
-  const [metaResult, transcriptResult, analysisResult] =
-    await Promise.allSettled([
-      fetchVideoMeta(videoId),
-      fetchTranscript(videoId),
-      getGeminiApiKey()
-        ? analyzeYouTubeVideo({ videoUrl: canonicalUrl })
-        : Promise.reject(new Error("Gemini API key not configured")),
-    ]);
+  // Step 1: cheap parallel fetches (duration + captions). These drive the audit.
+  const [metaResult, transcriptResult] = await Promise.allSettled([
+    fetchVideoMeta(videoId),
+    fetchTranscript(videoId),
+  ]);
 
   const meta =
     metaResult.status === "fulfilled"
@@ -199,14 +198,50 @@ async function runPipeline(
         : String(transcriptResult.reason)
       : null;
 
-  const analysis: VideoAnalysis | null =
-    analysisResult.status === "fulfilled" ? analysisResult.value : null;
-  const analysisError =
-    analysisResult.status === "rejected"
-      ? analysisResult.reason instanceof Error
-        ? analysisResult.reason.message
-        : String(analysisResult.reason)
-      : null;
+  const transcriptWordCount = transcript
+    ? transcript.split(/\s+/).filter(Boolean).length
+    : 0;
+
+  // Step 2: audit. Decides whether to burn Gemini $ on this video.
+  const mode: GenerationMode = body.mode ?? "auto";
+  const decision = audit({
+    mode,
+    durationSeconds: meta.durationSeconds,
+    hasTranscript: !!transcript,
+    transcriptWordCount: transcript ? transcriptWordCount : null,
+  });
+
+  send({
+    type: "progress",
+    stage: "audit-complete",
+    mode,
+    useGemini: decision.useGemini,
+    reason: decision.reason,
+    estimatedGeminiCost: decision.estimatedGeminiCost,
+    durationMinutes: decision.durationMinutes,
+    hasTranscript: !!transcript,
+    transcriptWordCount,
+  });
+
+  // Step 3: conditionally fire Gemini (the expensive step).
+  let analysis: VideoAnalysis | null = null;
+  let analysisError: string | null = null;
+  if (decision.useGemini) {
+    if (!getGeminiApiKey()) {
+      analysisError = "Gemini API key not configured";
+    } else {
+      send({
+        type: "progress",
+        stage: "running-gemini",
+        estimatedGeminiCost: decision.estimatedGeminiCost,
+      });
+      try {
+        analysis = await analyzeYouTubeVideo({ videoUrl: canonicalUrl });
+      } catch (err) {
+        analysisError = err instanceof Error ? err.message : String(err);
+      }
+    }
+  }
 
   send({
     type: "progress",
@@ -214,17 +249,17 @@ async function runPipeline(
     hasTranscript: !!transcript,
     hasAnalysis: !!analysis,
     reposExtracted: analysis?.total_repos_mentioned ?? null,
-    transcriptWordCount: transcript
-      ? transcript.split(/\s+/).filter(Boolean).length
-      : 0,
+    transcriptWordCount,
   });
 
   if (!analysis && !transcript) {
     send({
       type: "error",
       error:
-        "Could not analyze this video. Gemini failed" +
-        (analysisError ? ` (${analysisError})` : "") +
+        "Could not analyze this video. Gemini " +
+        (decision.useGemini
+          ? `failed${analysisError ? ` (${analysisError})` : ""}`
+          : "was skipped by audit") +
         " and captions" +
         (transcriptError ? ` (${transcriptError})` : " were empty") +
         ".",
@@ -251,10 +286,6 @@ async function runPipeline(
     return;
   }
 
-  const wordCount = transcript
-    ? transcript.split(/\s+/).filter(Boolean).length
-    : 0;
-
   send({
     type: "done",
     ok: true,
@@ -265,9 +296,12 @@ async function runPipeline(
     channelHandle: resolved.channelHandle ?? null,
     channelTitle: resolved.channelTitle ?? null,
     latestVideoTitle: resolved.latestVideoTitle ?? null,
-    transcriptWordCount: wordCount,
+    transcriptWordCount,
     source: analysis ? "gemini+transcript" : "transcript-only",
     reposExtracted: analysis?.total_repos_mentioned ?? null,
+    mode,
+    auditReason: decision.reason,
+    estimatedGeminiCost: decision.useGemini ? decision.estimatedGeminiCost : 0,
     analysisError,
     transcriptError,
     draft,

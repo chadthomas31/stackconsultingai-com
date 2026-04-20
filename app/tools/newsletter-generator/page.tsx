@@ -26,6 +26,9 @@ interface DraftResponse {
   transcriptWordCount?: number;
   source?: "gemini+transcript" | "transcript-only";
   reposExtracted?: number | null;
+  mode?: "auto" | "transcript-only" | "always-gemini";
+  auditReason?: string;
+  estimatedGeminiCost?: number | null;
   resolvedFrom?: "video-url" | "bare-id" | "channel-latest";
   channelHandle?: string | null;
   channelTitle?: string | null;
@@ -41,6 +44,10 @@ export default function NewsletterGeneratorPage() {
   const [secret, setSecret] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [customInstructions, setCustomInstructions] = useState("");
+  const [mode, setMode] = useState<
+    "auto" | "transcript-only" | "always-gemini"
+  >("auto");
+  const [auditPreview, setAuditPreview] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
   );
@@ -63,6 +70,7 @@ export default function NewsletterGeneratorPage() {
     setError("");
     setResult(null);
     setProgressStage("starting");
+    setAuditPreview(null);
     setPublishStatus("idle");
     setPublishError("");
     setPublishedUrl(null);
@@ -79,6 +87,7 @@ export default function NewsletterGeneratorPage() {
         body: JSON.stringify({
           videoUrl: videoUrl.trim(),
           customInstructions: customInstructions.trim() || undefined,
+          mode,
         }),
         signal: AbortSignal.timeout(360000),
       });
@@ -119,6 +128,9 @@ export default function NewsletterGeneratorPage() {
           }
           if (event.type === "progress") {
             setProgressStage(String(event.stage ?? ""));
+            if (event.stage === "audit-complete" && event.reason) {
+              setAuditPreview(String(event.reason));
+            }
           } else if (event.type === "error") {
             streamError = String(event.error ?? "Generation failed");
           } else if (event.type === "done") {
@@ -151,8 +163,9 @@ export default function NewsletterGeneratorPage() {
     starting: "Starting…",
     "resolving-url": "Resolving YouTube URL…",
     resolved: "Video resolved",
-    "fetching-metadata-and-analysis":
-      "Gemini is watching the video (this is the long step)…",
+    "fetching-metadata-and-captions": "Fetching captions + duration…",
+    "audit-complete": "Audit complete — deciding whether to run Gemini…",
+    "running-gemini": "Gemini is watching the video (this is the long step)…",
     "analysis-done": "Video analyzed — writing newsletter with Claude…",
     "writing-newsletter": "Claude is drafting the newsletter…",
   };
@@ -304,6 +317,55 @@ generated: ${new Date().toISOString()}
               className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none resize-y"
             />
           </div>
+
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Generation mode
+            </label>
+            <div className="grid gap-2 md:grid-cols-3">
+              {[
+                {
+                  value: "auto",
+                  label: "Auto (recommended)",
+                  hint: "Audit decides. Skips Gemini when captions are enough.",
+                },
+                {
+                  value: "transcript-only",
+                  label: "Transcript only",
+                  hint: "Free + fast. Good for talking-head videos.",
+                },
+                {
+                  value: "always-gemini",
+                  label: "Always Gemini",
+                  hint: "~$0.10 / video. Best for demo-heavy visual content.",
+                },
+              ].map((opt) => (
+                <label
+                  key={opt.value}
+                  className={`cursor-pointer rounded-md border p-3 transition-colors ${
+                    mode === opt.value
+                      ? "border-brand bg-brand/5"
+                      : "border-border hover:border-brand/50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="mode"
+                    value={opt.value}
+                    checked={mode === opt.value}
+                    onChange={(e) =>
+                      setMode(e.target.value as typeof mode)
+                    }
+                    className="sr-only"
+                  />
+                  <div className="text-sm font-semibold mb-1">{opt.label}</div>
+                  <div className="text-xs text-muted-foreground leading-snug">
+                    {opt.hint}
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
           <button
             type="submit"
             disabled={status === "loading"}
@@ -323,6 +385,12 @@ generated: ${new Date().toISOString()}
             )}
           </button>
         </form>
+
+        {status === "loading" && auditPreview && (
+          <div className="mb-6 rounded-md border border-brand/25 bg-brand/5 p-3 text-sm text-navy-900">
+            <span className="font-semibold">Audit:</span> {auditPreview}
+          </div>
+        )}
 
         {status === "error" && (
           <div
@@ -361,6 +429,11 @@ generated: ${new Date().toISOString()}
                     </>
                   )}
                 </div>
+                {result.auditReason && (
+                  <div className="mb-1.5 text-xs text-emerald-800">
+                    {result.auditReason}
+                  </div>
+                )}
                 {result.resolvedFrom === "channel-latest" && (
                   <div className="mb-1.5 text-xs italic text-emerald-800">
                     Resolved channel{" "}
