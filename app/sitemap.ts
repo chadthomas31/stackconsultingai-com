@@ -1,86 +1,38 @@
 import { MetadataRoute } from 'next'
+import { listIssues } from '@/lib/newsletter-issues-db'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://stackconsultingai.com'
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date('2026-03-18'),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/tools`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/tools/speed-checker`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/tools/seo-audit`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/tools/roi-calculator`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/tools/timeline-estimator`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/tools/tech-stack`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/tools/cost-calculator`,
-      lastModified: new Date('2026-03-16'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date('2026-03-18'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/web-development`,
-      lastModified: new Date('2026-03-18'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/business-automation`,
-      lastModified: new Date('2026-03-18'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/ecommerce`,
-      lastModified: new Date('2026-03-18'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/maintenance`,
-      lastModified: new Date('2026-03-18'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
+  const staticEntries: MetadataRoute.Sitemap = [
+    { url: baseUrl, lastModified: new Date('2026-03-18'), changeFrequency: 'weekly', priority: 1 },
+    { url: `${baseUrl}/tools`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/tools/speed-checker`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/tools/seo-audit`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/tools/roi-calculator`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/tools/timeline-estimator`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/tools/tech-stack`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/tools/cost-calculator`, lastModified: new Date('2026-03-16'), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/services`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/services/web-development`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/services/business-automation`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/services/ecommerce`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/services/maintenance`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/stack-report`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
   ]
+
+  let issueEntries: MetadataRoute.Sitemap = []
+  try {
+    const issues = await listIssues()
+    issueEntries = issues.map((i) => ({
+      url: `${baseUrl}/stack-report/${i.slug}`,
+      lastModified: new Date(i.published_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+  } catch {
+    // Supabase unreachable during build — skip dynamic entries rather than failing
+  }
+
+  return [...staticEntries, ...issueEntries]
 }

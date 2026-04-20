@@ -9,6 +9,8 @@ import {
   Download,
   ExternalLink,
   Wand2,
+  Send,
+  RefreshCw,
 } from "lucide-react";
 
 interface DraftResponse {
@@ -40,12 +42,24 @@ export default function NewsletterGeneratorPage() {
   const [error, setError] = useState<string>("");
   const [result, setResult] = useState<DraftResponse | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [publishStatus, setPublishStatus] = useState<
+    "idle" | "publishing" | "published" | "error"
+  >("idle");
+  const [publishError, setPublishError] = useState<string>("");
+  const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
+  const [publishedIssueNumber, setPublishedIssueNumber] = useState<
+    number | null
+  >(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
     setError("");
     setResult(null);
+    setPublishStatus("idle");
+    setPublishError("");
+    setPublishedUrl(null);
+    setPublishedIssueNumber(null);
     try {
       const res = await fetch("/api/newsletter/generate", {
         method: "POST",
@@ -71,6 +85,58 @@ export default function NewsletterGeneratorPage() {
       setError(err instanceof Error ? err.message : "Network error");
       setStatus("error");
     }
+  }
+
+  async function handlePublish() {
+    if (!result?.draft) return;
+    setPublishStatus("publishing");
+    setPublishError("");
+    try {
+      const res = await fetch("/api/newsletter/publish", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-secret": secret,
+        },
+        body: JSON.stringify({
+          subject: result.draft.subject,
+          preheader: result.draft.preheader,
+          markdown_body: result.draft.markdown_body,
+          source_video_id: result.videoUrl
+            ? new URL(result.videoUrl).searchParams.get("v")
+            : null,
+          source_video_url: result.videoUrl,
+          source_video_title: result.meta?.title,
+          source_channel: result.meta?.channel,
+        }),
+        signal: AbortSignal.timeout(30000),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setPublishError(data.error || "Publish failed.");
+        setPublishStatus("error");
+        return;
+      }
+      setPublishedUrl(data.url);
+      setPublishedIssueNumber(data.issue_number);
+      setPublishStatus("published");
+    } catch (err) {
+      setPublishError(err instanceof Error ? err.message : "Network error");
+      setPublishStatus("error");
+    }
+  }
+
+  function resetForNextRun() {
+    setStatus("idle");
+    setError("");
+    setResult(null);
+    setVideoUrl("");
+    setCustomInstructions("");
+    setPublishStatus("idle");
+    setPublishError("");
+    setPublishedUrl(null);
+    setPublishedIssueNumber(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function copyToClipboard(text: string, field: string) {
@@ -306,6 +372,77 @@ generated: ${new Date().toISOString()}
                 rows={24}
                 className="w-full px-4 py-3 rounded-md border border-border bg-soft font-mono text-xs leading-relaxed resize-y"
               />
+            </div>
+
+            <div className="pt-6 mt-2 border-t border-border">
+              {publishStatus !== "published" ? (
+                <>
+                  <h2 className="font-heading text-xl font-bold mb-2">
+                    Ready to ship?
+                  </h2>
+                  <p className="text-sm text-muted-foreground mb-4 max-w-xl">
+                    Publishing sends this draft live at{" "}
+                    <code className="text-xs px-1 py-0.5 rounded bg-soft">
+                      /stack-report/[slug]
+                    </code>{" "}
+                    and adds it to the issue index. You can still copy/download
+                    for Beehiiv separately.
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handlePublish}
+                      disabled={publishStatus === "publishing"}
+                      className="btn-accent inline-flex items-center gap-2 disabled:opacity-50"
+                    >
+                      {publishStatus === "publishing" ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Publishing…
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Publish to Stack Report
+                        </>
+                      )}
+                    </button>
+                    {publishStatus === "error" && (
+                      <span className="text-sm text-red-700">
+                        {publishError}
+                      </span>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="rounded-md border border-emerald-200 bg-emerald-50 p-5">
+                  <div className="flex items-start gap-3 mb-4">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-emerald-900 mb-1">
+                        Published as Issue #{publishedIssueNumber}
+                      </div>
+                      <a
+                        href={publishedUrl ?? "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm text-emerald-800 hover:text-emerald-900 underline"
+                      >
+                        {publishedUrl}
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={resetForNextRun}
+                    className="btn-accent inline-flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Generate another
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
