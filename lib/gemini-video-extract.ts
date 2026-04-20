@@ -114,14 +114,25 @@ CRITICAL:
 
 Return JSON matching the provided schema. Nothing else.`;
 
+export function getGeminiApiKey(): string | null {
+  return (
+    process.env.GEMINI_API_KEY ||
+    process.env.AI_STUDIO_GEMINI_KEY ||
+    process.env.GOOGLE_AI_STUDIO_KEY ||
+    null
+  );
+}
+
 export async function analyzeYouTubeVideo(opts: {
   videoUrl: string;
   apiKey?: string;
   model?: string;
 }): Promise<VideoAnalysis> {
-  const apiKey = opts.apiKey ?? process.env.GEMINI_API_KEY;
+  const apiKey = opts.apiKey ?? getGeminiApiKey();
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY is not set");
+    throw new Error(
+      "No Gemini API key configured (checked GEMINI_API_KEY, AI_STUDIO_GEMINI_KEY, GOOGLE_AI_STUDIO_KEY)",
+    );
   }
 
   const ai = new GoogleGenAI({ apiKey });

@@ -7,6 +7,7 @@ import {
 import { generateNewsletter } from "@/lib/newsletter-gen";
 import {
   analyzeYouTubeVideo,
+  getGeminiApiKey,
   type VideoAnalysis,
 } from "@/lib/gemini-video-extract";
 
@@ -101,9 +102,9 @@ export async function POST(req: NextRequest) {
   const [metaResult, transcriptResult, analysisResult] = await Promise.allSettled([
     fetchVideoMeta(videoId),
     fetchTranscript(videoId),
-    process.env.GEMINI_API_KEY
+    getGeminiApiKey()
       ? analyzeYouTubeVideo({ videoUrl: canonicalUrl })
-      : Promise.reject(new Error("GEMINI_API_KEY not configured")),
+      : Promise.reject(new Error("Gemini API key not configured")),
   ]);
 
   const meta =
