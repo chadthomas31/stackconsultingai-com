@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  extractVideoId,
+  resolveYouTubeInput,
   fetchTranscript,
   fetchVideoMeta,
 } from "@/lib/youtube-transcript";
@@ -58,17 +58,32 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const videoId = extractVideoId(videoUrl);
-  if (!videoId) {
+  let resolved;
+  try {
+    resolved = await resolveYouTubeInput(videoUrl);
+  } catch (err) {
     return NextResponse.json(
       {
         ok: false,
         error:
-          "Paste a single YouTube video URL (watch?v=... or youtu.be/...). Channel URLs aren't supported yet.",
+          err instanceof Error
+            ? `Could not resolve the YouTube URL: ${err.message}`
+            : "Could not resolve the YouTube URL.",
       },
       { status: 400 },
     );
   }
+  if (!resolved) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          "Could not extract a video from that URL. Paste a video link (watch?v=...), a channel (@handle), or /channel/UCxxx.",
+      },
+      { status: 400 },
+    );
+  }
+  const videoId = resolved.videoId;
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
@@ -159,6 +174,10 @@ export async function POST(req: NextRequest) {
     videoId,
     videoUrl: canonicalUrl,
     meta,
+    resolvedFrom: resolved.resolvedFrom,
+    channelHandle: resolved.channelHandle ?? null,
+    channelTitle: resolved.channelTitle ?? null,
+    latestVideoTitle: resolved.latestVideoTitle ?? null,
     transcriptWordCount: wordCount,
     source: analysis ? "gemini+transcript" : "transcript-only",
     reposExtracted: analysis?.total_repos_mentioned ?? null,

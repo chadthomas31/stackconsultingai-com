@@ -19,6 +19,10 @@ interface DraftResponse {
   transcriptWordCount?: number;
   source?: "gemini+transcript" | "transcript-only";
   reposExtracted?: number | null;
+  resolvedFrom?: "video-url" | "bare-id" | "channel-latest";
+  channelHandle?: string | null;
+  channelTitle?: string | null;
+  latestVideoTitle?: string | null;
   draft?: {
     subject: string;
     preheader: string;
@@ -139,10 +143,14 @@ generated: ${new Date().toISOString()}
               type="url"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
-              placeholder="https://www.youtube.com/watch?v=..."
+              placeholder="Video URL or channel (e.g., https://youtube.com/@GithubAwesome)"
               required
               className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none"
             />
+            <p className="text-xs text-muted-foreground mt-1.5">
+              Paste a single video URL, or a channel URL — we&apos;ll grab the
+              channel&apos;s latest upload automatically.
+            </p>
           </div>
           <div>
             <label className="block text-sm font-semibold mb-2">
@@ -215,6 +223,18 @@ generated: ${new Date().toISOString()}
                     </>
                   )}
                 </div>
+                {result.resolvedFrom === "channel-latest" && (
+                  <div className="mb-1.5 text-xs italic text-emerald-800">
+                    Resolved channel{" "}
+                    {result.channelHandle
+                      ? `@${result.channelHandle}`
+                      : result.channelTitle || "URL"}{" "}
+                    → latest video:{" "}
+                    <span className="font-semibold not-italic">
+                      {result.latestVideoTitle || result.meta?.title}
+                    </span>
+                  </div>
+                )}
                 <div>
                   Source: {result.meta?.title || "(untitled)"}
                   {result.meta?.channel ? ` · ${result.meta.channel}` : ""}{" "}
