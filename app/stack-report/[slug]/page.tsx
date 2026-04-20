@@ -56,8 +56,41 @@ export default async function StackReportIssuePage({
   const issue = await getIssueBySlug(slug);
   if (!issue) notFound();
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: issue.subject,
+    description: issue.preheader,
+    datePublished: issue.source_published_at ?? issue.published_at,
+    dateModified: issue.published_at,
+    author: {
+      "@type": "Organization",
+      name: "Stack Consulting AI",
+      url: "https://stackconsultingai.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Stack Consulting AI",
+      url: "https://stackconsultingai.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://stackconsultingai.com/stack-logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://stackconsultingai.com/stack-report/${issue.slug}`,
+    },
+    isBasedOn: issue.source_video_url ?? undefined,
+    articleSection: "The Stack Report",
+  };
+
   return (
     <main className="min-h-screen bg-white text-navy-900 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <article className="max-w-3xl mx-auto px-4 pt-10 md:pt-16">
         <Link
           href="/stack-report"
@@ -99,7 +132,28 @@ export default async function StackReportIssuePage({
         </div>
 
         <div className="prose prose-navy max-w-none prose-headings:font-heading prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-relaxed prose-p:text-[0.975rem] prose-li:text-[0.975rem] prose-li:leading-relaxed prose-a:text-brand prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-900 prose-hr:border-border">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              a: ({ href, children, ...props }) => {
+                const isExternal = href?.startsWith("http");
+                return (
+                  <a
+                    href={href}
+                    {...(isExternal
+                      ? {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        }
+                      : {})}
+                    {...props}
+                  >
+                    {children}
+                  </a>
+                );
+              },
+            }}
+          >
             {issue.markdown_body}
           </ReactMarkdown>
         </div>
