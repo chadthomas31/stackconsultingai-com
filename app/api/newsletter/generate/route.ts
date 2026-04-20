@@ -33,7 +33,7 @@ function authorize(req: NextRequest, body: GenerateRequest) {
   );
 }
 
-export async function POST(req: NextRequest) {
+async function handlePost(req: NextRequest) {
   let body: GenerateRequest;
   try {
     body = await req.json();
@@ -186,4 +186,23 @@ export async function POST(req: NextRequest) {
     transcriptError,
     draft,
   });
+}
+
+/** Top-level wrapper that guarantees a JSON response even on uncaught errors. */
+export async function POST(req: NextRequest) {
+  try {
+    return await handlePost(req);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[newsletter/generate] uncaught:", message, stack);
+    return NextResponse.json(
+      {
+        ok: false,
+        stage: "uncaught",
+        error: `Server error: ${message}`,
+      },
+      { status: 500 },
+    );
+  }
 }

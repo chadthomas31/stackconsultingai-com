@@ -73,9 +73,19 @@ export default function NewsletterGeneratorPage() {
         }),
         signal: AbortSignal.timeout(300000),
       });
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        const text = await res.text();
+        const preview = text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 220);
+        setError(
+          `Server returned ${res.status} ${res.statusText} with non-JSON body (likely a platform timeout or 502). Check Vercel → Deployments → latest → Functions → /api/newsletter/generate for the real stack trace. Preview: ${preview || "(empty)"}`,
+        );
+        setStatus("error");
+        return;
+      }
       const data = (await res.json()) as DraftResponse;
       if (!res.ok || !data.ok) {
-        setError(data.error || "Generation failed.");
+        setError(data.error || `Generation failed (HTTP ${res.status}).`);
         setStatus("error");
         return;
       }
