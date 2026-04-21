@@ -352,47 +352,81 @@ export default function SiteAudit() {
       try {
         const res = await fetch("/api/site-audit", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "text/event-stream",
+          },
           body: JSON.stringify({
             url: normalizeUrl(url),
             name,
             email,
             phone: phone || undefined,
           }),
-          signal: AbortSignal.timeout(90000),
+          signal: AbortSignal.timeout(200000),
         });
 
-        if (!res.ok && res.status >= 500) {
+        if (!res.ok || !res.body) {
           setError(
-            "The audit took too long — that usually means the target site is slow. Try again, or try a different URL."
+            `Audit failed with HTTP ${res.status}. Try again, or try a different URL.`,
           );
           setLoading(false);
           return;
         }
 
-        const data = await res.json();
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let final: AuditResult | null = null;
+        let streamError: string | null = null;
 
-        if (!data.success) {
-          setError(data.error || "Something went wrong. Please try again.");
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const frames = buffer.split("\n\n");
+          buffer = frames.pop() ?? "";
+          for (const frame of frames) {
+            if (!frame.startsWith("data: ")) continue;
+            let event: Record<string, unknown>;
+            try {
+              event = JSON.parse(frame.slice(6));
+            } catch {
+              continue;
+            }
+            if (event.type === "error") {
+              streamError = String(event.error ?? "Audit failed.");
+            } else if (event.type === "done") {
+              final = event as unknown as AuditResult;
+            }
+            // "progress" events just keep CF alive; nothing to render.
+          }
+        }
+
+        if (streamError) {
+          setError(streamError);
+          setLoading(false);
+          return;
+        }
+        if (!final) {
+          setError(
+            "The audit stream ended without results — Google PageSpeed is slow right now. Try again in a moment.",
+          );
           setLoading(false);
           return;
         }
 
         setProgress(100);
-        // Short delay so the progress bar fills
         setTimeout(() => {
-          setResult(data as AuditResult);
+          setResult(final as AuditResult);
           setLoading(false);
-          // Push GTM event
           if (typeof window !== "undefined" && (window as any).dataLayer) {
             (window as any).dataLayer.push({
               event: "site_audit_complete",
-              audit_url: data.url,
-              audit_grade: data.overallGrade,
-              audit_score: data.overallScore,
+              audit_url: (final as AuditResult).url,
+              audit_grade: (final as AuditResult).overallGrade,
+              audit_score: (final as AuditResult).overallScore,
             });
           }
-          // Scroll to results
           setTimeout(() => {
             resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
           }, 200);
@@ -402,8 +436,8 @@ export default function SiteAudit() {
           err instanceof DOMException && err.name === "TimeoutError";
         setError(
           isTimeout
-            ? "The audit timed out. PageSpeed is slow — try again in a moment."
-            : "Network error. Please check your connection and try again."
+            ? "The audit timed out after 3 minutes. PageSpeed is very slow today — try again in a moment."
+            : "Network error. Please check your connection and try again.",
         );
         setLoading(false);
       }
