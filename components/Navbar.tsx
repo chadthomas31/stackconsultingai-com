@@ -64,7 +64,8 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Main navigation"
-      className={`fixed top-0 left-0 right-0 z-40 overflow-visible transition-all duration-300 ${
+      style={{ top: "var(--announcement-h, 0px)" }}
+      className={`fixed left-0 right-0 z-40 overflow-visible transition-all duration-300 ${
         isScrolled
           ? "bg-white/85 backdrop-blur-xl border-b border-border"
           : "bg-transparent border-b border-transparent"

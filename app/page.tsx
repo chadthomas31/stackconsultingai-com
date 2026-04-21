@@ -1,8 +1,12 @@
 import Navbar from "@/components/Navbar";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Hero from "@/components/Hero";
 import ClientLogoStrip from "@/components/ClientLogoStrip";
 import FreeAssessmentOffer from "@/components/FreeAssessmentOffer";
-import FoundingClientSpecial from "@/components/FoundingClientSpecial";
+import FoundingClientSpecial, {
+  LAUNCH_PARTNER_SLOTS_REMAINING,
+  LAUNCH_PARTNER_TOTAL_SLOTS,
+} from "@/components/FoundingClientSpecial";
 import StackComparison from "@/components/StackComparison";
 import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
@@ -18,6 +22,10 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <main id="main-content" className="min-h-screen">
+      <AnnouncementBar
+        slotsRemaining={LAUNCH_PARTNER_SLOTS_REMAINING}
+        totalSlots={LAUNCH_PARTNER_TOTAL_SLOTS}
+      />
       <Navbar />
       <Hero />
       <ClientLogoStrip />

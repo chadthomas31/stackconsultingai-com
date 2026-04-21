@@ -85,6 +85,14 @@ const TIERS: Array<{
   },
 ];
 
+export const LAUNCH_PARTNER_TOTAL_SLOTS = TIERS.reduce(
+  (sum, t) => sum + t.slotsCount,
+  0,
+);
+export const LAUNCH_PARTNER_SLOTS_REMAINING = TIERS.filter(
+  (t) => !t.filled,
+).reduce((sum, t) => sum + t.slotsCount, 0);
+
 export default function FoundingClientSpecial() {
   const totalSlots = TIERS.reduce((sum, t) => sum + t.slotsCount, 0);
   const slotsRemaining = TIERS.filter((t) => !t.filled).reduce(
