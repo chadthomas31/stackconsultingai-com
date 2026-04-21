@@ -101,16 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        {/* ElevenLabs ConvAI - disabled, replaced by GHL chat widget */}
-
-        {/* GHL Chat Widget */}
-        <Script
-          id="ghl-chat-widget"
-          src="https://widgets.leadconnectorhq.com/loader.js"
-          data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
-          data-widget-id="69cc00c67061134043df2d3f"
-          strategy="lazyOnload"
-        />
+        {/* Chat widget removed 2026-04-21 — GoHighLevel subscription cancelled.
+            Previously: GHL chat widget via widgets.leadconnectorhq.com. */}
       </body>
     </html>
   );
