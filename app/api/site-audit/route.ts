@@ -166,16 +166,44 @@ function getClientIp(request: NextRequest): string | null {
   );
 }
 
-async function fetchPageSpeed(url: string, strategy: "mobile" | "desktop") {
+class PageSpeedError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
+async function fetchPageSpeedOnce(url: string, strategy: "mobile" | "desktop") {
   const key = process.env.GOOGLE_API_KEY;
   const keyParam = key ? `&key=${key}` : "";
   const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&category=performance&category=accessibility&category=best-practices&category=seo${keyParam}`;
   const res = await fetch(apiUrl, { signal: AbortSignal.timeout(120000) });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`PageSpeed API error (${strategy}): ${res.status} - ${text.slice(0, 200)}`);
+    throw new PageSpeedError(
+      `PageSpeed API error (${strategy}): ${res.status} - ${text.slice(0, 200)}`,
+      res.status,
+    );
   }
   return res.json();
+}
+
+async function fetchPageSpeed(url: string, strategy: "mobile" | "desktop") {
+  // Retry once on 429 / 5xx with a short backoff.
+  try {
+    return await fetchPageSpeedOnce(url, strategy);
+  } catch (err) {
+    if (err instanceof PageSpeedError && (err.status === 429 || err.status >= 500)) {
+      await new Promise((r) => setTimeout(r, 8000));
+      return fetchPageSpeedOnce(url, strategy);
+    }
+    throw err;
+  }
+}
+
+function isRateLimitError(err: unknown): boolean {
+  return err instanceof PageSpeedError && err.status === 429;
 }
 
 // Streaming response. Same pattern as /api/newsletter/generate — sends SSE
@@ -275,30 +303,48 @@ async function runAudit(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mobileData: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let desktopData: any;
+  let desktopData: any = null;
+  let desktopFailureNote: string | null = null;
+
+  // Mobile is non-negotiable — if it fails, the whole audit fails.
   try {
-    // Run in parallel — Google PageSpeed can take 30-60s per strategy.
-    [mobileData, desktopData] = await Promise.all([
-      fetchPageSpeed(url, "mobile"),
-      fetchPageSpeed(url, "desktop"),
-    ]);
+    mobileData = await fetchPageSpeed(url, "mobile");
   } catch (apiError) {
-    console.error("PageSpeed API error:", apiError);
+    console.error("PageSpeed API error (mobile):", apiError);
     const msg =
       apiError instanceof Error ? apiError.message : String(apiError);
     send({
       type: "error",
-      error: `Could not analyze that website. ${msg.includes("429") ? "Rate limit hit — try again in a minute." : "Please check the URL is accessible and try again."}`,
+      error: `Could not analyze that website. ${
+        isRateLimitError(apiError)
+          ? "Google PageSpeed rate-limited us. Wait 60 seconds and retry — if this keeps happening, GOOGLE_API_KEY needs to be set in Vercel."
+          : "Please check the URL is accessible and try again."
+      }`,
     });
     return;
+  }
+
+  // Desktop is nice-to-have — if rate-limited or slow, we ship mobile-only.
+  send({ type: "progress", stage: "running-desktop" });
+  try {
+    desktopData = await fetchPageSpeed(url, "desktop");
+  } catch (apiError) {
+    console.error("PageSpeed API error (desktop):", apiError);
+    desktopFailureNote = isRateLimitError(apiError)
+      ? "Desktop audit skipped (rate limited)."
+      : "Desktop audit skipped (error).";
   }
 
   send({ type: "progress", stage: "scoring" });
 
   const mobileScores = extractScores(mobileData.lighthouseResult);
-  const desktopScores = extractScores(desktopData.lighthouseResult);
+  const desktopScores = desktopData
+    ? extractScores(desktopData.lighthouseResult)
+    : mobileScores;
   const mobileFindings = extractFindings(mobileData.lighthouseResult);
-  const desktopFindings = extractFindings(desktopData.lighthouseResult);
+  const desktopFindings = desktopData
+    ? extractFindings(desktopData.lighthouseResult)
+    : mobileFindings;
 
   const allScores = [
     mobileScores.performance,
@@ -347,5 +393,7 @@ async function runAudit(
       scores: desktopScores,
       findings: desktopFindings,
     },
+    desktopFallback: desktopData === null,
+    desktopFailureNote,
   });
 }
