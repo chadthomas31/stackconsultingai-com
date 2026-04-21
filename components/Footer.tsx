@@ -15,8 +15,8 @@ export default function Footer() {
             <Image
               src="/stack-logo.png?v=4"
               alt="Stack Consulting AI"
-              width={600}
-              height={150}
+              width={1024}
+              height={1024}
               className="h-[96px] w-auto mb-2"
             />
             <p className="text-muted-foreground">
@@ -27,7 +27,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
+            <h3 className="font-semibold mb-4">Contact</h3>
             <div className="space-y-2">
               <a
                 href="mailto:hello@stackconsultingai.com"
@@ -48,7 +48,7 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-semibold mb-4">Services</h4>
+            <h3 className="font-semibold mb-4">Services</h3>
             <ul className="space-y-2">
               <li>
                 <a href="/services/web-development" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">

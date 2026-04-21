@@ -82,8 +82,8 @@ export default function Navbar() {
             <Image
               src="/stack-logo.png?v=4"
               alt="Stack Consulting AI"
-              width={600}
-              height={150}
+              width={1024}
+              height={1024}
               className="h-20 md:h-56 lg:h-72 w-auto"
               priority
             />
