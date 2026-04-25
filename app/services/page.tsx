@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Code2, Zap, ShoppingCart, Wrench, ArrowRight } from "lucide-react";
+import { Code2, Zap, ShoppingCart, Wrench, ArrowRight, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "AI Consulting & Web Development Services | Southern California | Stack Consulting AI",
@@ -29,6 +29,14 @@ export const metadata: Metadata = {
 };
 
 const services = [
+  {
+    icon: MapPin,
+    title: "AI Consulting Orange County",
+    description:
+      "Founder-led AI consulting for OC small businesses. Voice agents, chatbots, and automations built in-house — no offshore handoffs. Free 30-minute assessment.",
+    href: "/services/ai-consulting-orange-county",
+    highlights: ["Voice Agents", "Chatbots", "Workflow Automation", "OC-based"],
+  },
   {
     icon: Code2,
     title: "Custom Web Development",

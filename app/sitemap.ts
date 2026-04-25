@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/services/business-automation`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/services/ecommerce`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/services/maintenance`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/services/ai-consulting-orange-county`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/stack-report`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
   ]
 
