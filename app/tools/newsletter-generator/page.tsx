@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const SECRET_STORAGE_KEY = "stackreport.admin_secret";
+const INSTRUCTIONS_STORAGE_KEY = "stackreport.custom_instructions";
 import {
   Loader2,
   CheckCircle2,
@@ -42,8 +45,43 @@ interface DraftResponse {
 
 export default function NewsletterGeneratorPage() {
   const [secret, setSecret] = useState("");
+  const [secretEditable, setSecretEditable] = useState(true);
   const [videoUrl, setVideoUrl] = useState("");
   const [customInstructions, setCustomInstructions] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const storedSecret = window.localStorage.getItem(SECRET_STORAGE_KEY);
+    if (storedSecret) {
+      setSecret(storedSecret);
+      setSecretEditable(false);
+    }
+    const storedInstructions = window.localStorage.getItem(
+      INSTRUCTIONS_STORAGE_KEY,
+    );
+    if (storedInstructions) setCustomInstructions(storedInstructions);
+  }, []);
+
+  function persistSecret(value: string) {
+    setSecret(value);
+    if (typeof window !== "undefined") {
+      if (value) window.localStorage.setItem(SECRET_STORAGE_KEY, value);
+      else window.localStorage.removeItem(SECRET_STORAGE_KEY);
+    }
+  }
+
+  function persistInstructions(value: string) {
+    setCustomInstructions(value);
+    if (typeof window !== "undefined") {
+      if (value) window.localStorage.setItem(INSTRUCTIONS_STORAGE_KEY, value);
+      else window.localStorage.removeItem(INSTRUCTIONS_STORAGE_KEY);
+    }
+  }
+
+  function clearSecret() {
+    persistSecret("");
+    setSecretEditable(true);
+  }
   const [mode, setMode] = useState<
     "auto" | "transcript-only" | "always-gemini"
   >("auto");
@@ -272,19 +310,36 @@ generated: ${new Date().toISOString()}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5 mb-12">
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Admin secret
-            </label>
-            <input
-              type="password"
-              value={secret}
-              onChange={(e) => setSecret(e.target.value)}
-              placeholder="NEWSLETTER_ADMIN_SECRET value"
-              required
-              className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none"
-            />
-          </div>
+          {secretEditable ? (
+            <div>
+              <label className="block text-sm font-semibold mb-2">
+                Admin secret
+              </label>
+              <input
+                type="password"
+                value={secret}
+                onChange={(e) => persistSecret(e.target.value)}
+                placeholder="NEWSLETTER_ADMIN_SECRET value (saved locally for next time)"
+                required
+                className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none"
+              />
+              <p className="text-xs text-muted-foreground mt-1.5">
+                Saved to this browser only. You won&apos;t see this field again
+                on this device.
+              </p>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between text-xs text-muted-foreground bg-soft border border-border rounded-md px-3 py-2">
+              <span>Admin secret loaded from this browser.</span>
+              <button
+                type="button"
+                onClick={clearSecret}
+                className="text-brand hover:underline font-medium"
+              >
+                Reset
+              </button>
+            </div>
+          )}
           <div>
             <label className="block text-sm font-semibold mb-2">
               YouTube URL
@@ -311,11 +366,14 @@ generated: ${new Date().toISOString()}
             </label>
             <textarea
               value={customInstructions}
-              onChange={(e) => setCustomInstructions(e.target.value)}
+              onChange={(e) => persistInstructions(e.target.value)}
               placeholder="e.g., 'Highlight tools that save marketing teams time.' Leave blank for default."
               rows={3}
               className="w-full px-4 py-3 rounded-md border border-border bg-white focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none resize-y"
             />
+            <p className="text-xs text-muted-foreground mt-1.5">
+              Auto-saved to this browser. Edit per-issue or leave as-is.
+            </p>
           </div>
 
           <div>
