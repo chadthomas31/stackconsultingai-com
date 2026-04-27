@@ -12,10 +12,12 @@ import {
   ShieldCheck,
   Gauge,
   AlertTriangle,
+  Plus,
 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PricingTier from "@/components/PricingTier";
 
 export const metadata: Metadata = {
   title:
@@ -60,7 +62,8 @@ const tiers = [
       "Fixed-price implementation quote if you want to proceed",
       "1-page PDF deliverable + 30-min walkthrough",
     ],
-    cta: "Start a workflow audit",
+    ctaLabel: "Start a workflow audit",
+    ctaHref: "/#contact",
     highlight: false,
   },
   {
@@ -79,7 +82,8 @@ const tiers = [
       "Fixed-price quotes for the top 3 use cases",
       "Audit fee credited toward any project we ship together",
     ],
-    cta: "Book the full audit",
+    ctaLabel: "Book the full audit",
+    ctaHref: "/#contact",
     highlight: true,
   },
 ];
@@ -328,7 +332,7 @@ export default function AiReadinessAuditPage() {
           </nav>
 
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-white text-navy-900 text-xs font-medium mb-8">
-            <ClipboardList className="w-3.5 h-3.5 text-brand" />
+            <ClipboardList aria-hidden="true" className="w-3.5 h-3.5 text-brand" />
             <span>Fixed-fee · Founder-led · 7–14 day delivery</span>
           </div>
 
@@ -350,7 +354,7 @@ export default function AiReadinessAuditPage() {
               className="btn-accent inline-flex items-center gap-2 text-base"
             >
               See audit tiers
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight aria-hidden="true" className="w-4 h-4" />
             </Link>
             <Link
               href="/#contact"
@@ -368,7 +372,7 @@ export default function AiReadinessAuditPage() {
       </section>
 
       {/* Reality */}
-      <section className="py-20 bg-soft">
+      <section className="py-16 bg-soft">
         <div className="max-w-4xl mx-auto px-4">
           <span className="section-kicker">The reality</span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-6 tracking-tight">
@@ -389,15 +393,118 @@ export default function AiReadinessAuditPage() {
         </div>
       </section>
 
-      {/* Tiers */}
-      <section id="tiers" className="py-20">
+      {/* Signature: sample report preview */}
+      <section className="py-24 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+            <div className="md:col-span-5">
+              <span className="section-kicker">Sample deliverable</span>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
+                What lands in your inbox.
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                A 12-page PDF with a real scorecard, named tools, ranked
+                opportunities, and fixed-price quotes. Formatted to forward to
+                your accountant or your board without rewriting a word.
+              </p>
+              <ul className="space-y-2 text-sm text-navy-900">
+                <li className="flex gap-2">
+                  <span className="text-brand">→</span> AI-readiness score across 8 dimensions
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-brand">→</span> Top 5 use cases, ranked impact × feasibility
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-brand">→</span> Risk + compliance flags called out
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-brand">→</span> Fixed-price implementation quotes
+                </li>
+              </ul>
+            </div>
+
+            {/* Stylized PDF preview */}
+            <div
+              aria-hidden="true"
+              className="md:col-span-7 relative"
+            >
+              <div className="absolute -top-6 -right-6 w-full h-full rounded-md bg-brand-soft hidden md:block" />
+              <div className="relative bg-white border border-border rounded-md p-8 md:p-10 shadow-[0_24px_60px_-24px_rgba(0,18,46,0.25)]">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-brand" />
+                    <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                      AI Readiness Audit · Acme Co.
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono text-muted-foreground">
+                    p. 03 / 12
+                  </span>
+                </div>
+
+                <h3 className="font-heading text-xl font-bold text-navy-900 mb-1">
+                  Readiness Scorecard
+                </h3>
+                <p className="text-xs text-muted-foreground mb-6">
+                  How your stack scores across 8 dimensions (0&ndash;10).
+                </p>
+
+                <div className="space-y-3">
+                  {[
+                    { label: "Data hygiene", score: 7 },
+                    { label: "CRM completeness", score: 4 },
+                    { label: "Workflow documentation", score: 3 },
+                    { label: "Tool consolidation", score: 6 },
+                    { label: "Team AI literacy", score: 5 },
+                    { label: "Compliance posture", score: 8 },
+                  ].map((row) => (
+                    <div
+                      key={row.label}
+                      className="grid grid-cols-[1fr_auto] items-center gap-3"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-medium text-navy-900">
+                            {row.label}
+                          </span>
+                          <span className="text-xs font-mono text-muted-foreground tabular-nums">
+                            {row.score}/10
+                          </span>
+                        </div>
+                        <div className="h-1.5 rounded-full bg-soft overflow-hidden">
+                          <div
+                            className="h-full bg-brand rounded-full"
+                            style={{ width: `${row.score * 10}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-border flex items-baseline justify-between">
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground">
+                    Overall
+                  </span>
+                  <span className="font-heading text-2xl font-bold text-navy-900">
+                    5.5<span className="text-muted-foreground text-base font-normal">/10</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tiers */}
+      <section id="tiers" className="py-24">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="mb-14 max-w-2xl">
             <span className="section-kicker">Pick your tier</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
               Two flat fees. No retainer trap.
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
               Start narrow with one workflow, or go broad with the full
               readiness scorecard. Either way: fixed price, fixed timeline,
               real deliverable.
@@ -406,62 +513,13 @@ export default function AiReadinessAuditPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {tiers.map((t) => (
-              <div
-                key={t.name}
-                className={
-                  t.highlight
-                    ? "relative p-8 rounded-md bg-white border-2 border-brand shadow-[0_8px_32px_rgba(62,106,239,0.18)]"
-                    : "p-8 rounded-md bg-white border border-border"
-                }
-              >
-                {t.highlight ? (
-                  <span className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-brand text-white text-xs font-semibold tracking-wide">
-                    Most chosen
-                  </span>
-                ) : null}
-                <h3 className="font-heading text-2xl font-bold text-navy-900 mb-1">
-                  {t.name}
-                </h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="font-heading text-5xl font-bold text-navy-900">
-                    {t.price}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-5">
-                  {t.cadence}
-                </p>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {t.pitch}
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {t.bullets.map((b) => (
-                    <li
-                      key={b}
-                      className="flex items-start gap-3 text-sm text-navy-900 leading-relaxed"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-brand shrink-0 mt-0.5" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/#contact"
-                  className={
-                    t.highlight
-                      ? "btn-accent w-full inline-flex items-center justify-center gap-2"
-                      : "btn-ghost w-full inline-flex items-center justify-center gap-2"
-                  }
-                >
-                  {t.cta}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
+              <PricingTier key={t.name} {...t} />
             ))}
           </div>
 
           <p className="text-sm text-muted-foreground text-center mt-8 max-w-2xl mx-auto">
             Not sure which fits?{" "}
-            <Link href="/#contact" className="text-brand hover:underline">
+            <Link href="/#contact" className="text-brand-hover hover:underline">
               Talk to Chad
             </Link>{" "}
             for 15 minutes &mdash; we&rsquo;ll point you to the right tier even
@@ -470,49 +528,58 @@ export default function AiReadinessAuditPage() {
         </div>
       </section>
 
-      {/* What's inside */}
+      {/* What's inside — editorial list, no card grid */}
       <section className="py-20 bg-soft">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="section-kicker">What&rsquo;s inside</span>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
-              What an audit actually contains
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Real artifacts, not framework slides. The full audit ships as a
-              12-page PDF you can hand to your accountant, your team, or your
-              board.
-            </p>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+            <div className="md:col-span-4">
+              <span className="section-kicker">What&rsquo;s inside</span>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
+                What an audit actually contains
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Real artifacts, not framework slides. The full audit ships as
+                a 12-page PDF you can hand to your accountant, your team, or
+                your board.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {insideAudit.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  className="p-6 rounded-md bg-white border border-border hover:border-navy-900/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,18,46,0.10)]"
-                >
-                  <div className="p-2.5 rounded-md bg-brand-soft text-brand w-fit mb-4">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="font-heading text-lg font-semibold text-navy-900 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              );
-            })}
+            <ol className="md:col-span-8 divide-y divide-border border-y border-border">
+              {insideAudit.map((item, i) => {
+                const Icon = item.icon;
+                const num = String(i + 1).padStart(2, "0");
+                return (
+                  <li
+                    key={item.title}
+                    className="flex items-start gap-5 py-6"
+                  >
+                    <span className="font-heading text-2xl font-bold text-brand-soft tabular-nums w-10 shrink-0 pt-0.5">
+                      {num}
+                    </span>
+                    <Icon
+                      aria-hidden="true"
+                      className="w-5 h-5 text-brand shrink-0 mt-1.5"
+                    />
+                    <div>
+                      <h3 className="font-heading text-lg font-semibold text-navy-900 mb-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
         </div>
       </section>
 
       {/* Process */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="mb-12 max-w-2xl">
             <span className="section-kicker">How it works</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
               Kickoff to walkthrough in 7&ndash;14 days
@@ -531,7 +598,7 @@ export default function AiReadinessAuditPage() {
                     {s.step}
                   </span>
                   <div className="p-2.5 rounded-md bg-brand-soft text-brand w-fit mb-4">
-                    <Icon className="w-5 h-5" />
+                    <Icon aria-hidden="true" className="w-5 h-5" />
                   </div>
                   <h3 className="font-heading text-lg font-semibold text-navy-900 mb-2">
                     {s.title}
@@ -566,7 +633,7 @@ export default function AiReadinessAuditPage() {
                     key={g}
                     className="flex items-start gap-3 text-sm text-navy-900 leading-relaxed"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-brand shrink-0 mt-0.5" />
+                    <CheckCircle2 aria-hidden="true" className="w-4 h-4 text-brand shrink-0 mt-0.5" />
                     <span>{g}</span>
                   </li>
                 ))}
@@ -582,7 +649,7 @@ export default function AiReadinessAuditPage() {
                     key={b}
                     className="flex items-start gap-3 text-sm text-muted-foreground leading-relaxed"
                   >
-                    <AlertTriangle className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+                    <AlertTriangle aria-hidden="true" className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
                     <span>{b}</span>
                   </li>
                 ))}
@@ -593,7 +660,7 @@ export default function AiReadinessAuditPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
             <span className="section-kicker">FAQ</span>
@@ -609,12 +676,10 @@ export default function AiReadinessAuditPage() {
               >
                 <summary className="cursor-pointer list-none font-heading font-semibold text-navy-900 flex items-start justify-between gap-4">
                   <span>{f.q}</span>
-                  <span
-                    aria-hidden
-                    className="text-brand transition-transform group-open:rotate-45 mt-0.5 text-xl leading-none"
-                  >
-                    +
-                  </span>
+                  <Plus
+                    aria-hidden="true"
+                    className="text-brand-hover transition-transform group-open:rotate-45 mt-1 w-5 h-5 shrink-0"
+                  />
                 </summary>
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                   {f.a}
@@ -626,7 +691,7 @@ export default function AiReadinessAuditPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-soft">
+      <section className="py-28 bg-soft">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-navy-900 mb-6 tracking-tight">
             Ready for an honest answer?
@@ -642,7 +707,7 @@ export default function AiReadinessAuditPage() {
               className="btn-accent inline-flex items-center justify-center gap-2 text-base"
             >
               See audit tiers
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight aria-hidden="true" className="w-4 h-4" />
             </Link>
             <Link
               href="/#contact"
@@ -655,7 +720,7 @@ export default function AiReadinessAuditPage() {
             Or call us directly:{" "}
             <a
               href="tel:+19497490001"
-              className="text-brand hover:underline font-medium"
+              className="text-brand-hover hover:underline font-medium"
             >
               (949) 749-0001
             </a>

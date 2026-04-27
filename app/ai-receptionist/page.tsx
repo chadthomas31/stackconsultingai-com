@@ -10,13 +10,14 @@ import {
   ArrowRightLeft,
   Mic,
   ShieldCheck,
-  CheckCircle2,
   Clock,
   Zap,
+  Plus,
 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PricingTier from "@/components/PricingTier";
 
 export const metadata: Metadata = {
   title:
@@ -119,27 +120,6 @@ const useCases = [
   },
 ];
 
-const results = [
-  {
-    metric: "40%",
-    label: "More booked appointments",
-    detail:
-      "Fix It San Clemente: AI receptionist + automated follow-up. Bookings up 40% inside 90 days.",
-  },
-  {
-    metric: "<1 sec",
-    label: "Answer time",
-    detail:
-      "FreeSWITCH + Realtime API answers faster than your phone can finish ringing. No 'please hold while we connect you.'",
-  },
-  {
-    metric: "100%",
-    label: "Calls captured",
-    detail:
-      "Every inbound call gets a transcript, a summary, and a CRM record. Nothing slips through after-hours, vacation, or a busy team.",
-  },
-];
-
 const tiers = [
   {
     name: "Pilot",
@@ -156,7 +136,8 @@ const tiers = [
       "30 days of post-launch tuning included",
       "You own the FreeSWITCH config + repo",
     ],
-    cta: "Start a pilot",
+    ctaLabel: "Start a pilot",
+    ctaHref: "/#contact",
     highlight: false,
   },
   {
@@ -175,7 +156,8 @@ const tiers = [
       "60 days of post-launch tuning + monthly tuning calls",
       "SLA on uptime + response time",
     ],
-    cta: "Talk through production scope",
+    ctaLabel: "Talk through production scope",
+    ctaHref: "/#contact",
     highlight: true,
   },
 ];
@@ -335,7 +317,7 @@ export default function AiReceptionistPage() {
           </nav>
 
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-white text-navy-900 text-xs font-medium mb-8">
-            <Mic className="w-3.5 h-3.5 text-brand" />
+            <Mic aria-hidden="true" className="w-3.5 h-3.5 text-brand" />
             <span>Live demo on the homepage · Call it yourself</span>
           </div>
 
@@ -345,10 +327,10 @@ export default function AiReceptionistPage() {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-10 leading-relaxed">
-            FreeSWITCH + OpenAI Realtime, deployed on your infrastructure.
-            Answers your phone, qualifies the caller, reads your calendar,
-            books the appointment, transfers humans when needed, and emails
-            you the transcript. 24/7. Sub-1-second answer time.
+            Answers your phone, qualifies the caller, books the appointment,
+            transfers humans when needed, and emails you the transcript &mdash;
+            24/7. Sub-1-second answer time. Same voice agent live on this
+            site&rsquo;s hero. Call it before you commit.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 items-start mb-10">
@@ -356,7 +338,7 @@ export default function AiReceptionistPage() {
               href="/#call-me"
               className="btn-accent inline-flex items-center gap-2 text-base"
             >
-              <Phone className="w-4 h-4" />
+              <Phone aria-hidden="true" className="w-4 h-4" />
               Call the live demo
             </Link>
             <Link
@@ -364,18 +346,18 @@ export default function AiReceptionistPage() {
               className="btn-ghost inline-flex items-center gap-2 text-base"
             >
               See pricing
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight aria-hidden="true" className="w-4 h-4" />
             </Link>
           </div>
 
           <p className="text-sm text-muted-foreground">
-            Same stack live on this site&rsquo;s hero. Try it before you trust it.
+            10+ Southern California small businesses on this stack since 2025.
           </p>
         </div>
       </section>
 
       {/* Reality check */}
-      <section className="py-20 bg-soft">
+      <section className="py-16 bg-soft">
         <div className="max-w-4xl mx-auto px-4">
           <span className="section-kicker">The reality</span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-6 tracking-tight">
@@ -396,55 +378,146 @@ export default function AiReceptionistPage() {
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className="py-20">
+      {/* Signature: call flow — dark band, horizontal sequence */}
+      <section className="py-24 bg-navy-900 text-white">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="mb-14 max-w-2xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-soft">
+              How a call flows
+            </span>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mt-3 mb-4 tracking-tight">
+              From ring to booked appointment in under 60 seconds.
+            </h2>
+            <p className="text-white/70 leading-relaxed">
+              Same path every inbound call takes. Sub-1-second answer.
+              Calendar booked while the caller is still on the line. Receipt
+              in your inbox before they hang up.
+            </p>
+          </div>
+
+          <ol className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 relative">
+            <div
+              aria-hidden="true"
+              className="hidden md:block absolute top-8 left-[10%] right-[10%] h-px bg-brand/30"
+            />
+            {[
+              {
+                Icon: PhoneCall,
+                t: "0s",
+                title: "Caller dials in",
+                desc: "Inbound number, day or night. Telnyx routes to FreeSWITCH.",
+              },
+              {
+                Icon: Mic,
+                t: "<1s",
+                title: "AI answers, qualifies",
+                desc: "OpenAI Realtime picks up. Asks the questions you scripted.",
+              },
+              {
+                Icon: CalendarCheck,
+                t: "~30s",
+                title: "Books or transfers",
+                desc: "Reads your calendar live. Books slot, or warm-transfers a human.",
+              },
+              {
+                Icon: Mail,
+                t: "~60s",
+                title: "You get the receipt",
+                desc: "Transcript, summary, and CRM record before they hang up.",
+              },
+            ].map((step) => {
+              const { Icon } = step;
+              return (
+                <li key={step.title} className="relative">
+                  <div className="w-16 h-16 rounded-full bg-brand text-white flex items-center justify-center mb-5 relative z-10 ring-4 ring-navy-900">
+                    <Icon aria-hidden="true" className="w-7 h-7" />
+                  </div>
+                  <span className="absolute top-1 left-20 text-xs font-mono text-brand-soft tabular-nums">
+                    {step.t}
+                  </span>
+                  <h3 className="font-heading text-lg font-semibold mb-1">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-white/70 leading-relaxed">
+                    {step.desc}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+
+          <p className="text-sm text-white/60 mt-12">
+            Want to hear it?{" "}
+            <Link
+              href="/#call-me"
+              className="text-brand-soft hover:text-white underline underline-offset-4"
+            >
+              Call the live demo
+            </Link>{" "}
+            &mdash; same stack running on this page&rsquo;s hero.
+          </p>
+        </div>
+      </section>
+
+      {/* Capabilities — full-width numbered editorial rows */}
+      <section className="py-24">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="mb-14 max-w-2xl">
             <span className="section-kicker">What it does</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
               What an AI receptionist actually handles
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
               Real capabilities, not framework demos. Each of these runs in
               production on client lines today.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {capabilities.map((c) => {
+          <ol className="divide-y divide-border border-y border-border">
+            {capabilities.map((c, i) => {
               const Icon = c.icon;
+              const num = String(i + 1).padStart(2, "0");
               return (
-                <div
+                <li
                   key={c.title}
-                  className="p-6 rounded-md bg-white border border-border hover:border-navy-900/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,18,46,0.10)]"
+                  className="grid grid-cols-[auto_1fr] md:grid-cols-[4rem_2.5rem_1fr_2fr] gap-x-5 gap-y-2 py-7 items-start"
                 >
-                  <div className="p-2.5 rounded-md bg-brand-soft text-brand w-fit mb-4">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="font-heading text-lg font-semibold text-navy-900 mb-2">
+                  <span className="font-heading text-3xl font-bold text-brand-soft tabular-nums">
+                    {num}
+                  </span>
+                  <Icon
+                    aria-hidden="true"
+                    className="w-6 h-6 text-brand mt-2 hidden md:block"
+                  />
+                  <h3 className="font-heading text-xl font-semibold text-navy-900 col-start-2 md:col-start-3 md:pt-1">
                     {c.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed col-span-2 md:col-span-1 md:col-start-4 md:pt-1.5">
                     {c.description}
                   </p>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </section>
 
       {/* Stack */}
       <section className="py-20 bg-soft">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="mb-12 max-w-2xl">
             <span className="section-kicker">The stack</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
               We name our parts. No black boxes.
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
               Every layer is open, owned, and replaceable. Nothing locked
-              behind a proprietary &ldquo;AI platform.&rdquo;
+              behind a proprietary &ldquo;AI platform.&rdquo; This is also the
+              <span className="font-semibold text-navy-900">
+                {" "}
+                FreeSWITCH + OpenAI Realtime
+              </span>{" "}
+              stack live on this site&rsquo;s hero demo.
             </p>
           </div>
 
@@ -471,7 +544,7 @@ export default function AiReceptionistPage() {
       </section>
 
       {/* Use cases */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="max-w-5xl mx-auto px-4">
           <div className="mb-12">
             <span className="section-kicker">Where it pays for itself</span>
@@ -497,45 +570,49 @@ export default function AiReceptionistPage() {
         </div>
       </section>
 
-      {/* Results */}
-      <section className="py-20 bg-soft">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="section-kicker">Proof</span>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
-              Real clients. Real numbers.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {results.map((r) => (
-              <div
-                key={r.label}
-                className="p-8 rounded-md bg-white border border-border text-center"
-              >
-                <div className="font-heading text-5xl font-bold text-brand mb-2">
-                  {r.metric}
-                </div>
-                <div className="font-heading text-lg font-semibold text-navy-900 mb-3">
-                  {r.label}
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {r.detail}
-                </p>
-              </div>
-            ))}
+      {/* Proof — single outcome, named client */}
+      <section className="py-24 bg-soft">
+        <div className="max-w-5xl mx-auto px-4">
+          <span className="section-kicker">Proof</span>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-10 items-start mt-3">
+            <div className="md:col-span-3">
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-navy-900 leading-[1.1] tracking-tight">
+                <span className="text-brand">40% more booked appointments</span>{" "}
+                at Fix It San Clemente in 90 days.
+              </h2>
+            </div>
+            <aside className="md:col-span-2 space-y-4 text-sm leading-relaxed text-muted-foreground border-t border-border pt-6 md:pt-0 md:border-t-0 md:border-l md:pl-8">
+              <p>
+                Same AI receptionist stack live on this page&rsquo;s hero
+                &mdash; production-deployed since 2025.
+              </p>
+              <p>
+                <span className="font-semibold text-navy-900">
+                  Sub-1-second answer time.
+                </span>{" "}
+                Calls answered before your phone finishes ringing.
+              </p>
+              <p>
+                <span className="font-semibold text-navy-900">
+                  100% of inbound calls
+                </span>{" "}
+                logged with transcript, summary, and CRM record. Nothing slips
+                through after-hours.
+              </p>
+            </aside>
           </div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section id="tiers" className="py-20">
+      <section id="tiers" className="py-28">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="mb-14 max-w-2xl">
             <span className="section-kicker">Pricing</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
               Two tiers. Owned, not rented.
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
               One-time build fee plus your own infrastructure costs. No
               per-minute markup. No subscription that doubles next year.
             </p>
@@ -543,63 +620,14 @@ export default function AiReceptionistPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {tiers.map((t) => (
-              <div
-                key={t.name}
-                className={
-                  t.highlight
-                    ? "relative p-8 rounded-md bg-white border-2 border-brand shadow-[0_8px_32px_rgba(62,106,239,0.18)]"
-                    : "p-8 rounded-md bg-white border border-border"
-                }
-              >
-                {t.highlight ? (
-                  <span className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-brand text-white text-xs font-semibold tracking-wide">
-                    Most chosen
-                  </span>
-                ) : null}
-                <h3 className="font-heading text-2xl font-bold text-navy-900 mb-1">
-                  {t.name}
-                </h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="font-heading text-5xl font-bold text-navy-900">
-                    {t.price}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-5">
-                  {t.cadence}
-                </p>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {t.pitch}
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {t.bullets.map((b) => (
-                    <li
-                      key={b}
-                      className="flex items-start gap-3 text-sm text-navy-900 leading-relaxed"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-brand shrink-0 mt-0.5" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/#contact"
-                  className={
-                    t.highlight
-                      ? "btn-accent w-full inline-flex items-center justify-center gap-2"
-                      : "btn-ghost w-full inline-flex items-center justify-center gap-2"
-                  }
-                >
-                  {t.cta}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
+              <PricingTier key={t.name} {...t} />
             ))}
           </div>
 
           <div className="mt-12 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-5 rounded-md bg-white border border-border">
               <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-4 h-4 text-brand" />
+                <Clock aria-hidden="true" className="w-4 h-4 text-brand" />
                 <h4 className="font-heading font-semibold text-navy-900 text-sm">
                   10-day pilot
                 </h4>
@@ -611,7 +639,7 @@ export default function AiReceptionistPage() {
             </div>
             <div className="p-5 rounded-md bg-white border border-border">
               <div className="flex items-center gap-2 mb-2">
-                <ShieldCheck className="w-4 h-4 text-brand" />
+                <ShieldCheck aria-hidden="true" className="w-4 h-4 text-brand" />
                 <h4 className="font-heading font-semibold text-navy-900 text-sm">
                   Your data stays yours
                 </h4>
@@ -623,7 +651,7 @@ export default function AiReceptionistPage() {
             </div>
             <div className="p-5 rounded-md bg-white border border-border">
               <div className="flex items-center gap-2 mb-2">
-                <Zap className="w-4 h-4 text-brand" />
+                <Zap aria-hidden="true" className="w-4 h-4 text-brand" />
                 <h4 className="font-heading font-semibold text-navy-900 text-sm">
                   No per-minute markup
                 </h4>
@@ -654,12 +682,10 @@ export default function AiReceptionistPage() {
               >
                 <summary className="cursor-pointer list-none font-heading font-semibold text-navy-900 flex items-start justify-between gap-4">
                   <span>{f.q}</span>
-                  <span
-                    aria-hidden
-                    className="text-brand transition-transform group-open:rotate-45 mt-0.5 text-xl leading-none"
-                  >
-                    +
-                  </span>
+                  <Plus
+                    aria-hidden="true"
+                    className="text-brand-hover transition-transform group-open:rotate-45 mt-1 w-5 h-5 shrink-0"
+                  />
                 </summary>
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                   {f.a}
@@ -671,7 +697,7 @@ export default function AiReceptionistPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-navy-900 mb-6 tracking-tight">
             Stop losing calls. Start booking them.
@@ -685,7 +711,7 @@ export default function AiReceptionistPage() {
               href="/#call-me"
               className="btn-accent inline-flex items-center justify-center gap-2 text-base"
             >
-              <Phone className="w-4 h-4" />
+              <Phone aria-hidden="true" className="w-4 h-4" />
               Call the live demo
             </Link>
             <Link
@@ -693,14 +719,14 @@ export default function AiReceptionistPage() {
               className="btn-ghost inline-flex items-center justify-center gap-2 text-base"
             >
               Talk to Chad
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight aria-hidden="true" className="w-4 h-4" />
             </Link>
           </div>
           <p className="text-xs text-muted-foreground mt-6">
             Or call us directly:{" "}
             <a
               href="tel:+19497490001"
-              className="text-brand hover:underline font-medium"
+              className="text-brand-hover hover:underline font-medium"
             >
               (949) 749-0001
             </a>

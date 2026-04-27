@@ -178,6 +178,35 @@ html {
   transform: translateY(-2px);
 }
 
+/* Pricing tier card */
+.tier-card {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: var(--radius);
+  padding: 2rem;
+  position: relative;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.tier-card-highlight {
+  border: 2px solid #3e6aef;
+  box-shadow: 0 12px 36px -16px rgba(62, 106, 239, 0.32);
+}
+.tier-card-highlight:hover {
+  box-shadow: 0 16px 44px -16px rgba(62, 106, 239, 0.42);
+}
+.tier-badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 2rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: #3e6aef;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
 /* Skip-nav link (accessibility) */
 .skip-nav {
   position: absolute;
