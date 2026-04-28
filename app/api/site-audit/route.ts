@@ -1,5 +1,6 @@
 import { supabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
+import { enforceRateLimit, rateLimitErrorPayload } from "@/lib/rate-limit";
 
 export const maxDuration = 180;
 export const runtime = "nodejs";
@@ -210,6 +211,13 @@ function isRateLimitError(err: unknown): boolean {
 // frames so Cloudflare keeps the connection open past 100s and the client
 // can show live progress while PageSpeed grinds.
 export async function POST(request: NextRequest) {
+  const rl = await enforceRateLimit(request, "site-audit");
+  if (!rl.allowed) {
+    return NextResponse.json(rateLimitErrorPayload(rl, "site-audit"), {
+      status: 429,
+    });
+  }
+
   const encoder = new TextEncoder();
   let send: (data: Record<string, unknown>) => void = () => {};
   let closeStream: () => void = () => {};

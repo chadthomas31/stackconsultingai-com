@@ -336,7 +336,7 @@ export default function AiReceptionistPage() {
           <div className="flex flex-col sm:flex-row gap-3 items-start mb-10">
             <Link
               href="/#call-me"
-              className="btn-accent inline-flex items-center gap-2 text-base"
+              className="btn-cta-call inline-flex items-center gap-2 text-base"
             >
               <Phone aria-hidden="true" className="w-4 h-4" />
               Call the live demo
@@ -709,7 +709,7 @@ export default function AiReceptionistPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/#call-me"
-              className="btn-accent inline-flex items-center justify-center gap-2 text-base"
+              className="btn-cta-call inline-flex items-center justify-center gap-2 text-base"
             >
               <Phone aria-hidden="true" className="w-4 h-4" />
               Call the live demo

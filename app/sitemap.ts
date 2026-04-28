@@ -20,6 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/services/maintenance`, lastModified: new Date('2026-03-18'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/ai-readiness-audit`, lastModified: new Date('2026-04-27'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/ai-receptionist`, lastModified: new Date('2026-04-27'), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/portfolio`, lastModified: new Date('2026-04-28'), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/services/ai-consulting-orange-county`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/services/ai-consulting-irvine`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/services/ai-consulting-newport-beach`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },

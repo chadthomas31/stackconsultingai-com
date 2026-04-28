@@ -106,6 +106,12 @@ export default function Navbar() {
               </a>
             ))}
             <a
+              href="/tools"
+              className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+            >
+              Free Tools
+            </a>
+            <a
               href="/stack-report"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
@@ -142,6 +148,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
+            <a
+              href="/tools"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
+            >
+              Free Tools
+            </a>
             <a
               href="/stack-report"
               onClick={() => setIsMobileMenuOpen(false)}

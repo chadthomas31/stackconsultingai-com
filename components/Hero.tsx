@@ -40,9 +40,9 @@ export default function Hero() {
         <div className="animate-fade-in-up animation-delay-300 flex flex-col sm:flex-row gap-3 items-start mb-14">
           <button
             onClick={() => scrollTo("assessment")}
-            className="btn-accent inline-flex items-center gap-2 text-base"
+            className="btn-cta-call inline-flex items-center gap-2 text-base"
           >
-            <Phone className="w-4 h-4" />
+            <Phone aria-hidden="true" className="w-4 h-4" />
             Get your free AI assessment
           </button>
           <button

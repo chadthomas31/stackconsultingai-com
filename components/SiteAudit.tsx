@@ -365,6 +365,17 @@ export default function SiteAudit() {
           signal: AbortSignal.timeout(200000),
         });
 
+        if (res.status === 429) {
+          const data = await res.json().catch(() => null);
+          setError(
+            data?.suggest?.message
+              ? `Daily free-audit limit reached. ${data.suggest.message}`
+              : "Daily free-audit limit reached. Subscribe to The Stack Report newsletter for unlimited access: /stack-report",
+          );
+          setLoading(false);
+          return;
+        }
+
         if (!res.ok || !res.body) {
           setError(
             `Audit failed with HTTP ${res.status}. Try again, or try a different URL.`,
