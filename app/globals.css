@@ -52,6 +52,12 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--announcement-h, 0px) + 7rem);
+}
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: calc(var(--announcement-h, 0px) + 8rem);
+  }
 }
 
 /* ============================================================
