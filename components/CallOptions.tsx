@@ -1,33 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Phone, MessageSquare, Video, Mail, X, ChevronDown } from "lucide-react";
-
-/**
- * Multi-channel meeting chooser. Replaces hard `tel:` buttons that get
- * hijacked by Zoom on macOS. Visitor picks how they want to talk:
- *
- *   - Phone (tel:)              → opens dialer / Zoom hijack possible
- *   - Text (sms:)               → opens Messages / SMS app
- *   - Google Meet (mailto)      → emails Chad, he sends a Meet invite
- *   - Zoom (mailto)             → emails Chad, he sends a Zoom invite
- *
- * Mailto fallback is used because Calendly isn't wired up yet — when it is,
- * swap the GM/Zoom hrefs to direct booking URLs.
- */
+import { Phone, MessageSquare, Calendar, Mail, X, ChevronDown } from "lucide-react";
 
 const PHONE = "+19497490001";
 const PHONE_DISPLAY = "(949) 749-0001";
 const EMAIL = "chad.mccluskey@gmail.com";
-
-const MEET_SUBJECT = encodeURIComponent("Schedule Google Meet — Stack Consulting AI");
-const MEET_BODY = encodeURIComponent(
-  "Hi Chad,\n\nI'd like to schedule a Google Meet to talk about working with Stack Consulting AI.\n\nWhat I want to discuss:\n\nMy timezone:\nGood times this week:\n\nThanks,",
-);
-const ZOOM_SUBJECT = encodeURIComponent("Schedule Zoom call — Stack Consulting AI");
-const ZOOM_BODY = encodeURIComponent(
-  "Hi Chad,\n\nI'd like to schedule a Zoom call to talk about working with Stack Consulting AI.\n\nWhat I want to discuss:\n\nMy timezone:\nGood times this week:\n\nThanks,",
-);
+const BOOK_30 = "https://book.stackconsultingai.com/chad/30min";
+const BOOK_15 = "https://book.stackconsultingai.com/chad/15min";
 
 export type CallOptionsVariant = "primary" | "ghost" | "navy";
 
@@ -142,32 +122,34 @@ export default function CallOptions({
 
           <a
             role="menuitem"
-            href={`mailto:${EMAIL}?subject=${MEET_SUBJECT}&body=${MEET_BODY}`}
+            href={BOOK_30}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 px-4 py-3 hover:bg-soft border-b border-border transition-colors"
           >
-            <Video className="w-5 h-5 text-brand shrink-0" />
+            <Calendar className="w-5 h-5 text-brand shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-navy-900">
-                Schedule a Google Meet
-              </p>
+              <p className="font-semibold text-navy-900">Book a 30-min call</p>
               <p className="text-xs text-navy-700/60">
-                We&apos;ll send a calendar invite
+                Live calendar — pick a slot, get a Google Meet invite
               </p>
             </div>
           </a>
 
           <a
             role="menuitem"
-            href={`mailto:${EMAIL}?subject=${ZOOM_SUBJECT}&body=${ZOOM_BODY}`}
+            href={BOOK_15}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 px-4 py-3 hover:bg-soft border-b border-border transition-colors"
           >
-            <Video className="w-5 h-5 text-brand shrink-0" />
+            <Calendar className="w-5 h-5 text-brand shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-navy-900">Schedule a Zoom call</p>
+              <p className="font-semibold text-navy-900">Quick 15-min intro</p>
               <p className="text-xs text-navy-700/60">
-                We&apos;ll send a Zoom invite
+                Short slot if you just want to size us up
               </p>
             </div>
           </a>
