@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Rss, ArrowRight } from "lucide-react";
 import { listIssues } from "@/lib/newsletter-issues-db";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const revalidate = 60;
 
@@ -24,7 +26,9 @@ export default async function StackReportIndexPage() {
   const issues = await listIssues();
 
   return (
-    <main className="min-h-screen bg-white text-navy-900 pb-24">
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-white text-navy-900 pb-24 pt-24">
       <section className="max-w-5xl mx-auto px-4 pt-12 md:pt-20 pb-12 border-b border-border">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand/10 border border-brand/25 text-brand text-xs font-semibold tracking-[0.16em] uppercase mb-5">
           <Rss className="w-3 h-3" />
@@ -97,6 +101,8 @@ export default async function StackReportIndexPage() {
           </ul>
         )}
       </section>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }

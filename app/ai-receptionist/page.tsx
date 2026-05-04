@@ -18,6 +18,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PricingTier from "@/components/PricingTier";
+import CallOptions from "@/components/CallOptions";
 
 export const metadata: Metadata = {
   title:
@@ -714,22 +715,10 @@ export default function AiReceptionistPage() {
               <Phone aria-hidden="true" className="w-4 h-4" />
               Call the live demo
             </Link>
-            <Link
-              href="/#contact"
-              className="btn-ghost inline-flex items-center justify-center gap-2 text-base"
-            >
-              Talk to Chad
-              <ArrowRight aria-hidden="true" className="w-4 h-4" />
-            </Link>
+            <CallOptions label="Talk to Chad" variant="ghost" />
           </div>
           <p className="text-xs text-muted-foreground mt-6">
-            Or call us directly:{" "}
-            <a
-              href="tel:+19497490001"
-              className="text-brand-hover hover:underline font-medium"
-            >
-              (949) 749-0001
-            </a>
+            Phone: (949) 749-0001 · Or pick a meeting platform above
           </p>
         </div>
       </section>

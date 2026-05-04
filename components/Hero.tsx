@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowRight, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
+import CallOptions from "@/components/CallOptions";
 
 export default function Hero() {
   const scrollTo = (id: string) => {
@@ -45,13 +46,7 @@ export default function Hero() {
             <Phone aria-hidden="true" className="w-4 h-4" />
             Get your free AI assessment
           </button>
-          <button
-            onClick={() => scrollTo("contact")}
-            className="btn-ghost inline-flex items-center gap-2 text-base"
-          >
-            Talk to an AI expert
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <CallOptions label="Talk to an AI expert" variant="ghost" />
         </div>
 
         {/* Proof line */}

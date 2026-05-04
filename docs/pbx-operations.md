@@ -101,3 +101,22 @@ Init JSON for 5003 at `/var/lib/freeswitch/stacks_init/*.b64` (session.update + 
 ## Alternative: FusionPBX web UI
 
 If you'd rather avoid SQL, the FusionPBX admin UI on port 80 of fs-pbx provides equivalent CRUD for dialplans. Slower but harder to foot-gun. The cache-invalidation problem still bites either way — always nuke `/var/cache/fusionpbx/dialplan.*` after any change.
+
+## 2026-04-29 — Outbound recovery + DNS watchdog
+
+Fanvil X7A both 7001 lines red, outbound = busy.
+
+**Cause chain:**
+1. pfSense Unbound stuck reloading (kea2unbound sync hang). Port 53 timing out.
+2. Fanvil resolved `stackconsultingai.com` → `76.76.21.21` (Vercel CDN) instead of `10.6.0.2`. REGISTERs went to public internet, never reached PBX.
+3. After DNS fix → registered. Outbound 403 from Telnyx: "Caller Origination Number is Invalid D35".
+4. From URI sent as `sip:7001@sip.telnyx.com` (extension, not DID). Telnyx rejects.
+
+**Fixes:**
+- Killed stuck unbound (`kill -9`) + restart `/usr/local/sbin/unbound -c /var/unbound/unbound.conf`.
+- Watchdog `/usr/local/bin/dns-watchdog.sh` cron every 5 min, restarts unbound if `dig stackconsultingai.com` ≠ `10.6.0.2`. Persisted in `/cf/conf/config.xml` `<cron>` block.
+- Global outbound dialplan `d1e2f3a4-5678-9abc-def0-123456789012` hardcodes `caller_id_number=19499982424` + `sip_from_user=19499982424`. Variable `${outbound_caller_id_number}` from FusionPBX directory expands EMPTY in dialplan context — channel var doesn't propagate despite `<variable>` in cache file. Hardcode required.
+
+**Outstanding:**
+- Stack DID `19497490001` not authorized on Telnyx as outbound CID. All outbound shows SS number even from Stack line.
+- To split: Telnyx Mission Control → Voice → Outbound Profiles → Allowed Origination Numbers (add 19497490001). Then patch dialplan with `<condition field="${domain_name}" expression="^stackconsultingai\.com$">` branch setting Stack CID.

@@ -323,7 +323,7 @@ export default function FoundingClientSpecial() {
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
             <Link
               href="#assessment"
-              className="btn-accent inline-flex items-center gap-2 whitespace-nowrap"
+              className="btn-cta-call inline-flex items-center gap-2 whitespace-nowrap"
             >
               Start the assessment
               <ArrowRight className="w-4 h-4" />

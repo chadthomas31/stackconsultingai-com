@@ -30,7 +30,7 @@ export default function FinalCTA() {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => scrollTo("contact")}
-                className="btn-accent inline-flex items-center gap-2"
+                className="btn-cta-call inline-flex items-center gap-2"
               >
                 Book a call
                 <ArrowRight className="w-4 h-4" />

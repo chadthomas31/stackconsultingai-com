@@ -63,7 +63,7 @@ export default function PricingTier({
         href={ctaHref}
         className={
           highlight
-            ? "btn-accent w-full inline-flex items-center justify-center gap-2"
+            ? "btn-cta-call w-full inline-flex items-center justify-center gap-2"
             : "btn-ghost w-full inline-flex items-center justify-center gap-2"
         }
       >

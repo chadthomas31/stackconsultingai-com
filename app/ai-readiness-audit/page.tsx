@@ -18,6 +18,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PricingTier from "@/components/PricingTier";
+import CallOptions from "@/components/CallOptions";
 
 export const metadata: Metadata = {
   title:
@@ -351,7 +352,7 @@ export default function AiReadinessAuditPage() {
           <div className="flex flex-col sm:flex-row gap-3 items-start mb-10">
             <Link
               href="#tiers"
-              className="btn-accent inline-flex items-center gap-2 text-base"
+              className="btn-cta-call inline-flex items-center gap-2 text-base"
             >
               See audit tiers
               <ArrowRight aria-hidden="true" className="w-4 h-4" />
@@ -704,26 +705,15 @@ export default function AiReadinessAuditPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="#tiers"
-              className="btn-accent inline-flex items-center justify-center gap-2 text-base"
+              className="btn-cta-call inline-flex items-center justify-center gap-2 text-base"
             >
               See audit tiers
               <ArrowRight aria-hidden="true" className="w-4 h-4" />
             </Link>
-            <Link
-              href="/#contact"
-              className="btn-ghost inline-flex items-center justify-center gap-2 text-base"
-            >
-              Talk to Chad
-            </Link>
+            <CallOptions label="Talk to Chad" variant="ghost" />
           </div>
           <p className="text-xs text-muted-foreground mt-6">
-            Or call us directly:{" "}
-            <a
-              href="tel:+19497490001"
-              className="text-brand-hover hover:underline font-medium"
-            >
-              (949) 749-0001
-            </a>
+            Phone: (949) 749-0001 · Or pick a meeting platform above
           </p>
         </div>
       </section>

@@ -8,6 +8,8 @@ import {
   getIssueBySlug,
   listIssueSlugs,
 } from "@/lib/newsletter-issues-db";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const revalidate = 60;
 
@@ -86,7 +88,9 @@ export default async function StackReportIssuePage({
   };
 
   return (
-    <main className="min-h-screen bg-white text-navy-900 pb-24">
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-white text-navy-900 pb-24 pt-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
@@ -204,6 +208,8 @@ export default async function StackReportIssuePage({
           </div>
         </div>
       </article>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }

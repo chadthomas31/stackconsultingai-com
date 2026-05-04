@@ -1,6 +1,14 @@
 import { supabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 import { enforceRateLimit, rateLimitErrorPayload } from "@/lib/rate-limit";
+import { diagnoseAudit, type AuditDiagnosis } from "@/lib/site-audit-diagnose";
+import {
+  auditKeywords,
+  extractContent,
+  type KeywordReport,
+  type ExtractedContent,
+} from "@/lib/keyword-audit";
+import { safeFetchHtml } from "@/lib/safe-fetch";
 
 export const maxDuration = 180;
 export const runtime = "nodejs";
@@ -45,6 +53,18 @@ function isValidUrl(str: string): boolean {
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+async function fetchPageContent(url: string): Promise<ExtractedContent | null> {
+  const result = await safeFetchHtml({
+    url,
+    maxBytes: 400_000,
+    timeoutMs: 15_000,
+    userAgent:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 StackConsultingAuditBot/1.0",
+  });
+  if (!result.ok) return null;
+  return extractContent(result.body);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -363,6 +383,51 @@ async function runAudit(
   const avg = Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length);
   const overallGrade = calculateGrade(avg);
 
+  send({ type: "progress", stage: "fetching-content" });
+  const pageContent = await fetchPageContent(url);
+
+  send({ type: "progress", stage: "diagnosing" });
+  let diagnosis: AuditDiagnosis | null = null;
+  let diagnosisError: string | null = null;
+  let keywordReport: KeywordReport | null = null;
+  let keywordError: string | null = null;
+
+  // Run diagnosis + keyword audit in parallel — both call Haiku, both can be
+  // slow, no reason to serialize. Diagnose needs industry classification, so
+  // we use its industry_label as input to the keyword audit when available.
+  try {
+    diagnosis = await diagnoseAudit({
+      url,
+      pageTitle: pageContent?.title ?? null,
+      metaDescription: pageContent?.metaDescription ?? null,
+      mobileScores,
+      desktopScores,
+      mobileFindings,
+      overallGrade,
+      overallScore: avg,
+    });
+  } catch (err) {
+    console.error("[site-audit] diagnose failed:", err);
+    diagnosisError =
+      err instanceof Error ? err.message : "Diagnosis unavailable";
+  }
+
+  if (pageContent) {
+    try {
+      keywordReport = await auditKeywords({
+        url,
+        industryLabel: diagnosis?.industry_label ?? "Small business",
+        content: pageContent,
+      });
+    } catch (err) {
+      console.error("[site-audit] keyword audit failed:", err);
+      keywordError =
+        err instanceof Error ? err.message : "Keyword audit unavailable";
+    }
+  } else {
+    keywordError = "Could not fetch page HTML for keyword analysis";
+  }
+
   if (isSupabaseConfigured()) {
     try {
       const { error: dbError } = await supabaseAdmin.from("tool_leads").insert({
@@ -372,6 +437,8 @@ async function runAudit(
           desktop_scores: desktopScores,
           overall_grade: overallGrade,
           overall_score: avg,
+          diagnosis: diagnosis ?? null,
+          keyword_report: keywordReport ?? null,
         },
         email,
         phone: phone || null,
@@ -403,5 +470,9 @@ async function runAudit(
     },
     desktopFallback: desktopData === null,
     desktopFailureNote,
+    diagnosis,
+    diagnosisError,
+    keywordReport,
+    keywordError,
   });
 }

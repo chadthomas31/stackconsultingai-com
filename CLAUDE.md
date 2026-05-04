@@ -130,3 +130,106 @@
   for composition references. Look at the existing `components/Portfolio.tsx`                                                   
   and `components/Testimonials.tsx` for tone. Do NOT look at generic AI                                                         
   startup templates.                                                          
+
+  ---
+
+  ## Codebase Architecture
+
+  ### Stack
+  Next.js 15 App Router · React 19 · TypeScript 5.7 · Tailwind v3 (NOT v4 — `@tailwindcss/postcss` is installed but config is v3-style in `tailwind.config.ts`) · Supabase (Postgres + RLS) · Resend (email) · Anthropic SDK + Google GenAI · Vercel hosting.
+
+  ### Top-level layout
+  - `app/` — App Router pages, layouts, API routes
+  - `components/` — flat directory (no subfolders), one component per file, all PascalCase. Imported via `@/components/*` path alias
+  - `lib/` — server-side helpers: Supabase client (`supabase.ts`), Anthropic extractor (`claude-extract.ts`), Gemini video extractor (`gemini-video-extract.ts`), Resend wrapper (`email.ts`), DB access modules (`assessments-db.ts`, `newsletter-issues-db.ts`), tool catalog, prompt scripts, schemas
+  - `migrations/` — hand-applied SQL files; see `migrations/README.md`. **No migration runner** — paste into Supabase SQL Editor manually before deploying dependent code
+  - `docs/` — `pbx-operations.md` (FreeSWITCH live demo backend), PRDs, handoff notes
+  - `public/screenshots/` — real client portfolio screenshots (WebP)
+  - `types/` — shared TypeScript types
+
+  ### App Router conventions
+  - Single root `app/layout.tsx` injects GA4 (`G-GKBVKQ49ND`) + GTM (`GTM-5N9G6XQ4`) via `next/script lazyOnload`, plus skip-link target. Don't duplicate analytics in child layouts.
+  - `app/page.tsx` is the homepage and composes the section canon listed above.
+  - Marketing pages live under `app/services/<slug>/` and `app/services/ai-consulting-<city>/` — geo-variant landing pages share the `CityAiConsultingPage` component.
+  - Lead-gen tools live under `app/tools/<tool>/` with matching API at `app/api/<tool>/route.ts`. Pattern: client wizard component (e.g. `components/AutomationFinder.tsx`) → POST → API route runs analysis → writes lead to Supabase → emails Chad via Resend.
+  - The Stack Report newsletter: `app/stack-report/` (index + `[slug]`), `app/api/newsletter/{generate,publish,route}` for admin-protected generation. Issues stored in Supabase (`newsletter_issues` table).
+
+  ### Signature live demo (`/#call-me`)
+  `components/CallMeDemo.tsx` (or equivalent) → `POST /api/call-me/route.ts` → triggers FreeSWITCH on **fspbx (107.175.53.217 / Tailscale 100.78.119.28)** to place an outbound OpenAI Realtime call to the visitor. Backend operations live in `docs/pbx-operations.md`. FusionPBX dialplans are stored in **Postgres + `/var/cache/fusionpbx/`**, not in XML files — never edit XML directly.
+
+  ### Supabase
+  - Client: `lib/supabase.ts` (anon key, RLS-enforced)
+  - Tables touched by app code: `contact_submissions`, `tools_*`, `assessments`, `newsletter_issues`, plus lead tables created per tool
+  - Schema-cache error `Could not find the 'X' column of 'Y'` = a `migrations/*.sql` file was committed but never run in Supabase. Apply manually before redeploying.
+
+  ### Environment variables
+  Local: `.env.local` (gitignored). Production: set in Vercel dashboard. Required at minimum:
+  - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - `GOOGLE_PAGESPEED_API_KEY` (Site Audit tool — referrer-restricted key will fail server-side calls)
+  - `ANTHROPIC_API_KEY`, `GOOGLE_GENAI_API_KEY` (newsletter generation, assessment extraction)
+  - `RESEND_API_KEY` (lead notifications)
+  - `NEWSLETTER_ADMIN_SECRET` (gates `/api/newsletter/generate` and `/publish`)
+  - PBX/FreeSWITCH webhook secrets for `/api/call-me`
+
+  ### Commands
+  ```bash
+  npm run dev      # next dev on :3000
+  npm run build    # ALWAYS run before pushing — Vercel build matches local
+  npm run lint     # next lint (eslint-config-next)
+  npm start        # production server (rare; Vercel handles prod)
+  ```
+  No test runner is wired up — verification is `npm run build` + manual browser check.
+
+  ### Deploy
+  Push to `main` on GitHub → Vercel auto-deploys. Branch must be up-to-date with `origin/main` before pushing (the session frequently drifts behind). Run `git pull --rebase` first when status shows "behind".
+
+  ### Path alias
+  `@/*` → repo root (see `tsconfig.json`). Use `@/components/Foo`, `@/lib/foo`, never relative `../../`.
+
+  ### Tailwind tokens
+  Brand colors are exposed as both CSS custom properties (`hsl(var(--accent))` in `app/globals.css`) and Tailwind literals (`navy-900`, `brand`, `brand-soft`, `soft`) in `tailwind.config.ts`. Prefer the literals in component code; the CSS vars exist for shadcn-style overrides.
+
+  ### Things that bite
+  - Tailwind is v3 — don't reach for v4-only syntax even though `@tailwindcss/postcss` is in deps.
+  - Migrations don't auto-apply. Apply SQL in Supabase **before** pushing dependent code or production breaks while local works.
+  - GA4 + GTM both run; don't add a third analytics script.
+  - All static images under `public/screenshots/*` should be **WebP**, optimized, with `priority` set on above-the-fold usages.
+  - The homepage section order in this file is the conversion flow — don't reorder casually.
+
+  ## Multi-Model Orchestration
+
+  Three models, three invocation paths. Use the right tool for the job.
+
+  ### Claude (this agent + subagents) — primary
+  - Spawn parallel subagents in a single message: `Agent(subagent_type=...)` × N tool calls in one block
+  - Use for: architecture, writing, code, repo navigation, anything requiring tool use
+
+  ### OpenAI Codex — wired as MCP server
+  - Configured in `.mcp.json` (project root). Restart Claude Code after first install for tools to appear
+  - Also callable via Bash: `codex exec --skip-git-repo-check "prompt"`
+  - Skills: `/codex-review`, `/codex-adversarial`
+  - Use for: adversarial second-opinion on diffs, alternative implementations, GPT-style reasoning
+
+  ### Gemini — Bash wrapper
+  - `scripts/ask-gemini.sh "prompt"` (auto-loads key from `.env.local`)
+  - Pipe context: `cat file.ts | scripts/ask-gemini.sh "explain in 5 bullets"`
+  - Model override: `scripts/ask-gemini.sh -m gemini-2.5-pro "prompt"`
+  - Use for: 1M-context whole-repo reads, cheap bulk classification, third opinion in ensembles
+  - **Key health**: run `scripts/ask-gemini.sh "ping"` to verify. `API_KEY_INVALID` = renew at https://aistudio.google.com/apikey
+
+  ### Patterns
+
+  - **Diversity ensemble** — same prompt → Claude + Codex + Gemini → diff outputs → main agent picks/merges
+  - **Adversarial pair** — Claude writes code → `/codex-adversarial` attacks → fix loop
+  - **Long-context cascade** — Gemini reads 1M-token corpus, returns summary → Claude acts on summary
+  - **Cost cascade** — Gemini Flash triages backlog → Claude Opus handles flagged items only
+
+  ### When to use which
+  | Job | First choice |
+  |---|---|
+  | Code edits in this repo | Claude (native) |
+  | Diff review / find bugs in PR | Codex (`/codex-review`) |
+  | Read 50+ files at once | Gemini (1M context) |
+  | Alternative implementation | Codex via MCP |
+  | Bulk text classification | Gemini Flash |
+  | Cross-cutting refactor | Claude subagents in parallel |                                                          

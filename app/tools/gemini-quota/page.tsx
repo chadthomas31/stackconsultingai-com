@@ -128,7 +128,7 @@ export default function GeminiQuotaPage() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="btn-accent inline-flex items-center gap-2 disabled:opacity-50"
+            className="btn-cta-call inline-flex items-center gap-2 disabled:opacity-50"
           >
             {status === "loading" ? (
               <>

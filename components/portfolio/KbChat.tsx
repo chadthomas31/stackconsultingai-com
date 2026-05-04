@@ -97,7 +97,7 @@ export default function KbChat() {
         <button
           type="submit"
           disabled={loading || !question.trim()}
-          className="btn-accent inline-flex items-center gap-2 text-sm disabled:opacity-50"
+          className="btn-cta-call inline-flex items-center gap-2 text-sm disabled:opacity-50"
         >
           {loading ? (
             <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin" />

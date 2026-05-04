@@ -161,7 +161,7 @@ export default function LeadAutomation() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-accent w-full inline-flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+            className="btn-cta-call w-full inline-flex items-center justify-center gap-2 text-sm disabled:opacity-50"
           >
             {loading ? (
               <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin" />

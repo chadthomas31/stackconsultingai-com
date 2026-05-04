@@ -69,7 +69,7 @@ export default function PortfolioPage() {
                   href="https://github.com/chadmccluskey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-accent inline-flex items-center gap-2 text-sm"
+                  className="btn-cta-call inline-flex items-center gap-2 text-sm"
                 >
                   <Github aria-hidden="true" className="w-4 h-4" />
                   GitHub
@@ -176,7 +176,7 @@ OpenAI Realtime API · gpt-realtime
               <div className="flex flex-wrap gap-3 pt-4">
                 <Link
                   href="/#assessment"
-                  className="btn-accent inline-flex items-center gap-2 text-sm"
+                  className="btn-cta-call inline-flex items-center gap-2 text-sm"
                 >
                   <Phone aria-hidden="true" className="w-4 h-4" />
                   Try the live demo

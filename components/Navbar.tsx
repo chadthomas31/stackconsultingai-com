@@ -106,6 +106,12 @@ export default function Navbar() {
               </a>
             ))}
             <a
+              href="/demos"
+              className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+            >
+              Live Demos
+            </a>
+            <a
               href="/tools"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
@@ -120,7 +126,7 @@ export default function Navbar() {
             <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
-              className="btn-accent text-sm"
+              className="btn-cta-call text-sm"
             >
               Get Started
             </a>
@@ -149,6 +155,13 @@ export default function Navbar() {
               </a>
             ))}
             <a
+              href="/demos"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
+            >
+              Live Demos
+            </a>
+            <a
               href="/tools"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
@@ -165,7 +178,7 @@ export default function Navbar() {
             <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
-              className="btn-accent block w-full text-center"
+              className="btn-cta-call block w-full text-center"
             >
               Get Started
             </a>

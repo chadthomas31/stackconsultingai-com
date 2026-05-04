@@ -427,7 +427,7 @@ generated: ${new Date().toISOString()}
           <button
             type="submit"
             disabled={status === "loading"}
-            className="btn-accent inline-flex items-center gap-2 disabled:opacity-50"
+            className="btn-cta-call inline-flex items-center gap-2 disabled:opacity-50"
           >
             {status === "loading" ? (
               <>
@@ -596,7 +596,7 @@ generated: ${new Date().toISOString()}
                       type="button"
                       onClick={handlePublish}
                       disabled={publishStatus === "publishing"}
-                      className="btn-accent inline-flex items-center gap-2 disabled:opacity-50"
+                      className="btn-cta-call inline-flex items-center gap-2 disabled:opacity-50"
                     >
                       {publishStatus === "publishing" ? (
                         <>
@@ -639,7 +639,7 @@ generated: ${new Date().toISOString()}
                   <button
                     type="button"
                     onClick={resetForNextRun}
-                    className="btn-accent inline-flex items-center gap-2"
+                    className="btn-cta-call inline-flex items-center gap-2"
                   >
                     <RefreshCw className="w-4 h-4" />
                     Generate another

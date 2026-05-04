@@ -424,7 +424,7 @@ export default function FreeAssessmentOffer() {
                   <button
                     onClick={runStream}
                     disabled={!valid}
-                    className="w-full btn-accent inline-flex items-center justify-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full btn-cta-call inline-flex items-center justify-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="assessment-submit"
                   >
                     Request callback
