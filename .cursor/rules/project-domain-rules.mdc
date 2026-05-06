@@ -1,0 +1,28 @@
+---
+description: Project-specific domain rules. Violations cause real bugs.
+alwaysApply: true
+---
+
+<!-- project-owned: fill with 5-10 rules specific to THIS project. -->
+<!-- Pack-owned protocol-enforcement.mdc OUTRANKS this file for      -->
+<!-- enforcement directives (agent delegation, hooks, memory).       -->
+<!-- See protocol-enforcement.mdc "Precedence" section.              -->
+
+# Stack Consulting AI Domain Rules
+
+- `app/layout.tsx` is the only place for GA4 and GTM scripts. Duplicating analytics in a page or component double-counts traffic and hurts performance.
+- Tailwind is v3 in this repo. Do not use Tailwind v4-only config, directives, or plugin assumptions even though `@tailwindcss/postcss` is installed.
+- Homepage section order is a conversion flow. Do not reorder `Hero`, client proof, live call demo, stack comparison, services, portfolio, testimonials, audit CTA, newsletter, FAQ, contact, final CTA, and footer without an explicit product reason.
+- Brand copy must sound like a builder, not an AI agency template. Avoid "leverage", "synergize", "unlock", "transform", "empower", "cutting-edge", and similar generic claims.
+- `public/screenshots/*` should be real optimized WebP client proof, not stock photography or AI-generated hero art. Above-the-fold images need correct sizing and `priority` when used.
+- Supabase schema changes require a new manual SQL file in `migrations/` and a deployment note that the SQL must be applied in Supabase before dependent code reaches Vercel.
+- Lead capture routes must store the lead before sending Resend notifications. Email failure should not discard a valid lead or expose internal provider errors to visitors.
+- `/api/call-me` and any PBX-related code must preserve webhook authentication, rate limiting, safe logging, and the operational assumptions in `docs/pbx-operations.md`.
+- Client-visible forms and tools must validate inputs server-side with structured schemas and return safe generic errors. Never echo secrets, stack traces, provider payloads, or private infra details.
+- Motion must respect `prefers-reduced-motion`. Marquees, entrance fades, and CTA animations must become still or non-disruptive when the user requests reduced motion.
+
+## Conflict with other rules?
+
+If this rule contradicts `protocol-enforcement.mdc`, protocol wins.
+If it contradicts `AGENTS.md` Invariants, `AGENTS.md` wins. See
+`protocol-enforcement.mdc` "Precedence" section.

@@ -210,12 +210,16 @@
   - Skills: `/codex-review`, `/codex-adversarial`
   - Use for: adversarial second-opinion on diffs, alternative implementations, GPT-style reasoning
 
-  ### Gemini — Bash wrapper
-  - `scripts/ask-gemini.sh "prompt"` (auto-loads key from `.env.local`)
+  ### Gemini — Vertex-first Bash wrapper
+  - `scripts/ask-gemini.sh "prompt"` — primary path: Vertex AI via `@google/genai` (project `stack-consulting-ai-495420`, region `us-central1`, ADC auth on account `admin@2105.io`)
+  - Default model `gemini-2.5-flash`. Override: `-m gemini-2.5-pro` or `-m gemini-2.5-flash-lite` (only these three allowed)
   - Pipe context: `cat file.ts | scripts/ask-gemini.sh "explain in 5 bullets"`
-  - Model override: `scripts/ask-gemini.sh -m gemini-2.5-pro "prompt"`
-  - Use for: 1M-context whole-repo reads, cheap bulk classification, third opinion in ensembles
-  - **Key health**: run `scripts/ask-gemini.sh "ping"` to verify. `API_KEY_INVALID` = renew at https://aistudio.google.com/apikey
+  - Project/location override: `STACK_GEMINI_PROJECT=… STACK_GEMINI_LOCATION=… scripts/ask-gemini.sh "…"`
+  - Fallback: AI Studio API key + `gemini -p` CLI when ADC missing or `STACK_VERTEX_DISABLE=1` set. Reads `GEMINI_API_KEY` / `GEMINI_API_KEY_BACKUP` / `GOOGLE_GENAI_API_KEY` / `GOOGLE_API_KEY` from `.env.local`
+  - Vertex worker: `scripts/ask-gemini.mjs` (don't call directly — wrapper pins env)
+  - **Vertex broken?** `gcloud auth application-default login --account=admin@2105.io && gcloud auth application-default set-quota-project stack-consulting-ai-495420`
+  - **Key health (fallback)**: `STACK_VERTEX_DISABLE=1 scripts/ask-gemini.sh "ping"`. `API_KEY_INVALID` = renew at https://aistudio.google.com/apikey
+  - Use for: 1M-context whole-repo reads, cheap bulk classification, third opinion in ensembles. Avoids the broken `cloudaicompanion`/Gemini-CLI Cloud Code OAuth path entirely.
 
   ### Patterns
 

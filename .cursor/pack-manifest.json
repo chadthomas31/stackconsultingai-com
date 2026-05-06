@@ -1,0 +1,28 @@
+{
+  "files": {
+    ".cursor/agents/code-quality-auditor.md": "fb59bf35093add19cc586c7151e32ed2c5c4e7f1529433bbb54b575e8a05bb6f",
+    ".cursor/agents/design-brand-guardian.md": "c65b09d3e6369ae4e387e40ebf1b191edd6a89bca45a8c5fa2c5109b4317ef53",
+    ".cursor/agents/engineering-backend-architect.md": "8e4792aa2e6495c9b43e465baf8b64ad1575df9a0a80322a2a6988eadeb254f7",
+    ".cursor/agents/engineering-frontend-developer.md": "75ce34cd0f4874799067a0368447de89bb38e4f161e673d762f57abafa73f20c",
+    ".cursor/agents/marketing-seo-specialist.md": "90214124662583eabbf36bf242e6c3c15eb3e03bfbc4b97b6311045d94734120",
+    ".cursor/agents/qa-verifier.md": "841b9d3481aa37721b4707564af0dda21818c62bcba11e48247b688e7ad27c2d",
+    ".cursor/agents/repo-scout.md": "5cf04471fbe70857594d5c703a9c79247e6e27888610cbe9b3e58cfd33c478f2",
+    ".cursor/agents/security-reviewer.md": "520f2fea8d42ac0fbfca301ca8ef70883fee3aa4b81f88b1ba37bfbc52cef266",
+    ".cursor/agents/sre-observability.md": "89865ab0e66e52d9f8515135064f18c2f092d2344910aa9924f3ca7548e384ff",
+    ".cursor/agents/testing-accessibility-auditor.md": "d8a2a713223ba892f030de8606b8dd67e4874f452612886d48c4c5677f7bd61b",
+    ".cursor/hooks.json": "ca10daeced8d1d4112ba679560b9e65a703bb81334593582d17a0d1c5614bfb2",
+    ".cursor/hooks/scripts/gate-stop.sh": "d396e1275e6d8dced03dbe12bf6e922fa2cd82c781886380cfafaff9e508cffc",
+    ".cursor/hooks/scripts/lib.sh": "c9efbe939a6729c2910ebae11c5d4773d74a68b36d360053ef1f549530db94b2",
+    ".cursor/hooks/scripts/record-subagent-start.sh": "1c1b30e72b2fd73e799ca98b19aa87e27d0126edc3801112e14472776c5f3ed9",
+    ".cursor/hooks/scripts/record-subagent-stop.sh": "6f43791100e02eac0a81a53656e19b2f1b8ab8e20693734d2601ffbae4a876b2",
+    ".cursor/hooks/scripts/record-write.sh": "465a9e64cff3f9c209aa240e0540cead7ec7775ab8507f8e5048b2bd930926f4",
+    ".cursor/hooks/scripts/seed-session.sh": "8d6282339d4305766b05df9c1f23e5dcce5f70b844dfe5aa3e188c4b29b9b54b",
+    ".cursor/memory/README.md": "8975e8722dce3f6feddaecdc192c6d04e68e79a16ab8856f52c9e88a34a37e63",
+    ".cursor/memory/SCHEMA.md": "234d71c56d73152c9e24c0feee441fd70cc729ab00d3cc2b8f94d059496bb86e",
+    ".cursor/memory/memory.py": "a57186b9bc515c856980a78ce35858675746db6dc41ae136826ad38369151bfa",
+    ".cursor/memory/validate.py": "7c61dfe7b1ccf95e563cbbc1b4b04e74987a43eb7971fedd06f435ad7629f3de",
+    ".cursor/rules/protocol-enforcement.mdc": "19c6bcef36183d3805876506ce42137f5a813e4e2b82bcba0944df4cd890628a"
+  },
+  "pack_version": "1.0.0",
+  "recorded_at": "2026-05-05T18:47:20Z"
+}
