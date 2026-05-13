@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { Phone, PhoneOutgoing, CheckCircle2, AlertCircle } from "lucide-react";
 
 type Stage = {
@@ -15,6 +15,9 @@ type StreamState =
   | { kind: "done"; stages: Stage[] }
   | { kind: "error"; message: string };
 
+const OFFLINE_MESSAGE =
+  "The voice demo is temporarily offline. Call or book Chad and we will walk you through it live.";
+
 const formatPhone = (raw: string) => {
   const d = raw.replace(/\D/g, "").slice(0, 10);
   if (d.length < 4) return d;
@@ -22,14 +25,27 @@ const formatPhone = (raw: string) => {
   return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
 };
 
+const readErrorMessage = async (res: Response) => {
+  const fallback = res.status === 503 || res.status === 504 ? OFFLINE_MESSAGE : "We couldn't start the call. Try booking Chad instead.";
+  try {
+    const text = await res.text();
+    if (!text) return fallback;
+    const data = JSON.parse(text);
+    return typeof data?.error === "string" ? data.error : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
 export default function CallMeDemo() {
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
   const [state, setState] = useState<StreamState>({ kind: "idle" });
+  const inFlight = useRef(false);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    if (state.kind === "running") return;
+    if (inFlight.current || state.kind === "running") return;
     if (!consent) {
       setState({ kind: "error", message: "Please confirm consent to receive a call." });
       return;
@@ -40,19 +56,19 @@ export default function CallMeDemo() {
       return;
     }
 
+    inFlight.current = true;
     setState({ kind: "running", stages: [] });
 
     try {
       const res = await fetch("/api/demos/call", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ phone: digits }),
+        body: JSON.stringify({ phone: digits, consent: true }),
       });
       if (!res.ok || !res.body) {
-        const text = await res.text().catch(() => "");
         setState({
           kind: "error",
-          message: text || "We couldn't place the call. Try again in a minute.",
+          message: await readErrorMessage(res),
         });
         return;
       }
@@ -81,7 +97,7 @@ export default function CallMeDemo() {
             } else if (type === "done") {
               setState({ kind: "done", stages });
             } else if (type === "error") {
-              setState({ kind: "error", message: data.message ?? "Call failed." });
+              setState({ kind: "error", message: data.message ?? OFFLINE_MESSAGE });
             }
           } catch {
             // ignore malformed event
@@ -89,7 +105,9 @@ export default function CallMeDemo() {
         }
       }
     } catch {
-      setState({ kind: "error", message: "Network error. Please try again." });
+      setState({ kind: "error", message: OFFLINE_MESSAGE });
+    } finally {
+      inFlight.current = false;
     }
   };
 
@@ -98,6 +116,8 @@ export default function CallMeDemo() {
     setConsent(false);
     setState({ kind: "idle" });
   };
+
+  const isRunning = state.kind === "running";
 
   return (
     <div className="border border-border rounded-lg bg-white shadow-[0_20px_40px_-24px_rgba(0,18,46,0.18)] overflow-hidden">
@@ -130,6 +150,7 @@ export default function CallMeDemo() {
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
                   placeholder="(555) 123-4567"
                   className="w-full pl-10 pr-4 py-3 rounded-md border border-border bg-white text-navy-900 placeholder:text-navy-900/40 focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition"
+                  disabled={isRunning}
                   required
                 />
               </div>
@@ -141,10 +162,11 @@ export default function CallMeDemo() {
                 checked={consent}
                 onChange={(e) => setConsent(e.target.checked)}
                 className="mt-0.5 h-4 w-4 rounded border-border text-brand focus:ring-brand"
+                disabled={isRunning}
               />
               <span>
-                I consent to a one-time AI demo call to this number. No marketing follow-up
-                without my permission.
+                I consent to a one-time AI demo call to this number. If the phone bridge is
+                offline, I&rsquo;ll call or book Chad instead.
               </span>
             </label>
 
@@ -155,13 +177,17 @@ export default function CallMeDemo() {
               </p>
             )}
 
-            <button type="submit" className="btn-cta-call w-full sm:w-auto inline-flex items-center justify-center gap-2 text-base">
+            <button
+              type="submit"
+              disabled={isRunning}
+              className="btn-cta-call w-full sm:w-auto inline-flex items-center justify-center gap-2 text-base disabled:cursor-not-allowed disabled:opacity-60"
+            >
               <PhoneOutgoing className="w-4 h-4" aria-hidden="true" />
               Call me now
             </button>
 
             <p className="text-xs text-navy-900/50">
-              Demo only. We log the number for rate-limit + fraud detection. Not sold.
+              Demo only. We use the number to place this call and protect the tool from abuse.
             </p>
           </form>
         )}
@@ -171,7 +197,7 @@ export default function CallMeDemo() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-mono uppercase tracking-wider text-brand">
-                  {state.kind === "done" ? "Call placed" : "Placing call"}
+                  {state.kind === "done" ? "Call requested" : "Starting call"}
                 </p>
                 <p className="text-navy-900 font-medium mt-1">{phone}</p>
               </div>
@@ -206,7 +232,8 @@ export default function CallMeDemo() {
 
             {state.kind === "done" && (
               <p className="text-sm text-navy-900/70 pt-2 border-t border-border">
-                Your phone should ring shortly. If it doesn&rsquo;t, check your number and try again.
+                The outbound bridge accepted the request. If your phone does not ring shortly,
+                call or book Chad and we will walk through the demo live.
               </p>
             )}
           </div>
