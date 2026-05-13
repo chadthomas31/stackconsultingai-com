@@ -171,6 +171,10 @@ const faqs = [
     a: "Goodcall, Smith.ai, and Ruby are subscription answering services — you pay per minute or per call forever. PolyAI sells to enterprises only. We build a one-time, owned system on FreeSWITCH that you keep. Lower long-term cost, no per-minute markup, full control over the voice and the script.",
   },
   {
+    q: "I saw someone selling an \"AI receptionist\" on Facebook Marketplace for $300. Why is yours $4,997?",
+    a: "At $300 flat, somebody is either losing money on every install, gating the real work behind a monthly fee they haven't told you about yet, or shipping a no-code wrapper (Vapi, Bland, Retell trial) that breaks the day the trial ends. Running a real production AI voice agent costs ~$0.06–0.30/minute in OpenAI Realtime API time alone — that math doesn't close at $300. We charge $4,997 because we ship the actual stack: your FreeSWITCH instance on your VPS, your OpenAI account, your CRM webhook, your repo. Nothing rented, nothing hidden. Same demo number live on this page is the receptionist we'd build you.",
+  },
+  {
     q: "What does the voice sound like?",
     a: "OpenAI Realtime — currently the most natural production-grade conversational voice on the market. The agent can interrupt, be interrupted, handle uh-huhs and side comments, and switch tone. Most callers don't realize it's AI on the first call.",
   },
@@ -368,10 +372,18 @@ export default function AiReceptionistPage() {
             DIY no-code voice tools sound like robots and break the moment a
             caller goes off-script.
           </p>
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            On the other end: somebody on Facebook Marketplace will sell you an
+            &ldquo;AI receptionist&rdquo; for $300. Ask where the FreeSWITCH
+            config lives, who pays the per-minute OpenAI Realtime bill at scale,
+            and what happens when the trial API key expires. The answer is
+            usually &ldquo;don&rsquo;t worry about it&rdquo; &mdash; which is
+            the answer right up until your phone stops ringing.
+          </p>
           <p className="text-lg text-navy-900 font-semibold leading-relaxed">
-            We build you the receptionist instead of renting it. One-time
-            setup, your infrastructure, your data, your voice. Pay once.
-            Operate for years.
+            We build you the receptionist instead of renting it &mdash; and we
+            show you every part we&rsquo;re building. One-time setup, your
+            infrastructure, your data, your voice. Pay once. Operate for years.
           </p>
         </div>
       </section>
