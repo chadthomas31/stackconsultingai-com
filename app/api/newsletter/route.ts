@@ -33,12 +33,16 @@ export async function POST(req: NextRequest) {
 
   if (!apiKey || !publicationId) {
     // Dev/un-configured fallback — tell the client to open the Beehiiv
-    // subscribe page directly so no signup is lost.
+    // subscribe page directly so no signup is lost. Beehiiv reads the
+    // address from `primary_email`; using `email` silently drops it.
+    const fallbackBase =
+      process.env.NEXT_PUBLIC_BEEHIIV_SUBSCRIBE_URL ||
+      "https://stackconsultingai.beehiiv.com/subscribe";
     return NextResponse.json(
       {
         success: false,
         error: "Newsletter is temporarily unavailable. Please try again.",
-        fallbackUrl: `https://stackconsultingai.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`,
+        fallbackUrl: `${fallbackBase}?primary_email=${encodeURIComponent(email)}`,
       },
       { status: 503 },
     );

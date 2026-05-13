@@ -6,9 +6,10 @@ import { Mail, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
+    "idle" | "loading" | "success" | "error" | "fallback"
   >("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [fallbackUrl, setFallbackUrl] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +17,7 @@ export default function Newsletter() {
 
     setStatus("loading");
     setErrorMessage("");
+    setFallbackUrl("");
 
     try {
       const res = await fetch("/api/newsletter", {
@@ -35,11 +37,12 @@ export default function Newsletter() {
         return;
       }
 
-      // Server signaled the config is missing — gracefully bounce the user
-      // to the Beehiiv subscribe page so no signup is lost.
+      // Server signaled the config is missing — render a visible link so the
+      // user can finish subscribing on Beehiiv. Don't `window.open` because
+      // browsers popup-block it and the user thinks subscribing succeeded.
       if (data.fallbackUrl) {
-        window.open(data.fallbackUrl, "_blank", "noopener,noreferrer");
-        setStatus("success");
+        setFallbackUrl(data.fallbackUrl);
+        setStatus("fallback");
         return;
       }
 
@@ -81,6 +84,21 @@ export default function Newsletter() {
               <span className="font-semibold">
                 You&apos;re in! Check your inbox to confirm.
               </span>
+            </div>
+          ) : status === "fallback" ? (
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-sm text-muted-foreground max-w-md">
+                One more step — finish subscribing on our newsletter host:
+              </p>
+              <a
+                href={fallbackUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-cta-call inline-flex items-center justify-center gap-2"
+              >
+                Finish subscribing
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           ) : (
             <>
