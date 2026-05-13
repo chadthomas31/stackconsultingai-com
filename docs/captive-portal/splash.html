@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stack Consulting AI — Guest WiFi</title>
+<style>
+  :root {
+    --navy: #00122e;
+    --navy-700: #0a2247;
+    --brand: #3e6aef;
+    --brand-hover: #2f54c9;
+    --orange: #c2410c;
+    --soft: #f5f5fa;
+    --border: #e2e2e2;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    background: var(--soft);
+    color: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    line-height: 1.5;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 20px 40px rgba(0,18,46,0.06);
+    max-width: 460px;
+    width: 100%;
+    padding: 2.5rem 2rem;
+  }
+  .brand {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .brand-mark {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.65rem;
+    border-radius: 4px;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 1.25rem 0 0.5rem;
+    text-align: center;
+  }
+  .subhead {
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 1.75rem;
+    font-size: 0.95rem;
+  }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+  input[type="email"] {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--navy);
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  input[type="email"]:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(62,106,239,0.18);
+  }
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 1rem 0 1.25rem;
+    font-size: 0.85rem;
+    color: #4a5568;
+  }
+  .checkbox-row input { margin-top: 3px; }
+  .checkbox-row a { color: var(--brand); text-decoration: underline; }
+  button {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 150ms;
+    font-family: inherit;
+  }
+  button:hover:not(:disabled) { background: var(--brand-hover); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .error {
+    color: var(--orange);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+  .error.visible { display: block; }
+  .footer-note {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+  .footer-note a { color: var(--brand); text-decoration: none; }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <span class="brand-mark">STACK CONSULTING AI</span>
+    </div>
+    <h1>Guest WiFi</h1>
+    <p class="subhead">Drop your email and you're online — plus you'll get The Stack Report, the biweekly newsletter on AI for small business.</p>
+
+    <form id="wifi-form" method="POST" action="$action">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@business.com">
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="accept" name="accept" required>
+        <label for="accept" style="font-weight: 400; margin: 0;">I agree to the <a href="https://stackconsultingai.com/terms" target="_blank" rel="noopener">terms of use</a> and to receive The Stack Report newsletter.</label>
+      </div>
+
+      <input type="hidden" name="id" value="$id">
+      <input type="hidden" name="ap" value="$ap">
+      <input type="hidden" name="ssid" value="$ssid">
+      <input type="hidden" name="t" value="$t">
+      <input type="hidden" name="url" value="$url">
+
+      <button type="submit" id="submit-btn">Connect to WiFi</button>
+      <p class="error" id="error-msg"></p>
+    </form>
+
+    <p class="footer-note">Powered by <a href="https://stackconsultingai.com" target="_blank" rel="noopener">stackconsultingai.com</a></p>
+  </main>
+
+<script>
+(function() {
+  const form = document.getElementById('wifi-form');
+  const btn = document.getElementById('submit-btn');
+  const errorEl = document.getElementById('error-msg');
+  const WEBHOOK = 'https://stackconsultingai.com/api/wifi-signup';
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('visible');
+  }
+  function clearError() { errorEl.classList.remove('visible'); }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const accept = document.getElementById('accept').checked;
+    if (!accept) { showError('Please accept the terms.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Enter a valid email.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Connecting...';
+
+    try {
+      await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          ap: document.querySelector('[name=ap]').value,
+          ssid: document.querySelector('[name=ssid]').value,
+          site: 'stack_office',
+        }),
+        keepalive: true,
+        mode: 'cors',
+      }).catch(() => {});
+    } catch (_) {}
+
+    // submit native UniFi auth regardless of webhook outcome
+    form.removeEventListener('submit', arguments.callee);
+    form.submit();
+  });
+})();
+</script>
+</body>
+</html>
