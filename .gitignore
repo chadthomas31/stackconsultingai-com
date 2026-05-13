@@ -44,3 +44,7 @@ next-env.d.ts
 .cursor/hooks/config.json.local
 .cursor/telemetry/
 .cursor/.integration-snapshots/
+
+# local optional tooling
+harmonist/
+test-vertex.js
