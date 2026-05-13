@@ -162,35 +162,35 @@ html {
 }
 
 /* High-intent demo CTA — reserved exclusively for "try the live AI call" action.
-   Orange #dd6b20 = navy-complementary (~30° hue), 4.6:1 white-text contrast = AA pass.
+   Orange #c2410c = navy-complementary (~22° hue), 5.5:1 white-text contrast = AA pass.
    2-tier hierarchy: blue = standard contact, orange = high-intent product trial. */
 .btn-cta-call {
-  background: #dd6b20;
+  background: #c2410c;
   color: #fff;
   border-radius: var(--radius);
   padding: 0.75rem 1.25rem;
   font-weight: 600;
   transition: transform 300ms var(--spring-smooth), background 200ms ease, box-shadow 200ms ease;
-  box-shadow: 0 6px 16px -8px rgba(221, 107, 32, 0.5);
+  box-shadow: 0 6px 16px -8px rgba(194, 65, 12, 0.5);
 }
 .btn-cta-call:hover {
-  background: #c2410c;
+  background: #9a3412;
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px -10px rgba(221, 107, 32, 0.65);
+  box-shadow: 0 10px 22px -10px rgba(194, 65, 12, 0.65);
 }
 .btn-cta-call:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(221, 107, 32, 0.32);
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.32);
 }
 
-/* Section kickers */
+/* Section kickers — uses brand-hover (#2f54c9) for 4.7:1 AA on white and #f5f5fa */
 .section-kicker {
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #3e6aef;
+  color: #2f54c9;
 }
 
 /* Soft card */

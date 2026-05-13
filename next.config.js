@@ -5,6 +5,9 @@ const nextConfig = {
       { protocol: 'https', hostname: 'placehold.co' },
     ],
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
 };
 
 module.exports = nextConfig;

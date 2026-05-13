@@ -322,7 +322,7 @@ export default function FreeAssessmentOffer() {
           <div className="lg:col-span-3 space-y-6">
             {/* Primary: Call now (unchanged — the preferred path is outbound) */}
             <div className="rounded-md bg-navy-900 text-white p-6 md:p-8">
-              <div className="flex items-center gap-2 text-brand text-xs font-semibold uppercase tracking-wider mb-3">
+              <div className="flex items-center gap-2 text-brand-soft text-xs font-semibold uppercase tracking-wider mb-3">
                 <span className="live-dot" aria-hidden="true" />
                 Stacks is live 24/7
               </div>
