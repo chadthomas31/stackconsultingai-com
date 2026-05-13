@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Code2, Zap, ShoppingCart, Wrench, ArrowRight, MapPin } from "lucide-react";
+import { Code2, Zap, ShoppingCart, Wrench, Wifi, ArrowRight, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "AI Consulting & Web Development Services | Southern California | Stack Consulting AI",
@@ -58,6 +58,14 @@ const services = [
       "Complete online store solutions with secure payment processing, inventory management, and customer portals designed to maximize revenue and streamline fulfillment.",
     href: "/services/ecommerce",
     highlights: ["Shopify & Custom", "Payment Processing", "Inventory", "Analytics"],
+  },
+  {
+    icon: Wifi,
+    title: "Guest WiFi + Email Capture",
+    description:
+      "Branded captive portal on pfSense + UniFi. Customers connect to your WiFi, you collect verified emails straight into your newsletter list. Lead-gen built into the wall.",
+    href: "/services/guest-wifi",
+    highlights: ["Branded Splash", "Newsletter Sync", "Guest Isolation", "Multi-Location"],
   },
   {
     icon: Wrench,

@@ -1,4 +1,4 @@
-import { Code2, Zap, ShoppingCart, Wrench } from "lucide-react";
+import { Code2, Zap, ShoppingCart, Wrench, Wifi } from "lucide-react";
 
 const services = [
   {
@@ -15,6 +15,11 @@ const services = [
     icon: ShoppingCart,
     title: "E-commerce",
     description: "Complete online store solutions with secure payments, inventory management, and customer portals."
+  },
+  {
+    icon: Wifi,
+    title: "Guest WiFi + Email Capture",
+    description: "Branded captive portal on pfSense + UniFi. Customers log on, you collect emails into your newsletter list. Lead-gen built into the wall."
   },
   {
     icon: Wrench,
