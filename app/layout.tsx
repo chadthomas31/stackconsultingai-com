@@ -7,6 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import CookieConsent from "@/components/CookieConsent";
 import StructuredData from "@/components/StructuredData";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" });
@@ -68,8 +70,10 @@ export default function RootLayout({
         <VercelAnalytics />
         <SpeedInsights />
         <CookieConsent />
+        <Navbar />
         <div id="main-content"></div>
         {children}
+        <Footer />
 
         {/* Google Analytics 4 */}
         <Script

@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ArrowDown } from "lucide-react";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import CallMeDemo from "@/components/demos/CallMeDemo";
 import KbDemo from "@/components/demos/KbDemo";
 import LeadAgentDemo from "@/components/demos/LeadAgentDemo";
@@ -25,7 +23,6 @@ export const metadata: Metadata = {
 export default function DemosPage() {
   return (
     <>
-      <Navbar />
 
       <main className="bg-white">
         {/* ======================================================
@@ -238,7 +235,6 @@ export default function DemosPage() {
         </section>
       </main>
 
-      <Footer />
     </>
   );
 }

@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Hero from "@/components/Hero";
 import ClientLogoStrip from "@/components/ClientLogoStrip";
@@ -16,7 +15,6 @@ import Newsletter from "@/components/Newsletter";
 import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
 import FinalCTA from "@/components/FinalCTA";
-import Footer from "@/components/Footer";
 
 // Homepage section order per CLAUDE.md → Section Canon
 export default function Home() {
@@ -26,7 +24,6 @@ export default function Home() {
         slotsRemaining={LAUNCH_PARTNER_SLOTS_REMAINING}
         totalSlots={LAUNCH_PARTNER_TOTAL_SLOTS}
       />
-      <Navbar />
       <Hero />
       <ClientLogoStrip />
       <FreeAssessmentOffer />
@@ -40,7 +37,6 @@ export default function Home() {
       <FAQ />
       <ContactForm />
       <FinalCTA />
-      <Footer />
     </main>
   );
 }

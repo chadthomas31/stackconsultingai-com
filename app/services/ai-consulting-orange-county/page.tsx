@@ -18,8 +18,6 @@ import {
   MapPin,
 } from "lucide-react";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import CallOptions from "@/components/CallOptions";
 
 export const metadata: Metadata = {
@@ -310,7 +308,6 @@ const breadcrumbJsonLd = {
 export default function OcAiConsultingPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       <script
         type="application/ld+json"
@@ -665,7 +662,6 @@ export default function OcAiConsultingPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

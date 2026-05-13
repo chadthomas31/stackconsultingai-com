@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, type MouseEvent } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home } from "lucide-react";
 import Image from "next/image";
 
 export default function Navbar() {
@@ -91,6 +91,14 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
+            <a
+              href="/"
+              onClick={handleLogoClick}
+              className="inline-flex items-center gap-1.5 text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+            >
+              <Home className="w-4 h-4" aria-hidden="true" />
+              Home
+            </a>
             {navLinks.map((link) => (
               <a
                 key={link.id}
@@ -144,6 +152,17 @@ export default function Navbar() {
 
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 space-y-2">
+            <a
+              href="/"
+              onClick={(e) => {
+                handleLogoClick(e);
+                setIsMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2 w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
+            >
+              <Home className="w-4 h-4" aria-hidden="true" />
+              Home
+            </a>
             {navLinks.map((link) => (
               <a
                 key={link.id}

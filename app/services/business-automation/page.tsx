@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import {
   Zap,
   ArrowRight,
@@ -157,7 +155,6 @@ const processSteps = [
 export default function BusinessAutomationPage() {
   return (
     <main className="min-h-screen">
-      <Navbar />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background">
@@ -402,7 +399,6 @@ export default function BusinessAutomationPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

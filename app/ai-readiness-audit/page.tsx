@@ -15,8 +15,6 @@ import {
   Plus,
 } from "lucide-react";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import PricingTier from "@/components/PricingTier";
 import CallOptions from "@/components/CallOptions";
 
@@ -301,7 +299,6 @@ const breadcrumbJsonLd = {
 export default function AiReadinessAuditPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       <script
         type="application/ld+json"
@@ -718,7 +715,6 @@ export default function AiReadinessAuditPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

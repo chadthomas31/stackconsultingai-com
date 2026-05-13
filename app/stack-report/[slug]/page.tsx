@@ -3,13 +3,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Home } from "lucide-react";
 import {
   getIssueBySlug,
   listIssueSlugs,
 } from "@/lib/newsletter-issues-db";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export const revalidate = 60;
 
@@ -89,20 +87,28 @@ export default async function StackReportIssuePage({
 
   return (
     <>
-      <Navbar />
       <main className="min-h-screen bg-white text-navy-900 pb-24 pt-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <article className="max-w-3xl mx-auto px-4 pt-10 md:pt-16">
-        <Link
-          href="/stack-report"
-          className="inline-flex items-center gap-1.5 text-sm text-brand hover:text-brand-hover font-semibold mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          All issues
-        </Link>
+        <nav aria-label="Article navigation" className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-sm text-brand hover:text-brand-hover font-semibold"
+          >
+            <Home className="w-4 h-4" />
+            Home
+          </Link>
+          <Link
+            href="/stack-report"
+            className="inline-flex items-center gap-1.5 text-sm text-brand hover:text-brand-hover font-semibold"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            All issues
+          </Link>
+        </nav>
 
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand/10 border border-brand/25 text-brand text-xs font-semibold tracking-[0.16em] uppercase mb-5">
           The Stack Report · Issue #{issue.issue_number}
@@ -205,11 +211,34 @@ export default async function StackReportIssuePage({
             >
               Talk to an AI expert
             </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-md bg-white/10 hover:bg-white/20 text-white font-semibold"
+            >
+              <Home className="w-4 h-4" />
+              Home
+            </Link>
           </div>
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-brand hover:text-brand-hover font-semibold"
+          >
+            <Home className="w-4 h-4" />
+            Back to home
+          </Link>
+          <Link
+            href="/stack-report"
+            className="inline-flex items-center gap-1.5 text-brand hover:text-brand-hover font-semibold"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            All issues
+          </Link>
         </div>
       </article>
       </main>
-      <Footer />
     </>
   );
 }

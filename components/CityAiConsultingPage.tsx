@@ -17,8 +17,6 @@ import {
   MapPin,
 } from "lucide-react";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import CallOptions from "@/components/CallOptions";
 
 export type CityNeighbor = {
@@ -285,7 +283,6 @@ export default function CityAiConsultingPage({
 
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       <script
         type="application/ld+json"
@@ -642,7 +639,6 @@ export default function CityAiConsultingPage({
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }
