@@ -77,6 +77,18 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border text-center text-muted-foreground space-y-2">
           <p>© {currentYear} Stack Consulting AI. All rights reserved.</p>
+          <p className="text-sm">
+            Sister brand:{" "}
+            <a
+              href="https://strategicsync.com"
+              target="_blank"
+              rel="noopener"
+              className="hover:text-primary transition-colors underline-offset-2 hover:underline"
+            >
+              Strategic Sync
+            </a>{" "}
+            — AI automation &amp; integration for businesses with existing phone, CRM, and workflow systems.
+          </p>
           <div className="flex justify-center gap-4 text-sm">
             <a href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</a>
             <span>|</span>
