@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Phone } from "lucide-react";
+import Section from "@/components/Section";
 
 export default function FinalCTA() {
   const scrollTo = (id: string) => {
@@ -8,8 +9,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-white">
-      <div className="max-w-6xl mx-auto px-4">
+    <Section>
         <div className="relative rounded-[16px] bg-navy-900 text-white overflow-hidden p-10 md:p-16">
           <div
             aria-hidden="true"
@@ -45,7 +45,6 @@ export default function FinalCTA() {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+    </Section>
   );
 }

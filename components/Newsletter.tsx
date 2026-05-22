@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mail, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
+import Section from "@/components/Section";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -55,8 +56,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section id="newsletter" className="py-20 md:py-28 bg-white">
-      <div className="max-w-3xl mx-auto px-4">
+    <Section id="newsletter" width="3xl">
         <div className="relative rounded-xl bg-soft border border-border p-8 md:p-12 text-center">
           <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-5">
             <Mail className="w-5 h-5 text-brand" />
@@ -150,7 +150,6 @@ export default function Newsletter() {
             Join free. Unsubscribe anytime.
           </p>
         </div>
-      </div>
-    </section>
+    </Section>
   );
 }

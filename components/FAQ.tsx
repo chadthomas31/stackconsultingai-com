@@ -2,6 +2,8 @@
 
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
+import Section from "@/components/Section";
+import SectionHeader from "@/components/SectionHeader";
 
 const QA = [
   {
@@ -34,16 +36,10 @@ export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="py-20 md:py-28 bg-soft">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <span className="section-kicker">FAQ</span>
-          <h2 className="font-heading text-4xl md:text-5xl font-bold text-navy-900 mt-2">
-            Questions we get a lot.
-          </h2>
-        </div>
+    <Section id="faq" tone="soft" width="4xl">
+      <SectionHeader kicker="FAQ" title="Questions we get a lot." size="large" />
 
-        <div className="divide-y divide-border border-y border-border bg-white rounded-lg">
+      <div className="divide-y divide-border border-y border-border bg-white rounded-lg">
           {QA.map((item, i) => {
             const expanded = open === i;
             return (
@@ -85,7 +81,6 @@ export default function FAQ() {
             );
           })}
         </div>
-      </div>
-    </section>
+    </Section>
   );
 }
