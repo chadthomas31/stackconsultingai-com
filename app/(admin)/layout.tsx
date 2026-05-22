@@ -2,12 +2,12 @@ import { getRequiredAdmin } from "@/lib/auth-utils"
 import { LayoutDashboard, Users, FolderKanban, FileText, MessageSquare } from "lucide-react"
 import { Sidebar } from "@/components/sidebar"
 
-const navItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/clients", label: "Clients", icon: Users },
-  { href: "/admin/projects", label: "Projects", icon: FolderKanban },
-  { href: "/admin/invoices", label: "Invoices", icon: FileText },
-  { href: "/admin/messages", label: "Messages", icon: MessageSquare },
+const navItems: { href: string; label: string; icon: "LayoutDashboard" | "Users" | "FolderKanban" | "FileText" | "MessageSquare" }[] = [
+  { href: "/admin", label: "Dashboard", icon: "LayoutDashboard" },
+  { href: "/admin/clients", label: "Clients", icon: "Users" },
+  { href: "/admin/projects", label: "Projects", icon: "FolderKanban" },
+  { href: "/admin/invoices", label: "Invoices", icon: "FileText" },
+  { href: "/admin/messages", label: "Messages", icon: "MessageSquare" },
 ]
 
 export default async function AdminLayout({

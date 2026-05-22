@@ -3,13 +3,21 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, LogOut, LucideIcon } from "lucide-react"
+import { Menu, X, LayoutDashboard, FolderKanban, FileText, MessageSquare, Users } from "lucide-react"
 import { SignOutButton } from "./sign-out-button"
+
+const iconMap = {
+  LayoutDashboard,
+  FolderKanban,
+  FileText,
+  MessageSquare,
+  Users,
+}
 
 interface NavItem {
   href: string
   label: string
-  icon: LucideIcon
+  icon: keyof typeof iconMap
 }
 
 interface SidebarProps {
@@ -98,7 +106,10 @@ export function Sidebar({ navItems, userName, userRole, isAdmin }: SidebarProps)
                             : "hover:bg-zinc-100 hover:text-zinc-900"
                       }`}
                     >
-                      <item.icon className="h-4 w-4" />
+                      {(() => {
+                        const Icon = iconMap[item.icon]
+                        return <Icon className="h-4 w-4" />
+                      })()}
                       {item.label}
                     </Link>
                   </li>

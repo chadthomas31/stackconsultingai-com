@@ -2,11 +2,11 @@ import { getRequiredSession } from "@/lib/auth-utils"
 import { LayoutDashboard, FolderKanban, FileText, MessageSquare } from "lucide-react"
 import { Sidebar } from "@/components/sidebar"
 
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/projects", label: "Projects", icon: FolderKanban },
-  { href: "/invoices", label: "Invoices", icon: FileText },
-  { href: "/messages", label: "Messages", icon: MessageSquare },
+const navItems: { href: string; label: string; icon: "LayoutDashboard" | "FolderKanban" | "FileText" | "MessageSquare" }[] = [
+  { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+  { href: "/projects", label: "Projects", icon: "FolderKanban" },
+  { href: "/invoices", label: "Invoices", icon: "FileText" },
+  { href: "/messages", label: "Messages", icon: "MessageSquare" },
 ]
 
 export default async function PortalLayout({
