@@ -3,11 +3,21 @@
 import { useState, useEffect, type MouseEvent } from "react";
 import { Menu, X, Home } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+
+  const isPortal = pathname.startsWith("/dashboard") ||
+                  pathname.startsWith("/projects") ||
+                  pathname.startsWith("/invoices") ||
+                  pathname.startsWith("/messages") ||
+                  pathname.startsWith("/admin") ||
+                  pathname === "/login" ||
+                  pathname === "/register";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +47,8 @@ export default function Navbar() {
       observer.disconnect();
     };
   }, []);
+
+  if (isPortal) return null;
 
   const handleSectionClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -132,6 +144,12 @@ export default function Navbar() {
               Stack Report
             </a>
             <a
+              href="/login"
+              className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+            >
+              Client Portal
+            </a>
+            <a
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
               className="btn-cta-call text-sm"
@@ -193,6 +211,13 @@ export default function Navbar() {
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               Stack Report
+            </a>
+            <a
+              href="/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
+            >
+              Client Portal
             </a>
             <a
               href="/#contact"

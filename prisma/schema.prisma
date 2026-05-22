@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  passwordHash  String
+  role          String    @default("client") // "admin" | "client"
+  company       String?
+  phone         String?
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  projects      Project[]
+  invoices      Invoice[]
+  messages      Message[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      String   @default("discovery") // "discovery" | "in_progress" | "review" | "completed" | "on_hold"
+  startDate   DateTime?
+  dueDate     DateTime?
+  progress    Int      @default(0) // 0-100
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  milestones  Milestone[]
+  invoices    Invoice[]
+  messages    Message[]
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String   @default("pending") // "pending" | "in_progress" | "completed"
+  dueDate     DateTime?
+  completedAt DateTime?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+}
+
+model Invoice {
+  id          String   @id @default(cuid())
+  number      String   @unique
+  amount      Float
+  status      String   @default("draft") // "draft" | "sent" | "paid" | "overdue"
+  dueDate     DateTime?
+  paidAt      DateTime?
+  description String?
+  lineItems   String?  // JSON string of line items
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  isAdmin   Boolean  @default(false)
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+}

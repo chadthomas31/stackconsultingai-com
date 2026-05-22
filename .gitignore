@@ -13,9 +13,14 @@
 # production
 /build
 
-# misc
-.DS_Store
-*.pem
+# database
+*.db
+*.db-journal
+/prisma/*.db
+/prisma/*.db-journal
+
+# env files
+.env*
 __pycache__/
 *.py[cod]
 

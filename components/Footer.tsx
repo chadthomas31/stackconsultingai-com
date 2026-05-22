@@ -1,8 +1,22 @@
+"use client";
+
 import { Mail, Phone } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  const isPortal = pathname.startsWith("/dashboard") ||
+                  pathname.startsWith("/projects") ||
+                  pathname.startsWith("/invoices") ||
+                  pathname.startsWith("/messages") ||
+                  pathname.startsWith("/admin") ||
+                  pathname === "/login" ||
+                  pathname === "/register";
+
+  if (isPortal) return null;
 
   return (
     <footer className="relative py-12 px-4 border-t border-border">
