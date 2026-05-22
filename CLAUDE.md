@@ -150,6 +150,7 @@
   ### App Router conventions
   - Single root `app/layout.tsx` injects GA4 (`G-GKBVKQ49ND`) + GTM (`GTM-5N9G6XQ4`) via `next/script lazyOnload`, plus skip-link target. Don't duplicate analytics in child layouts.
   - `app/page.tsx` is the homepage and composes the section canon listed above.
+  - **Client Portal**: Routes under `app/(portal)`, `app/(admin)`, and `app/(auth)`. See `PORTAL_INTEGRATION.md` for details.
   - Marketing pages live under `app/services/<slug>/` and `app/services/ai-consulting-<city>/` — geo-variant landing pages share the `CityAiConsultingPage` component.
   - Lead-gen tools live under `app/tools/<tool>/` with matching API at `app/api/<tool>/route.ts`. Pattern: client wizard component (e.g. `components/AutomationFinder.tsx`) → POST → API route runs analysis → writes lead to Supabase → emails Chad via Resend.
   - The Stack Report newsletter: `app/stack-report/` (index + `[slug]`), `app/api/newsletter/{generate,publish,route}` for admin-protected generation. Issues stored in Supabase (`newsletter_issues` table).
