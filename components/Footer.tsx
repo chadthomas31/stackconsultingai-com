@@ -23,7 +23,7 @@ export default function Footer() {
       {/* Gradient Divider */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"></div>
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
             <Image
@@ -37,12 +37,7 @@ export default function Footer() {
               You don’t need more tools. You need a better stack.
             </p>
             <p className="text-sm text-muted-foreground mt-2">Stack smarter. Move faster.</p>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="font-semibold mb-4">Contact</h3>
-            <div className="space-y-2">
+            <div className="mt-4 space-y-2">
               <a
                 href="mailto:hello@stackconsultingai.com"
                 className="flex items-center gap-2 text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200"
@@ -65,6 +60,11 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Services</h3>
             <ul className="space-y-2">
               <li>
+                <a href="/services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  All Services
+                </a>
+              </li>
+              <li>
                 <a href="/services/web-development" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Web Development
                 </a>
@@ -82,6 +82,95 @@ export default function Footer() {
               <li>
                 <a href="/services/maintenance" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Maintenance
+                </a>
+              </li>
+              <li>
+                <a href="/services/guest-wifi" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Guest WiFi
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Products & Tools */}
+          <div>
+            <h3 className="font-semibold mb-4">Products &amp; Tools</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="/ai-receptionist" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  AI Receptionist
+                </a>
+              </li>
+              <li>
+                <a href="/ai-readiness-audit" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  AI Readiness Audit
+                </a>
+              </li>
+              <li>
+                <a href="/free-ai-site-audit" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Free Site Audit
+                </a>
+              </li>
+              <li>
+                <a href="/ai-automation-small-business-guide" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Automation Guide
+                </a>
+              </li>
+              <li>
+                <a href="/demos" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Live Demos
+                </a>
+              </li>
+              <li>
+                <a href="/portfolio" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Portfolio
+                </a>
+              </li>
+              <li>
+                <a href="/tools" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Free Tools
+                </a>
+              </li>
+              <li>
+                <a href="/stack-report" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  The Stack Report
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Service Area */}
+          <div>
+            <h3 className="font-semibold mb-4">Service Area</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="/services/ai-consulting-orange-county" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Orange County
+                </a>
+              </li>
+              <li>
+                <a href="/services/ai-consulting-irvine" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Irvine
+                </a>
+              </li>
+              <li>
+                <a href="/services/ai-consulting-newport-beach" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Newport Beach
+                </a>
+              </li>
+              <li>
+                <a href="/services/ai-consulting-costa-mesa" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Costa Mesa
+                </a>
+              </li>
+              <li>
+                <a href="/services/ai-consulting-mission-viejo" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Mission Viejo
+                </a>
+              </li>
+              <li>
+                <a href="/services/ai-consulting-san-clemente" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  San Clemente
                 </a>
               </li>
             </ul>

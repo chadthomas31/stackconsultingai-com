@@ -1,0 +1,70 @@
+# Stack Consulting AI
+
+> Practical AI automation, custom websites, and 24/7 AI phone agents for small businesses. Independent consulting practice based in Orange County, California.
+
+You don't need more AI tools. You need a better stack. Stack Consulting AI designs and deploys AI receptionists, business automation, and conversion-focused websites for small businesses that want systems their team will actually use — not another dashboard to babysit.
+
+## About
+
+- Independent AI consulting practice run by Chad McCluskey
+- Based in Orange County, California; serves SoCal in-person and remote nationwide
+- Specialties: AI voice receptionists, n8n/Make/Zapier automation, Next.js websites, managed IT for small business
+
+## Services
+
+- [Services overview](https://stackconsultingai.com/services): full service menu and how engagements work
+- [Business automation](https://stackconsultingai.com/services/business-automation): workflow automation with n8n, Make, Zapier, and custom integrations
+- [Web development](https://stackconsultingai.com/services/web-development): Next.js and Tailwind sites built for SEO and conversion
+- [Ecommerce](https://stackconsultingai.com/services/ecommerce): Shopify and custom storefront builds
+- [Maintenance](https://stackconsultingai.com/services/maintenance): ongoing site care, monitoring, and performance tuning
+- [Guest WiFi](https://stackconsultingai.com/services/guest-wifi): UniFi-based captive portal and guest network setup
+
+## AI Receptionist
+
+- [AI Receptionist](https://stackconsultingai.com/ai-receptionist): 24/7 phone agent that answers, qualifies, books appointments, transfers humans when needed, and emails you the transcript. Sub-1-second answer time. Live demo callable from the page.
+
+## Local — Orange County
+
+- [Orange County](https://stackconsultingai.com/services/ai-consulting-orange-county): hub page for OC AI consulting
+- [Irvine](https://stackconsultingai.com/services/ai-consulting-irvine)
+- [Newport Beach](https://stackconsultingai.com/services/ai-consulting-newport-beach)
+- [Costa Mesa](https://stackconsultingai.com/services/ai-consulting-costa-mesa)
+- [Mission Viejo](https://stackconsultingai.com/services/ai-consulting-mission-viejo)
+- [San Clemente](https://stackconsultingai.com/services/ai-consulting-san-clemente)
+
+## Free tools
+
+- [All tools](https://stackconsultingai.com/tools): tool index
+- [Automation finder](https://stackconsultingai.com/tools/automation-finder): identify automatable workflows in your business
+- [ROI calculator](https://stackconsultingai.com/tools/roi-calculator): estimate return on an automation investment
+- [Cost calculator](https://stackconsultingai.com/tools/cost-calculator): rough project budget estimate
+- [Timeline estimator](https://stackconsultingai.com/tools/timeline-estimator): scope-to-timeline estimator
+- [Speed checker](https://stackconsultingai.com/tools/speed-checker): site performance check
+- [Site audit](https://stackconsultingai.com/tools/site-audit): broader site health audit
+- [SEO audit](https://stackconsultingai.com/tools/seo-audit): on-page SEO check
+- [Tech stack analyzer](https://stackconsultingai.com/tools/tech-stack): detect what a site is built on
+- [Gemini quota tracker](https://stackconsultingai.com/tools/gemini-quota): track Google Gemini API usage
+- [Newsletter generator](https://stackconsultingai.com/tools/newsletter-generator): AI-assisted newsletter drafting
+
+## Demos and portfolio
+
+- [Live demos](https://stackconsultingai.com/demos): try the AI receptionist and other agents live
+- [Portfolio](https://stackconsultingai.com/portfolio): client work and case studies
+
+## Assessment
+
+- [AI Readiness Audit](https://stackconsultingai.com/ai-readiness-audit): free 5-minute assessment that scores where AI can move the needle in your business and returns a written readout
+- [Free AI Site Audit](https://stackconsultingai.com/free-ai-site-audit): free written audit of your website, lead capture, phone flow, and automation gaps — delivered in 48 hours
+
+## Guides
+
+- [AI Automation for Small Businesses](https://stackconsultingai.com/ai-automation-small-business-guide): practical 2026 guide to AI automation use cases, costs, and tools for 1-20 person businesses
+
+## Newsletter
+
+- [The Stack Report](https://stackconsultingai.com/stack-report): biweekly newsletter on AI, business technology, and productivity — written for operators who want signal, not hype
+
+## Optional
+
+- [Privacy policy](https://stackconsultingai.com/privacy)
+- [Terms of service](https://stackconsultingai.com/terms)

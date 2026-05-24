@@ -97,6 +97,30 @@ const tools = [
     href: "/tools/tech-stack",
     active: true,
     cta: "Get Recommendation"
+  },
+  {
+    id: "gemini-quota",
+    icon: BarChart3,
+    title: "Gemini Quota Tracker",
+    description: "Track Google Gemini API usage and stay under your daily limits with live quota visibility.",
+    badge: "",
+    badgeColor: "bg-primary text-primary-foreground",
+    stats: "~1 minute",
+    href: "/tools/gemini-quota",
+    active: true,
+    cta: "Check Quota"
+  },
+  {
+    id: "newsletter-generator",
+    icon: Workflow,
+    title: "Newsletter Generator",
+    description: "AI-assisted newsletter drafting — outline, write, and polish a full issue in minutes.",
+    badge: "",
+    badgeColor: "bg-primary text-primary-foreground",
+    stats: "~10 minutes",
+    href: "/tools/newsletter-generator",
+    active: true,
+    cta: "Draft a Newsletter"
   }
 ];
 
