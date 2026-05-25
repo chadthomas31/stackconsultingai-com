@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import AiOsExplainer from "@/components/AiOsExplainer";
 import AiOsTiers from "@/components/AiOsTiers";
 import { ArrowRight, Terminal, Workflow, Plug, Phone, Lock, ShieldCheck } from "lucide-react";
@@ -47,8 +45,6 @@ const jsonLd = {
 export default function AiOsPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
-
       {/* Hero */}
       <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-soft via-white to-white" />
@@ -128,6 +124,36 @@ export default function AiOsPage() {
         </div>
       </section>
 
+      {/* Proof */}
+      <section className="py-20 bg-soft">
+        <div className="max-w-5xl mx-auto px-4">
+          <span className="section-kicker">Proof</span>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-10 tracking-tight">
+            We already run this for real businesses.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-md bg-white border border-border">
+              <div className="font-heading text-3xl font-bold text-brand mb-1">40%</div>
+              <p className="text-sm text-navy-900/80 leading-relaxed">
+                More booked appointments at Fix It San Clemente after we put an AI voice agent on their phones.
+              </p>
+            </div>
+            <div className="p-6 rounded-md bg-white border border-border">
+              <div className="font-heading text-3xl font-bold text-brand mb-1">24/7</div>
+              <p className="text-sm text-navy-900/80 leading-relaxed">
+                Our FreeSWITCH + OpenAI Realtime receptionist answers and books calls around the clock for SoCal clients.
+              </p>
+            </div>
+            <div className="p-6 rounded-md bg-white border border-border">
+              <div className="font-heading text-3xl font-bold text-brand mb-1">Live</div>
+              <p className="text-sm text-navy-900/80 leading-relaxed">
+                Try it yourself on the homepage — enter your number and our AI calls you back. The demo is the proof.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-24">
         <div className="max-w-3xl mx-auto px-4 text-center">
@@ -142,8 +168,6 @@ export default function AiOsPage() {
           </Link>
         </div>
       </section>
-
-      <Footer />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </main>
   );

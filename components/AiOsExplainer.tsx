@@ -35,7 +35,7 @@ export default function AiOsExplainer({ showCta = false }: { showCta?: boolean }
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((s) => (
-            <div key={s.title} className="rounded-md bg-white/5 border border-white/10 p-6">
+            <div key={s.title} className="rounded-md bg-white/5 border border-white/10 p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
               <div className="w-12 h-12 rounded-full bg-brand text-white flex items-center justify-center mb-5">
                 <s.icon aria-hidden="true" className="w-6 h-6" />
               </div>

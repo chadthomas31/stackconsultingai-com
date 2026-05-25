@@ -37,35 +37,36 @@ const tiers: Tier[] = [
       "Everything in Foundation",
       "Custom automations we build and maintain",
       "Integrations via MCP — Google, QuickBooks, your CRM",
-      "Voice receptionist tie-in (FreeSWITCH + OpenAI Realtime)",
+      "AI Voice Receptionist (Answers calls, books appointments 24/7)",
       "Priority support + monthly tune-up",
     ],
   },
   {
     name: "Sovereign",
-    blurb: "Nothing leaves your building.",
+    blurb: "Sovereign AI for regulated industries. Data never leaves your building.",
     setup: "$7,500",
     care: "$999",
     forWho: "Law, medical, finance",
     features: [
       "Everything in Operator",
-      "Local AI models on the box — data never leaves",
-      "Encryption + audit logging",
-      "HIPAA-friendly posture",
-      "Compliance-ready documentation",
+      "Local-only AI (Llama/DeepSeek) running on your hardware",
+      "No cloud data leakage — zero-trust architecture",
+      "HIPAA \u0026 FINRA compliance-ready posture",
+      "Encryption at rest + automated audit logging",
     ],
   },
 ];
 
 const bodies = [
-  { name: "Linux mini", price: "$700" },
-  { name: "Windows mini", price: "$1,000" },
-  { name: "Mac Mini", price: "$1,400", note: "high-memory build for Sovereign: $2,400" },
+  { name: "Linux mini", price: "$700", note: "Efficient, open source, best for Foundation" },
+  { name: "Windows mini", price: "$1,000", note: "Best for MS Office / QuickBooks heavy stacks" },
+  { name: "Mac Mini (M4)", price: "$1,400", note: "Recommended body for Operator tier" },
+  { name: "Mac Mini (64GB)", price: "$2,400", note: "High-memory build required for Sovereign" },
 ];
 
 export default function AiOsTiers() {
   return (
-    <section id="tiers" className="py-28">
+    <section id="tiers" className="py-28 scroll-mt-24">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-14 max-w-2xl">
           <span className="section-kicker">Pricing</span>
@@ -126,7 +127,7 @@ export default function AiOsTiers() {
         {/* Bodies */}
         <div className="mt-12 max-w-4xl">
           <h3 className="font-heading font-semibold text-navy-900 mb-4">The machine (one-time)</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {bodies.map((b) => (
               <div key={b.name} className="p-5 rounded-md bg-white border border-border">
                 <div className="flex items-baseline justify-between">
@@ -147,6 +148,12 @@ export default function AiOsTiers() {
             machines that talk to your AI OS. $350 per seat, or bundle it into your Care plan.
           </p>
         </div>
+
+        {/* Token cost transparency */}
+        <p className="mt-6 max-w-4xl text-xs text-muted-foreground">
+          Care covers setup, monitoring, maintenance, and support. Cloud model usage
+          (OpenAI / Anthropic API tokens) is billed at cost on top — we don&rsquo;t resell tokens or mark them up. On Sovereign, models run on your box, so there are no per-token cloud charges.
+        </p>
       </div>
     </section>
   );
