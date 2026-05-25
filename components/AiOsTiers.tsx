@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Check, ArrowRight } from "lucide-react";
 
 type Tier = {
@@ -125,8 +126,29 @@ export default function AiOsTiers() {
         </div>
 
         {/* Bodies */}
-        <div className="mt-12 max-w-4xl">
-          <h3 className="font-heading font-semibold text-navy-900 mb-4">The machine (one-time)</h3>
+        <div className="mt-14">
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
+            <div className="rounded-lg overflow-hidden border border-border shadow-[0_20px_60px_rgba(0,18,46,0.15)]">
+              {/* Real custom small-form-factor build photo (Unsplash License, free for commercial use) */}
+              <Image
+                src="/screenshots/ai-os-mini-pc.webp"
+                alt="A custom small-form-factor PC build with a wood-and-glass case — a Linux or Windows AI OS body"
+                width={1400}
+                height={1388}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="w-full h-auto"
+              />
+            </div>
+            <div>
+              <span className="section-kicker">The machine</span>
+              <h3 className="font-heading text-2xl md:text-3xl font-bold text-navy-900 mt-3 mb-3 tracking-tight">
+                Your hardware, your call.
+              </h3>
+              <p className="text-muted-foreground">
+                Not a Mac shop? Same AI OS, your hardware. We build clean small-form-factor Linux and Windows rigs too — or rebuild what&rsquo;s already in your office. One-time, at cost.
+              </p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {bodies.map((b) => (
               <div key={b.name} className="p-5 rounded-md bg-white border border-border">
