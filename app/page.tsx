@@ -15,7 +15,7 @@ import Newsletter from "@/components/Newsletter";
 import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
 import FinalCTA from "@/components/FinalCTA";
-import AiOsExplainer from "@/components/AiOsExplainer";
+import AiOsTeaser from "@/components/AiOsTeaser";
 
 // Homepage section order per CLAUDE.md → Section Canon
 export default function Home() {
@@ -30,7 +30,7 @@ export default function Home() {
       <FreeAssessmentOffer />
       <FoundingClientSpecial />
       <StackComparison />
-      <AiOsExplainer showCta />
+      <AiOsTeaser />
       <Services />
       <Portfolio />
       <Testimonials />
