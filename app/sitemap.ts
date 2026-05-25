@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { listIssues } from '@/lib/newsletter-issues-db'
+import { listArticles } from '@/lib/articles'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://stackconsultingai.com'
@@ -32,6 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/services/ai-consulting-mission-viejo`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/services/ai-consulting-costa-mesa`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/stack-report`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
   ]
 
   let issueEntries: MetadataRoute.Sitemap = []
@@ -47,5 +49,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supabase unreachable during build — skip dynamic entries rather than failing
   }
 
-  return [...staticEntries, ...issueEntries]
+  let articleEntries: MetadataRoute.Sitemap = []
+  try {
+    const articles = await listArticles()
+    articleEntries = articles.map((a) => ({
+      url: `${baseUrl}/blog/${a.slug}`,
+      lastModified: new Date(a.dateModified ?? a.datePublished),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    }))
+  } catch {
+    // Filesystem read failed — skip rather than break build
+  }
+
+  return [...staticEntries, ...issueEntries, ...articleEntries]
 }
