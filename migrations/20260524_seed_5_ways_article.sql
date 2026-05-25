@@ -124,7 +124,7 @@ Use AI to empower, not replace. Choose one task this week, involve the person wh
 If you want to watch a few of these workflows running before you try to build your own, [see it in action](/demos) — we keep working examples of AI receptionists, automation flows, and content pipelines live on the demos page.
 
 And if you want one practical AI idea for small business owners delivered every two weeks, sign up for [The Stack Report newsletter](/stack-report). No fluff, no hype — just what's actually working in real Southern California small businesses right now.$body$,
-  '/stack-report/5-ways-ai-small-business.png',
+  '/stack-report/5-ways-ai-small-business.webp',
   'Infographic showing 5 ways AI for small business without replacing staff helps Orange County teams work smarter',
   'AI for Small Business',
   ARRAY[
