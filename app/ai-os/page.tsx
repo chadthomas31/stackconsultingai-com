@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import AiOsExplainer from "@/components/AiOsExplainer";
 import AiOsTiers from "@/components/AiOsTiers";
+import AiOsStickyCTA from "@/components/AiOsStickyCTA";
 import { ArrowRight, Terminal, Workflow, Plug, Phone, Lock, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -48,23 +50,37 @@ export default function AiOsPage() {
       {/* Hero */}
       <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-soft via-white to-white" />
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-white text-navy-900 text-xs font-medium mb-8">
-            New from Stack Consulting AI
+        <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-white text-navy-900 text-xs font-medium mb-8">
+              New from Stack Consulting AI
+            </div>
+            <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-navy-900 leading-[1.05] mb-6">
+              A managed AI workstation. We run your business&rsquo;s AI — you never touch the tools.
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-xl mb-8">
+              One machine, set up by us with the AI tools and automations your business needs, then maintained every month. Not another subscription you have to figure out alone.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/#contact" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors">
+                Book a fit call <ArrowRight aria-hidden="true" className="w-4 h-4" />
+              </Link>
+              <Link href="#tiers" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-white text-navy-900 border border-border font-medium hover:border-navy-900 transition-colors">
+                See the tiers
+              </Link>
+            </div>
           </div>
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-navy-900 leading-[1.05] mb-6 max-w-4xl">
-            A managed AI workstation. We run your business&rsquo;s AI — you never touch the tools.
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mb-8">
-            One machine, set up by us with the AI tools and automations your business needs, then maintained every month. Not another subscription you have to figure out alone.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link href="/#contact" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors">
-              Book a fit call <ArrowRight aria-hidden="true" className="w-4 h-4" />
-            </Link>
-            <Link href="#tiers" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-white text-navy-900 border border-border font-medium hover:border-navy-900 transition-colors">
-              See the tiers
-            </Link>
+          <div className="rounded-lg overflow-hidden border border-border shadow-[0_20px_60px_rgba(0,18,46,0.18)]">
+            {/* Real Mac Mini photo (Unsplash License, free for commercial use) */}
+            <Image
+              src="/screenshots/ai-os-mac-mini.webp"
+              alt="A Mac Mini on a desk beside an Apple keyboard and display — the kind of machine a Stack AI OS ships on"
+              width={1600}
+              height={900}
+              priority
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="w-full h-auto"
+            />
           </div>
         </div>
       </section>
@@ -111,16 +127,18 @@ export default function AiOsPage() {
       {/* Tiers + bodies + office rebuild */}
       <AiOsTiers />
 
-      {/* Sovereign / who it's for */}
-      <section className="py-20 bg-navy-900 text-white">
-        <div className="max-w-3xl mx-auto px-4">
-          <span className="section-kicker">When local matters</span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mt-3 mb-6 tracking-tight">
-            For law, medical, and finance: nothing leaves the building.
-          </h2>
-          <p className="text-lg text-white/70 leading-relaxed">
-            Most businesses are best served by frontier cloud models — better answers, lower cost, nothing to maintain. But if you handle privileged or regulated records, the Sovereign tier runs the models on the machine itself. We already build for privacy-sensitive clients like Dr. Robert Woods&rsquo; psychiatry practice; Sovereign makes that the default.
-          </p>
+      {/* Sovereign / who it's for — contained navy panel */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="rounded-lg bg-navy-900 text-white p-8 md:p-12">
+            <span className="section-kicker">When local matters</span>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mt-3 mb-6 tracking-tight max-w-3xl">
+              For law, medical, and finance: nothing leaves the building.
+            </h2>
+            <p className="text-lg text-white/70 leading-relaxed max-w-3xl">
+              Most businesses are best served by frontier cloud models — better answers, lower cost, nothing to maintain. But if you handle privileged or regulated records, the Sovereign tier runs the models on the machine itself. We already build for privacy-sensitive clients like Dr. Robert Woods&rsquo; psychiatry practice; Sovereign makes that the default.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -168,6 +186,8 @@ export default function AiOsPage() {
           </Link>
         </div>
       </section>
+      <AiOsStickyCTA />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </main>
   );

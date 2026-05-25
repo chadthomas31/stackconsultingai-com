@@ -66,7 +66,7 @@ const bodies = [
 
 export default function AiOsTiers() {
   return (
-    <section id="tiers" className="py-28 scroll-mt-24">
+    <section id="tiers" className="py-28 scroll-mt-32">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-14 max-w-2xl">
           <span className="section-kicker">Pricing</span>

@@ -26,7 +26,7 @@ export default function AiOsExplainer({ showCta = false }: { showCta?: boolean }
         <div className="max-w-2xl mb-14">
           <span className="section-kicker">What is an AI Operating System?</span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mt-3 mb-4 tracking-tight">
-            Your business runs on people and software. An AI OS adds a third layer — AI that does the work.
+            Your business runs on people and software. An AI OS adds a third layer that does the work.
           </h2>
           <p className="text-lg text-white/70">
             One machine we set up and maintain. Like a tireless employee who lives in a box on your desk and never quits.
