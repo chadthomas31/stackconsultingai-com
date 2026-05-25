@@ -74,7 +74,7 @@ export default async function StackReportIndexPage() {
                         alt={issue.hero_image_alt ?? issue.subject}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </div>
                     <div className="p-6">

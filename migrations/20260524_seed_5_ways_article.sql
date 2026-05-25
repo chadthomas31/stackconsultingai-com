@@ -160,8 +160,8 @@ And if you want one practical AI idea for small business owners delivered every 
     }
   ]$faqs$::jsonb,
   'article',
-  '2026-05-24T00:00:00Z',
-  '2026-05-24T00:00:00Z'
+  '2026-05-24T16:00:00Z',
+  '2026-05-24T16:00:00Z'
 )
 ON CONFLICT (slug) DO UPDATE SET
   subject = EXCLUDED.subject,

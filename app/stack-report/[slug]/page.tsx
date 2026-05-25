@@ -227,14 +227,15 @@ export default async function StackReportIssuePage({
           </div>
 
           {issue.hero_image && (
-            <div className="relative aspect-[3/2] w-full mb-10 rounded-md overflow-hidden border border-border bg-soft">
+            <div className="mb-10 rounded-md overflow-hidden border border-border bg-soft flex items-center justify-center">
               <Image
                 src={issue.hero_image}
                 alt={issue.hero_image_alt ?? issue.subject}
-                fill
+                width={1024}
+                height={1536}
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
-                className="object-cover"
+                className="w-full h-auto max-h-[900px] object-contain"
               />
             </div>
           )}
