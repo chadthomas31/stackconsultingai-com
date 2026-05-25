@@ -21,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/services/guest-wifi`, lastModified: new Date('2026-05-13'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/ai-readiness-audit`, lastModified: new Date('2026-04-27'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/ai-receptionist`, lastModified: new Date('2026-04-27'), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/ai-os`, lastModified: new Date('2026-05-25'), changeFrequency: 'monthly', priority: 0.95 },
     { url: `${baseUrl}/free-ai-site-audit`, lastModified: new Date('2026-05-22'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/ai-automation-small-business-guide`, lastModified: new Date('2026-05-22'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/demos`, lastModified: new Date('2026-04-28'), changeFrequency: 'weekly', priority: 0.95 },

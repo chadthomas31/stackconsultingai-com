@@ -126,6 +126,12 @@ export default function Navbar() {
               </a>
             ))}
             <a
+              href="/ai-os"
+              className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+            >
+              AI OS
+            </a>
+            <a
               href="/demos"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
@@ -191,6 +197,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
+            <a
+              href="/ai-os"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
+            >
+              AI OS
+            </a>
             <a
               href="/demos"
               onClick={() => setIsMobileMenuOpen(false)}

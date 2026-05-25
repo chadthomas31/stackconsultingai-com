@@ -97,6 +97,11 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Products &amp; Tools</h3>
             <ul className="space-y-2">
               <li>
+                <a href="/ai-os" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  AI OS
+                </a>
+              </li>
+              <li>
                 <a href="/ai-receptionist" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   AI Receptionist
                 </a>
