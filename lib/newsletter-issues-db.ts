@@ -1,5 +1,12 @@
 import { supabase, supabaseAdmin } from "./supabase";
 
+export interface NewsletterFaq {
+  question: string;
+  answer: string;
+}
+
+export type NewsletterContentType = "digest" | "article";
+
 export interface NewsletterIssue {
   id: string;
   issue_number: number;
@@ -14,6 +21,17 @@ export interface NewsletterIssue {
   source_published_at: string | null;
   published_at: string;
   created_at: string;
+  // Rich-content fields (added 2026-05-24 migration)
+  hero_image?: string | null;
+  hero_image_alt?: string | null;
+  category?: string | null;
+  keywords?: string[] | null;
+  reading_time?: string | null;
+  author_name?: string | null;
+  author_role?: string | null;
+  faqs?: NewsletterFaq[] | null;
+  date_modified?: string | null;
+  content_type?: NewsletterContentType;
 }
 
 /** Strip anything but alphanumerics and spaces; kebab-case and cap length. */
@@ -71,8 +89,20 @@ export async function publishIssue(opts: {
   source_video_title?: string | null;
   source_channel?: string | null;
   source_published_at?: string | null;
+  // Rich-content (new)
+  slug?: string;
+  hero_image?: string | null;
+  hero_image_alt?: string | null;
+  category?: string | null;
+  keywords?: string[] | null;
+  reading_time?: string | null;
+  author_name?: string | null;
+  author_role?: string | null;
+  faqs?: NewsletterFaq[] | null;
+  date_modified?: string | null;
+  content_type?: NewsletterContentType;
 }): Promise<NewsletterIssue> {
-  const slug = await buildUniqueSlug(opts.subject);
+  const slug = opts.slug ?? (await buildUniqueSlug(opts.subject));
   const issue_number = await nextIssueNumber();
 
   const { data, error } = await supabaseAdmin
@@ -88,6 +118,16 @@ export async function publishIssue(opts: {
       source_video_title: opts.source_video_title ?? null,
       source_channel: opts.source_channel ?? null,
       source_published_at: opts.source_published_at ?? null,
+      hero_image: opts.hero_image ?? null,
+      hero_image_alt: opts.hero_image_alt ?? null,
+      category: opts.category ?? null,
+      keywords: opts.keywords ?? null,
+      reading_time: opts.reading_time ?? null,
+      author_name: opts.author_name ?? null,
+      author_role: opts.author_role ?? null,
+      faqs: opts.faqs ?? null,
+      date_modified: opts.date_modified ?? null,
+      content_type: opts.content_type ?? "digest",
     })
     .select()
     .single();
