@@ -144,6 +144,12 @@ export default function Navbar() {
               Stack Report
             </a>
             <a
+              href="/blog"
+              className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+            >
+              Blog
+            </a>
+            <a
               href="/login"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
@@ -211,6 +217,13 @@ export default function Navbar() {
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               Stack Report
+            </a>
+            <a
+              href="/blog"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
+            >
+              Blog
             </a>
             <a
               href="/login"
