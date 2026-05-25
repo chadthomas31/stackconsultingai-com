@@ -120,3 +120,39 @@ Fanvil X7A both 7001 lines red, outbound = busy.
 **Outstanding:**
 - Stack DID `19497490001` not authorized on Telnyx as outbound CID. All outbound shows SS number even from Stack line.
 - To split: Telnyx Mission Control → Voice → Outbound Profiles → Allowed Origination Numbers (add 19497490001). Then patch dialplan with `<condition field="${domain_name}" expression="^stackconsultingai\.com$">` branch setting Stack CID.
+
+## 2026-05-25 — Phones dead: WireGuard tunnel went one-way
+
+All phones dead, `sofia status profile internal reg` = 0 registrations. FreeSWITCH up, services active.
+
+**Cause:** WireGuard tunnel (pfSense ↔ PBX) went **asymmetric**. pfSense→PBX (10.6.0.2) worked; PBX→pfSense (10.6.0.1) + PBX→phone (172.16.40.11) = 100% loss. PBX `wg show` handshake stale 9h despite 25s keepalive. A **stale pf state on pfSense** (`70.191.32.41:51820 <- 107.175.53.217:46884`) blocked the PBX return path.
+
+**Fix (on pfSense):**
+```sh
+pfctl -k 107.175.53.217    # flush stale state for PBX endpoint
+```
+Phone re-registered within seconds once the data path restored. No tunnel restart needed.
+
+**Diagnostic trap:** `ping 10.6.0.1` from PBX stays 100% loss EVEN WHEN tunnel is healthy — pfSense firewalls ICMP to its own tunnel IP. Use `ping 172.16.40.11` (a phone) as the real tunnel-health signal, not the WG peer IP.
+
+## 2026-05-25 — VoIP QoS on pfSense (HFSC) + the WireGuard classification trap
+
+Goal: protect voice on the client WAN **upload** bottleneck. WAN measured ~566↓ / **98↑ Mbps** (ix3, friendly name `wan`). All phone↔PBX voice rides the WG tunnel.
+
+**The trap that cost hours:** you CANNOT tag the WG tunnel into a priority queue. pfSense encrypts the tunnel itself → the egress is **firewall-originated**, and pf floating `match out` rules evaluate it but match **0 packets** (self-originated traffic isn't matched on the out hook). The encrypted voice always lands in the ALTQ **default** queue. (Also: outbound WG goes to the PBX's listen port `46884`, not pfSense's `51820`.)
+
+**The fix — invert the queues.** Make the default queue the protected one (host-origin voice lands there) and push *forwarded client bulk* (which DOES match pf rules) into a separate queue. HFSC on `wan`/ix3, root 90 Mb:
+- `qVoice` = `hfsc ( default, realtime 2Mb )` — voice + firewall-origin traffic, low-latency guarantee.
+- `qBulk` = 90% linkshare, no realtime — bulk.
+- Floating rule: `match out on ix3 from 172.16.0.0/12 to any → queue qBulk`.
+
+Verified: tunnel pings climb `qVoice` counter; forwarded client traffic → `qBulk`.
+
+**pfSense apply gotchas (Plus 26.03):**
+- Root ALTQ queue `<name>` MUST equal the interface friendly name (`wan`), not a label — else `get_real_interface()` returns blank → `altq on  hfsc` (no iface) → "No queue in use".
+- `filter_configure_sync()` from bare `php -r` throws. Reliable apply: edit `$config` → `write_config()` → `/etc/rc.filter_configure` → `pfctl -f /tmp/rules.debug` (last step actually loads pf).
+- `/etc/rc.filter_configure` returns before ALTQ loads — poll `pfctl -sq`.
+- Counters: `pfctl -vsq | grep "queue  qVoice"` (two spaces).
+- Backup before changes: `/conf/config.xml.pre-qos-*`. Rollback: restore → `/etc/rc.filter_configure` → `pfctl -f /tmp/rules.debug`.
+
+Skipped FreeSWITCH RTP DSCP marking — inner DSCP dies in the WG tunnel and the VPS network likely ignores it; WAN HFSC is the real win. Full detail in memory `networking/reference_pfsense_qos.md`.
