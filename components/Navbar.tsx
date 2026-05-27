@@ -83,26 +83,26 @@ export default function Navbar() {
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="w-full px-4 md:px-32 lg:px-52 xl:px-72 py-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           {/* Logo — dark version for light bg */}
           <a
             href="/"
             onClick={handleLogoClick}
-            className="hover:opacity-80 transition-opacity md:-my-16 lg:-my-24 relative z-10"
+            className="hover:opacity-80 transition-opacity relative z-10"
           >
             <Image
-              src="/stack-logo.png?v=4"
+              src="/stack-logo-trimmed.png"
               alt="Stack Consulting AI"
-              width={1024}
-              height={1024}
-              className="h-20 md:h-56 lg:h-72 w-auto"
+              width={744}
+              height={206}
+              className="h-9 md:h-10 w-auto"
               priority
             />
           </a>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 whitespace-nowrap">
             <a
               href="/"
               onClick={handleLogoClick}
