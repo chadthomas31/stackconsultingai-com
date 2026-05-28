@@ -27,19 +27,25 @@ Open the Supabase SQL Editor for the project, paste the contents of
 select count(*) from demo_leads;   -- expect 0
 ```
 
-### 2. Buy 4 Telnyx DIDs (paid — ~$4/month total)
+### 2. Telnyx DIDs — PURCHASED 2026-05-28
 
-In the Telnyx portal:
-- Buy 4 numbers (preferably 949 or 714 area codes)
-- Assign each to the existing `fspbx` IP-auth connection
+5 Newport Beach (949) numbers, sequential, $5/mo total, SMS + Voice + HD Voice enabled:
 
-Then set the 4 numbers in **Vercel → Environment Variables** AND `.env.local`:
+| E.164 | Role |
+|---|---|
+| `+19492397922` | SMS sender (outbound codes + DID-reveal texts) |
+| `+19492397923` | HVAC inbound (ext 5003) |
+| `+19492397924` | Plumbing inbound (ext 5004) |
+| `+19492397925` | Auto inbound (ext 5005) |
+| `+19492397926` | Medspa inbound (ext 5006) |
+
+Set in **Vercel → Environment Variables** AND `.env.local`:
 
 ```
-DEMO_DID_HVAC=+1949XXXXXXX
-DEMO_DID_PLUMBING=+1949XXXXXXX
-DEMO_DID_AUTO=+1949XXXXXXX
-DEMO_DID_MEDSPA=+1949XXXXXXX
+DEMO_DID_HVAC=+19492397923
+DEMO_DID_PLUMBING=+19492397924
+DEMO_DID_AUTO=+19492397925
+DEMO_DID_MEDSPA=+19492397926
 ```
 
 Until these are set the verify endpoint returns `503 — Demo line for this
@@ -48,9 +54,15 @@ vertical is not provisioned yet`.
 ### 3. Telnyx Messaging (SMS verify codes)
 
 ```
-TELNYX_API_KEY=<paste from Telnyx portal>
-TELNYX_SENDER_NUMBER=+1XXXXXXXXXX    # the messaging-enabled sender DID
+TELNYX_API_KEY=<paste from Telnyx portal — Messaging API key>
+TELNYX_SENDER_NUMBER=+19492397922
 ```
+
+**10DLC registration required.** Telnyx → Messaging → 10DLC:
+- Register brand "Stack Consulting AI"
+- Create low-volume campaign "Lead conversion / demo verification" (~$2/mo)
+- Assign `+19492397922` (and optionally the 4 inbound DIDs)
+- 1–3 day approval. Codes deliver as filtered spam until approved.
 
 When these are unset, `lib/sms.ts` logs the code to the server console
 and returns success — useful for dev, but production must have both.
