@@ -11,8 +11,29 @@ const VERTICALS = [
   { id: "medspa", label: "Med Spa" },
 ];
 
+const VOICES = [
+  { id: "cedar", label: "Cedar", note: "Warm, natural — recommended" },
+  { id: "marin", label: "Marin", note: "Friendly, natural — recommended" },
+  { id: "coral", label: "Coral", note: "Bright, upbeat" },
+  { id: "sage", label: "Sage", note: "Calm, reassuring" },
+  { id: "ash", label: "Ash", note: "Steady, professional" },
+  { id: "ballad", label: "Ballad", note: "Smooth, easygoing" },
+  { id: "verse", label: "Verse", note: "Expressive" },
+  { id: "shimmer", label: "Shimmer", note: "Light, energetic" },
+  { id: "alloy", label: "Alloy", note: "Neutral" },
+  { id: "echo", label: "Echo", note: "Classic" },
+];
+
 export default function TryPage() {
-  const [form, setForm] = useState({ business_name: "", mobile: "", email: "", vertical: "auto" });
+  const [form, setForm] = useState({ business_name: "", mobile: "", email: "", vertical: "auto", voice: "cedar" });
+  const [playing, setPlaying] = useState<string | null>(null);
+
+  function playVoice(id: string) {
+    const a = new Audio(`/voice-samples/${id}.mp3`);
+    setPlaying(id);
+    a.onended = () => setPlaying(null);
+    a.play().catch(() => setPlaying(null));
+  }
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -114,6 +135,47 @@ export default function TryPage() {
                   className="input"
                 />
               </Field>
+              <div>
+                <span className="block text-sm font-medium text-slate-300 mb-1.5">
+                  Choose your receptionist&apos;s voice
+                </span>
+                <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto pr-1">
+                  {VOICES.map((v) => {
+                    const selected = form.voice === v.id;
+                    return (
+                      <div
+                        key={v.id}
+                        onClick={() => setForm((f) => ({ ...f, voice: v.id }))}
+                        className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 cursor-pointer transition ${
+                          selected ? "border-emerald-500 bg-emerald-500/10" : "border-slate-700 bg-slate-900"
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playVoice(v.id);
+                          }}
+                          className="shrink-0 w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-emerald-400"
+                          aria-label={`Play ${v.label}`}
+                        >
+                          {playing === v.id ? "♪" : "▶"}
+                        </button>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-white">{v.label}</div>
+                          <div className="text-xs text-slate-400 truncate">{v.note}</div>
+                        </div>
+                        <div
+                          className={`shrink-0 w-4 h-4 rounded-full border-2 ${
+                            selected ? "border-emerald-400 bg-emerald-400" : "border-slate-600"
+                          }`}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-slate-500 mt-1.5">Tap ▶ to hear each. You can change it anytime.</p>
+              </div>
               {status === "error" && <p className="text-rose-400 text-sm">{error}</p>}
               <button
                 type="submit"
