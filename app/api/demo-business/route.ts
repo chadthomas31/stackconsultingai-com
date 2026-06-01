@@ -21,11 +21,11 @@ export async function GET(req: NextRequest) {
   }
   const { data } = await supabaseAdmin
     .from("demo_leads")
-    .select("biz_name")
+    .select("biz_name, voice")
     .eq("mobile_e164", phone)
     .not("biz_name", "is", null)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
-  return NextResponse.json({ business_name: data?.biz_name || null });
+  return NextResponse.json({ business_name: data?.biz_name || null, voice: data?.voice || null });
 }
