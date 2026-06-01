@@ -30,6 +30,9 @@ export default async function VerticalDemoPage({ params }: { params: Promise<{ v
           <span className="inline-block text-sm font-semibold text-brand uppercase tracking-wide mb-3">
             {copy.label} · AI Receptionist
           </span>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-md bg-brand-soft border border-brand/30 px-3 py-1.5 text-sm font-semibold text-navy-900">
+            🎟️ Founding 15 — 30 days free, then $197/mo locked for life <span className="text-slate-500 font-normal">(reg. $397)</span>
+          </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-navy-900 leading-tight tracking-tight">
             {copy.headline}
           </h1>
@@ -54,7 +57,10 @@ export default async function VerticalDemoPage({ params }: { params: Promise<{ v
         {/* Right: the register card */}
         <div className="rounded-lg border border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 md:p-8 bg-white">
           <h2 className="font-heading text-xl font-bold text-navy-900 mb-1">Hear it answer as your business</h2>
-          <p className="text-sm text-slate-500 mb-6">30 seconds to set up. Then call the demo line — it greets as your company.</p>
+          <p className="text-sm text-slate-500 mb-6">
+            30 seconds to set up, then call the demo line — it greets as your company.
+            <span className="block mt-1 text-navy-900 font-medium">First 15 shops join as founding case studies: 30 days free, $197/mo locked for life, free setup — just share how it goes.</span>
+          </p>
           <DemoRegister copy={copy} />
         </div>
       </section>
