@@ -156,3 +156,17 @@ Verified: tunnel pings climb `qVoice` counter; forwarded client traffic → `qBu
 - Backup before changes: `/conf/config.xml.pre-qos-*`. Rollback: restore → `/etc/rc.filter_configure` → `pfctl -f /tmp/rules.debug`.
 
 Skipped FreeSWITCH RTP DSCP marking — inner DSCP dies in the WG tunnel and the VPS network likely ignores it; WAN HFSC is the real win. Full detail in memory `networking/reference_pfsense_qos.md`.
+
+## 2026-05-29 — Phones down: stale pf state on pfSense killed S2S WG tunnel
+**Symptom:** 0 internal SIP registrations. WG handshake dead 4h20m on both ends despite 25s keepalive. PBX `10.6.0.2` ↔ homelab pfSense `10.6.0.1` (WAN 70.191.32.41).
+**Root cause:** pfSense WAN gateway flapped (~04:30 PT; NTP reach also dropped to 0). The WAN pass rule for UDP/51820 uses `reply-to (ix3 70.191.32.1) keep state`. WG responses are firewall-originated and matched the **stale reply-to state** pinned to the pre-flap gateway → black-holed. pfSense RECEIVED PBX handshake inits (rx counter climbed) but its responses never egressed WAN. ICMP/DNS/Tailscale worked (fresh states), masking it.
+**What did NOT fix it:** `wireguardd restart`, `pfctl` interface destroy+rebuild of `tun_wg0`, WG restart on PBX. States survive all of these.
+**Fix (1 cmd):** on pfSense — `pfctl -k 107.175.53.217` (kill states for the PBX host). Handshake completed in <20s; 7001 + 8001 re-registered, Ping-Status Reachable.
+**Diagnostic path:** `wg show` both ends (handshake age) → tcpdump on PBX `eth0` (saw PBX→pfSense only) → tcpdump pfSense `ix3` (confirmed 0 WG egress while DNS/ICMP egress fine) → `pfctl -ss | grep <pbx_ip>` (stale reply-to state).
+**Note:** SSH pfSense via LAN `172.16.23.1` when the Tailscale alias (`pfsense`/100.116.74.40) hangs on reauth. `wg show` on PBX needs `sudo`. NOT a phone/provisioning issue — no template push.
+
+## 2026-05-31 — "Phones not ringing" = Fanvil DND (NOT server/tunnel)
+**Symptom:** Both 7001 + 8001 register + OPTIONS-ping Reachable, WG tunnel healthy, but every INVITE → `480 Temporarily not available` / FS `NO_USER_RESPONSE`. Survives a check-sync reboot (so it's persisted config, not a wedge).
+**Root cause:** Phone-wide DND enabled on the Fanvil X7A. Web UI: Phone settings → Features → `DND Option = Phone (val=1)`, `DND Response Code = 480` (exact match). Timer unchecked = manual/always-on.
+**Fix (remote, no handset trip):** Fanvil web UI is reachable from the **homelab LAN** (NOT over the WG tunnel — http://172.16.40.11 = 200 from a 172.16.23.x host; tunnel only routes SIP/RTP so PBX-side curl gets 000). Login admin/admin (frameset, Rapid Logic server). Phone settings → Features → set **DND Option = Off**, Apply (`save()`). Verify originate flips from `-ERR NO_USER_RESPONSE` to `+OK`.
+**Key:** server-side reboot/migration does NOTHING for phone DND. Always ring-test (originate to the contact) — registration + OPTIONS Reachable do NOT prove calls work. If DND recurs, someone's pressing the DND softkey.
