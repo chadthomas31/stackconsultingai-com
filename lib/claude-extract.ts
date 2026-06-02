@@ -161,7 +161,7 @@ Now analyze the transcript and produce the JSON.`;
 
 ${input.transcript}`;
 
-  const model = options?.model ?? "claude-sonnet-4-6";
+  const model = options?.model ?? "claude-opus-4-8";
 
   const response = await client.messages.parse({
     model,

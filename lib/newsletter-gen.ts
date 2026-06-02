@@ -156,7 +156,7 @@ export async function generateNewsletter(opts: {
     .join("\n");
 
   const response = await client.messages.create({
-    model: opts.model ?? "claude-sonnet-4-6",
+    model: opts.model ?? "claude-opus-4-8",
     max_tokens: 4096,
     system: [
       {

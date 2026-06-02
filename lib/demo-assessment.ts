@@ -199,5 +199,5 @@ export const DEMO_ASSESSMENT: Assessment = {
 
   callDurationSeconds: 1120,
   callerPhoneNumber: "+17605551234",
-  modelUsed: "claude-sonnet-4-6",
+  modelUsed: "claude-opus-4-8",
 };
