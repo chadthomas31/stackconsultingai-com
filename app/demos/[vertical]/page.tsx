@@ -1,69 +1,158 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import DemoRegister from "@/components/DemoRegister";
-import { VERTICALS, VERTICAL_IDS, type VerticalId } from "@/lib/verticals";
+import { notFound } from "next/navigation";
+import Link from "next/link";
 
-export function generateStaticParams() {
-  return VERTICAL_IDS.map((vertical) => ({ vertical }));
+import { VERTICALS, isVertical, type Vertical } from "@/lib/voice-agents";
+import VerticalDemoFunnel from "@/components/demos/VerticalDemoFunnel";
+import { COPY } from "./copy";
+
+export const dynamic = "force-static";
+
+interface Params {
+  params: Promise<{ vertical: string }>;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ vertical: string }> }): Promise<Metadata> {
+export function generateStaticParams(): { vertical: Vertical }[] {
+  return VERTICALS.map((v) => ({ vertical: v }));
+}
+
+export async function generateMetadata({
+  params,
+}: Params): Promise<Metadata> {
   const { vertical } = await params;
-  const copy = VERTICALS[vertical as VerticalId];
-  if (!copy) return { title: "AI Receptionist Demo" };
+  if (!isVertical(vertical)) return { title: "Demo not found" };
+  const c = COPY[vertical];
+  const title = `${c.displayName} AI Receptionist — Live Demo | Stack Consulting AI`;
+  const description =
+    `Dial the live demo. Hear an AI receptionist tuned for ${c.displayName.toLowerCase()} ` +
+    `shops handle a real call end-to-end. Get a call-report email seconds after you hang up.`;
   return {
-    title: `${copy.label} AI Receptionist — Try It Free | Stack Consulting AI`,
-    description: copy.sub,
+    title,
+    description,
+    alternates: { canonical: `https://stackconsultingai.com/demos/${vertical}` },
+    openGraph: {
+      title,
+      description,
+      url: `https://stackconsultingai.com/demos/${vertical}`,
+      type: "website",
+    },
   };
 }
 
-export default async function VerticalDemoPage({ params }: { params: Promise<{ vertical: string }> }) {
+export default async function VerticalDemoPage({ params }: Params) {
   const { vertical } = await params;
-  const copy = VERTICALS[vertical as VerticalId];
-  if (!copy) notFound();
+  if (!isVertical(vertical)) notFound();
+  const c = COPY[vertical];
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="max-w-5xl mx-auto px-5 py-12 md:py-20 grid md:grid-cols-2 gap-10 md:gap-16 items-start">
-        {/* Left: the pitch */}
-        <div className="md:pt-6">
-          <span className="inline-block text-sm font-semibold text-brand uppercase tracking-wide mb-3">
-            {copy.label} · AI Receptionist
-          </span>
-          <div className="mb-4 inline-flex items-center gap-2 rounded-md bg-brand-soft border border-brand/30 px-3 py-1.5 text-sm font-semibold text-navy-900">
-            🎟️ Founding 15 — 30 days free, then $197/mo locked for life <span className="text-slate-500 font-normal">(reg. $397)</span>
+    <main className="bg-white">
+      {/* Hero — light, brand-correct */}
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 border-b border-border">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-soft via-white to-white" />
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-white text-navy-900 text-xs font-medium mb-8">
+            <span className="live-dot" aria-hidden="true" />
+            <span>{c.oneLiner}</span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold text-navy-900 leading-tight tracking-tight">
-            {copy.headline}
+
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-navy-900 leading-[1.05] md:leading-[1.02] mb-6 max-w-4xl">
+            {c.h1}
           </h1>
-          <p className="mt-4 text-lg text-slate-600">{copy.sub}</p>
-          <p className="mt-6 text-navy-900 font-medium border-l-2 border-brand pl-4">{copy.pain}</p>
 
-          <ul className="mt-8 space-y-3 text-slate-700">
-            {[
-              "Answers every call, 24/7 — nights, weekends, when you're slammed",
-              "Books the appointment straight to your calendar",
-              "Texts & emails you a full summary of every call",
-              "Sounds human — pick your receptionist's voice",
-            ].map((b) => (
-              <li key={b} className="flex gap-3">
-                <span className="text-brand font-bold">✓</span>
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Right: the register card */}
-        <div className="rounded-lg border border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 md:p-8 bg-white">
-          <h2 className="font-heading text-xl font-bold text-navy-900 mb-1">Hear it answer as your business</h2>
-          <p className="text-sm text-slate-500 mb-6">
-            30 seconds to set up, then call the demo line — it greets as your company.
-            <span className="block mt-1 text-navy-900 font-medium">First 15 shops join as founding case studies: 30 days free, $197/mo locked for life, free setup — just share how it goes.</span>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed">
+            {c.subhead}
           </p>
-          <DemoRegister copy={copy} />
+
+          <div className="text-sm text-navy-900/70 max-w-2xl mb-2">
+            <span className="font-medium text-navy-900">Proof:</span>{" "}
+            {c.proofLine}
+          </div>
         </div>
       </section>
+
+      {/* Funnel + "what it does" — two-column on desktop */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-12 lg:gap-16">
+          <div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold tracking-tight text-navy-900 mb-6">
+              What the agent does on your demo call
+            </h2>
+            <ol className="space-y-5">
+              {c.agentDoes.map((item, i) => (
+                <li key={i} className="flex gap-4">
+                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-navy-900 text-white text-sm font-semibold inline-flex items-center justify-center">
+                    {i + 1}
+                  </span>
+                  <span className="text-navy-900/85 leading-relaxed">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-10 p-5 rounded-md border border-border bg-soft">
+              <div className="text-xs uppercase tracking-wide text-navy-900/60 font-medium mb-2">
+                Why it matters
+              </div>
+              <p className="text-navy-900/85 leading-relaxed">
+                {c.whyItMatters}
+              </p>
+            </div>
+
+            <div className="mt-6 p-5 rounded-md border border-border bg-white">
+              <div className="text-xs uppercase tracking-wide text-navy-900/60 font-medium mb-2">
+                Suggested demo script
+              </div>
+              <p className="text-navy-900/85 leading-relaxed italic">
+                {c.bookingScript}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <VerticalDemoFunnel vertical={vertical} displayName={c.displayName} />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA band */}
+      <section className="py-20 bg-navy-900 text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Like what you heard?
+          </h2>
+          <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Same agent, trained on YOUR services, calendar, and pricing. Live in
+            about a week. We run it; you never touch the tools.
+          </p>
+          <Link
+            href="/ai-os"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors"
+          >
+            {c.cta} →
+          </Link>
+        </div>
+      </section>
+
+      {/* JSON-LD Service schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            serviceType: `${c.displayName} AI Receptionist`,
+            provider: {
+              "@type": "Organization",
+              name: "Stack Consulting AI",
+              url: "https://stackconsultingai.com",
+            },
+            areaServed: { "@type": "Place", name: "Orange County, California" },
+            description: c.subhead,
+            url: `https://stackconsultingai.com/demos/${vertical}`,
+          }),
+        }}
+      />
     </main>
   );
 }

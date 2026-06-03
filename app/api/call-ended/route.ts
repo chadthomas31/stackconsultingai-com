@@ -3,6 +3,9 @@ import crypto from "node:crypto";
 import { extractAssessment } from "@/lib/claude-extract";
 import { saveAssessment, markEmailSent } from "@/lib/assessments-db";
 import { sendAssessmentEmail, isResendConfigured } from "@/lib/email";
+import { findRecentLeadByMobile } from "@/lib/demo-leads-db";
+import { handleDemoCallEnded } from "@/lib/handle-demo-call";
+import { normalizeToE164 } from "@/lib/sms";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -66,6 +69,50 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  // ===== Demo branch =====
+  // If the caller matches a recently-verified demo lead, route to the
+  // vertical-demo summarizer + report email and skip the generic assessment path.
+  if (payload.callerPhoneNumber) {
+    const mobileE164 = normalizeToE164(payload.callerPhoneNumber);
+    if (mobileE164) {
+      const lead = await findRecentLeadByMobile(mobileE164);
+      if (lead) {
+        try {
+          const result = await handleDemoCallEnded({
+            lead,
+            transcript,
+            durationSeconds: payload.durationSeconds,
+            callUuid: payload.uuid,
+          });
+          if (result.ok) {
+            return NextResponse.json({
+              ok: true,
+              path: "demo",
+              vertical: lead.vertical,
+              leadId: lead.id,
+              emailed: result.emailed,
+            });
+          }
+          return NextResponse.json(
+            { ok: false, path: "demo", error: result.error },
+            { status: 500 }
+          );
+        } catch (err) {
+          console.error("[call-ended] demo branch failed:", err);
+          return NextResponse.json(
+            {
+              ok: false,
+              path: "demo",
+              error: err instanceof Error ? err.message : String(err),
+            },
+            { status: 500 }
+          );
+        }
+      }
+    }
+  }
+  // ===== /Demo branch =====
 
   // 1. Extract structured assessment via Claude
   let assessment;
