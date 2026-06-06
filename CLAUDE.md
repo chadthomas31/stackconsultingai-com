@@ -160,7 +160,8 @@
 
   ### Supabase
   - Client: `lib/supabase.ts` (anon key, RLS-enforced)
-  - Tables touched by app code: `contact_submissions`, `tools_*`, `assessments`, `newsletter_issues`, plus lead tables created per tool
+  - Tables touched by app code: `tool_leads` (also receives contact-form rows as `tool_name='contact'` — there is NO `contact_submissions` table), `tool_analytics`, `tool_runs` (rate limiting), `assessments`, `newsletter_issues`, `demo_leads`
+  - Access model (since 2026-06-06 lockdown): anon role has INSERT-only on `tool_leads`/`tool_analytics`, SELECT-only on `newsletter_issues`, and NO grants on `demo_leads`/`assessments`/`tool_runs` — those are written exclusively via `supabaseAdmin` (service role). Don't add permissive RLS policies to lead tables.
   - Schema-cache error `Could not find the 'X' column of 'Y'` = a `migrations/*.sql` file was committed but never run in Supabase. Apply manually before redeploying.
 
   ### Environment variables
