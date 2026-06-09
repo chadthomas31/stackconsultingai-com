@@ -9,7 +9,7 @@ import LeadAgentDemo from "@/components/demos/LeadAgentDemo";
 export const metadata: Metadata = {
   title: "Live AI Demos — Voice, Knowledge, Lead Agent | Stack Consulting AI",
   description:
-    "Three working AI systems you can try in your browser right now. A voice agent that calls your phone, a knowledge-base Q&A on real docs, and a lead-capture agent that summarizes and notifies in real time. Built on FreeSWITCH, OpenAI Realtime, and Claude.",
+    "Working AI systems you can try right now: a voice agent that calls your phone, a knowledge-base Q&A on real docs, a lead-capture agent, and industry-specific AI receptionists for HVAC, plumbing, auto repair, and medspas. Built on FreeSWITCH, OpenAI Realtime, and Claude.",
   alternates: { canonical: "https://stackconsultingai.com/demos" },
   openGraph: {
     title: "Live AI Demos — Stack Consulting AI",
@@ -52,7 +52,7 @@ export default function DemosPage() {
             {/* Jump links — asymmetric, left aligned, no card grid */}
             <nav
               aria-label="Demos on this page"
-              className="animate-fade-in-up animation-delay-300 grid sm:grid-cols-3 gap-x-8 gap-y-3 max-w-3xl text-sm"
+              className="animate-fade-in-up animation-delay-300 grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3 max-w-4xl text-sm"
             >
               <a href="#demo-call" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">01</span>
@@ -67,6 +67,11 @@ export default function DemosPage() {
               <a href="#demo-kb" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">03</span>
                 <span className="text-navy-900 font-medium">Knowledge-base Q&amp;A</span>
+                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
+              </a>
+              <a href="#demo-verticals" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
+                <span className="font-mono text-xs text-brand font-semibold">04</span>
+                <span className="text-navy-900 font-medium">Industry receptionists</span>
                 <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
               </a>
             </nav>
@@ -203,6 +208,46 @@ export default function DemosPage() {
 
             <div className="lg:col-span-7">
               <KbDemo />
+            </div>
+          </div>
+        </section>
+
+        {/* ======================================================
+            Demo 04 — Industry receptionists (live inbound demo lines)
+            ====================================================== */}
+        <section id="demo-verticals" className="scroll-mt-28 bg-soft py-20 md:py-28 border-b border-border">
+          <div className="max-w-6xl mx-auto px-4">
+            <span className="section-kicker">Demo 04 / Inbound by industry</span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-navy-900 tracking-tight mt-3 mb-6 leading-[1.05] max-w-3xl">
+              Hear the receptionist built for <span className="text-brand">your</span> trade.
+            </h2>
+            <p className="text-muted-foreground text-lg leading-relaxed mb-12 max-w-2xl">
+              These call the same FreeSWITCH + OpenAI Realtime stack as the demo above —
+              but each one is scripted for a specific industry: emergency triage, the
+              right intake questions, and a calendar that books around existing jobs.
+              Pick your trade, verify your number, and call it.
+            </p>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { slug: "hvac", name: "HVAC", blurb: "Emergency triage, ZIP + system age, books around jobs." },
+                { slug: "plumbing", name: "Plumbing", blurb: "Active-leak first. Walks the main shut-off, still books." },
+                { slug: "auto", name: "Auto Repair", blurb: "Captures the vehicle and the symptom, schedules the bay." },
+                { slug: "medspa", name: "Medspa / Aesthetics", blurb: "Service + provider intake, confirms and texts the booking." },
+              ].map((v) => (
+                <Link
+                  key={v.slug}
+                  href={`/demos/${v.slug}`}
+                  className="group flex flex-col rounded-md border border-border bg-white p-6 hover:border-navy-900 hover:shadow-[0_8px_30px_rgba(0,18,46,0.10)] transition"
+                >
+                  <span className="font-heading text-xl font-bold text-navy-900 mb-2">{v.name}</span>
+                  <span className="text-sm text-muted-foreground leading-relaxed flex-1">{v.blurb}</span>
+                  <span className="mt-5 inline-flex items-center gap-2 text-brand font-medium text-sm">
+                    Try the {v.name} line
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" aria-hidden="true" />
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
