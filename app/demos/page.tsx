@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ArrowDown } from "lucide-react";
 
-import CallMeDemo from "@/components/demos/CallMeDemo";
+import InboundDemoReveal from "@/components/demos/InboundDemoReveal";
 import KbDemo from "@/components/demos/KbDemo";
 import LeadAgentDemo from "@/components/demos/LeadAgentDemo";
 
@@ -87,13 +87,14 @@ export default function DemosPage() {
             <div className="lg:col-span-5 lg:sticky lg:top-32">
               <span className="section-kicker">Demo 01 / Voice</span>
               <h2 className="font-heading text-3xl md:text-5xl font-bold text-navy-900 tracking-tight mt-3 mb-6 leading-[1.05]">
-                A real AI agent calls your phone in under 30 seconds.
+                Call a real AI receptionist and talk to it yourself.
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6 max-w-md">
-                Enter a US number. Our FreeSWITCH instance dials it.
-                When you pick up, you&rsquo;re talking to an OpenAI Realtime
-                agent prompted as a small-business AI receptionist.
-                Hang up when you&rsquo;ve heard enough.
+                Tell us who you are and we&rsquo;ll reveal our live demo line.
+                Call it from any phone and you&rsquo;re talking to an OpenAI
+                Realtime agent running on our FreeSWITCH stack — prompted as a
+                small-business receptionist. Ask it anything. Hang up when
+                you&rsquo;ve heard enough.
               </p>
               <dl className="text-sm space-y-2 mb-6 max-w-md">
                 <div className="flex justify-between border-b border-border py-2">
@@ -101,12 +102,12 @@ export default function DemosPage() {
                   <dd className="text-navy-900 font-medium">FreeSWITCH + OpenAI Realtime</dd>
                 </div>
                 <div className="flex justify-between border-b border-border py-2">
-                  <dt className="text-navy-900/70">Avg connect time</dt>
-                  <dd className="text-navy-900 font-medium">~6 seconds</dd>
+                  <dt className="text-navy-900/70">Availability</dt>
+                  <dd className="text-navy-900 font-medium">Answers 24/7</dd>
                 </div>
                 <div className="flex justify-between border-b border-border py-2">
-                  <dt className="text-navy-900/70">Limit</dt>
-                  <dd className="text-navy-900 font-medium">1 call / number / hour</dd>
+                  <dt className="text-navy-900/70">Cost to you</dt>
+                  <dd className="text-navy-900 font-medium">Free — just call</dd>
                 </div>
               </dl>
               <p className="text-sm text-navy-900/70 max-w-md">
@@ -120,7 +121,7 @@ export default function DemosPage() {
             </div>
 
             <div className="lg:col-span-7">
-              <CallMeDemo />
+              <InboundDemoReveal />
             </div>
           </div>
         </section>

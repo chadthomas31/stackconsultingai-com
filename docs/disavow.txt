@@ -1,0 +1,23 @@
+# Google Search Console disavow file — stackconsultingai.com
+# Generated 2026-06-12 from Semrush Backlink Audit + Backlinks export.
+# Reason: spam/PBN backlinks (Fiverr PBN blast). One anchor literally reads
+#   "fiverr pbn links managed to raise my stackconsultingai.com's da from 15..."
+# Network graph flagged "Suspicious"; 100% of referring domains uncategorized.
+# Domain-level disavow (covers all current + future URLs on each host).
+#
+# Upload: GSC > legacy disavow tool https://search.google.com/search-console/disavow-links
+# Select the stackconsultingai.com property, upload this file. Allow weeks to process.
+#
+# KEEP (do NOT disavow) — legitimate follow links from your own client work:
+#   titosautomotiveservices-com.vercel.app  (Tito's Automotive footer credit)
+#   dr-woods-website.vercel.app             (Dr. Woods footer credit)
+
+# --- Toxic / PBN report-spam networks (auto-generated stat pages) ---
+domain:fiverr-affordable-seo-services.site
+domain:analyticshaven.top
+domain:domaindexer.com
+domain:drjack.world
+domain:dailymusings.top
+domain:bye.fyi
+domain:backlinks-checker.com
+domain:8coint.com
