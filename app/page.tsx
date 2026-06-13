@@ -20,7 +20,7 @@ import AiOsTeaser from "@/components/AiOsTeaser";
 // Homepage section order per CLAUDE.md → Section Canon
 export default function Home() {
   return (
-    <main id="main-content" className="min-h-screen">
+    <main className="min-h-screen">
       <AnnouncementBar
         slotsRemaining={LAUNCH_PARTNER_SLOTS_REMAINING}
         totalSlots={LAUNCH_PARTNER_TOTAL_SLOTS}

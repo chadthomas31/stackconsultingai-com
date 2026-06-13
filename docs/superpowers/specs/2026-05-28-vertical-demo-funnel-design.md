@@ -31,7 +31,9 @@ Sales follow-up runs off the captured lead + the recorded demo conversation.
 Each vertical has its own:
 - Telnyx DID (4 numbers, ~$4/mo total)
 - FusionPBX dialplan row (Postgres + `/var/cache/fusionpbx/` cache invalidate)
-- FreeSWITCH agent extension (`5003`–`5006`) running OpenAI Realtime with vertical system prompt
+- FreeSWITCH agent extension running OpenAI Realtime with vertical system prompt
+  (live map verified 2026-06-05: HVAC `5007`, plumbing `5004`, auto `5005`,
+  medspa `5006`; `5003` is Stacks Assessment)
 - Landing page on the site
 - Vertical-tuned intake schema for the post-call report
 

@@ -91,7 +91,7 @@ export default function ContactForm() {
               Thanks{submittedName ? `, ${submittedName}` : ""}! We got your message.
             </h3>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Your project details are in our queue. Here's what happens next:
+              Your project details are in our queue. Here&rsquo;s what happens next:
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
@@ -99,7 +99,7 @@ export default function ContactForm() {
                 <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
                 <div className="font-semibold text-sm">Within 24 Hours</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  We'll review your project details and prepare a response
+                  We&rsquo;ll review your project details and prepare a response
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
@@ -113,7 +113,7 @@ export default function ContactForm() {
                 <Mail className="w-5 h-5 text-primary mx-auto mb-2" />
                 <div className="font-semibold text-sm">Custom Proposal</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  You'll receive a tailored plan with timeline and pricing
+                  You&rsquo;ll receive a tailored plan with timeline and pricing
                 </p>
               </div>
             </div>
@@ -207,6 +207,7 @@ export default function ContactForm() {
                 className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
               >
                 <option value="">Select a service</option>
+                <option value="free-ai-pilot">Free AI Pilot</option>
                 <option value="web-development">Web Development</option>
                 <option value="automation">Business Automation</option>
                 <option value="ecommerce">E-commerce</option>
@@ -229,7 +230,7 @@ export default function ContactForm() {
               required
               rows={6}
               className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-              placeholder="Tell us about your project..."
+              placeholder="Tell us what AI should fix in your business. Missed calls, slow follow-up, admin work, scheduling, customer messages..."
             />
           </div>
 

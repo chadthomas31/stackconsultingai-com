@@ -67,7 +67,6 @@ async function fetchPageContent(url: string): Promise<ExtractedContent | null> {
   return extractContent(result.body);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractScores(lighthouseResult: any): LighthouseScores {
   const cats = lighthouseResult?.categories || {};
   return {
@@ -78,7 +77,6 @@ function extractScores(lighthouseResult: any): LighthouseScores {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractFindings(lighthouseResult: any): KeyFinding[] {
   const audits = lighthouseResult?.audits || {};
   const findings: KeyFinding[] = [];
@@ -328,9 +326,7 @@ async function runAudit(
   }
 
   send({ type: "progress", stage: "running-mobile" });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mobileData: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let desktopData: any = null;
   let desktopFailureNote: string | null = null;
 

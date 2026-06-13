@@ -1,6 +1,12 @@
+import type { Metadata } from "next"
 import { getRequiredAdmin } from "@/lib/auth-utils"
 import { LayoutDashboard, Users, FolderKanban, FileText, MessageSquare } from "lucide-react"
 import { Sidebar } from "@/components/sidebar"
+
+export const metadata: Metadata = {
+  title: "Admin | Stack Consulting AI",
+  robots: { index: false, follow: false },
+}
 
 const navItems: { href: string; label: string; icon: "LayoutDashboard" | "Users" | "FolderKanban" | "FileText" | "MessageSquare" }[] = [
   { href: "/admin", label: "Dashboard", icon: "LayoutDashboard" },

@@ -41,7 +41,9 @@ export const metadata: Metadata = {
     images: ["https://stackconsultingai.com/og-image.png"],
   },
   alternates: {
-    canonical: "https://stackconsultingai.com",
+    // Relative canonical resolves to each page's own URL via metadataBase —
+    // a hardcoded absolute URL here would canonicalize every page to the homepage.
+    canonical: "./",
   },
 };
 
@@ -72,8 +74,9 @@ export default function RootLayout({
         <SpeedInsights />
         <CookieConsent />
         <Navbar />
-        <div id="main-content"></div>
-        <Providers>{children}</Providers>
+        <div id="main-content">
+          <Providers>{children}</Providers>
+        </div>
         <Footer />
 
         {/* Google Analytics 4 */}

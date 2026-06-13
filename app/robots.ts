@@ -6,7 +6,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin/'],
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/dashboard',
+          '/invoices',
+          '/messages',
+          '/projects',
+          '/login',
+          '/register',
+          '/wifi',
+        ],
       },
     ],
     sitemap: 'https://stackconsultingai.com/sitemap.xml',

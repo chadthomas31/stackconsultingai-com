@@ -185,10 +185,10 @@ export default function FreeAiSiteAuditPage() {
             Built for small business owners
           </h2>
           <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-8">
-            Most "free audits" are sales funnels for a $5,000 retainer. This one
-            isn't. If you own a small business in Orange County and you're
+            Most &ldquo;free audits&rdquo; are sales funnels for a $5,000 retainer. This one
+            isn&rsquo;t. If you own a small business in Orange County and you&rsquo;re
             wondering whether AI is actually worth the hype for your operation,
-            we'll tell you straight.
+            we&rsquo;ll tell you straight.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
             {[
@@ -249,7 +249,7 @@ export default function FreeAiSiteAuditPage() {
             </ul>
           </div>
           <div>
-            <h2 className="text-3xl font-bold mb-6">What you don't get</h2>
+            <h2 className="text-3xl font-bold mb-6">What you don&rsquo;t get</h2>
             <ul className="space-y-3">
               {noStrings.map((d) => (
                 <li key={d} className="flex items-start gap-3">
@@ -269,7 +269,7 @@ export default function FreeAiSiteAuditPage() {
             Ready for a straight read?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Send us your website. We'll come back in 48 hours with a written
+            Send us your website. We&rsquo;ll come back in 48 hours with a written
             audit you can act on.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

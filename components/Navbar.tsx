@@ -3,6 +3,7 @@
 import { useState, useEffect, type MouseEvent } from "react";
 import { Menu, X, Home } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
@@ -86,7 +87,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           {/* Logo — dark version for light bg */}
-          <a
+          <Link
             href="/"
             onClick={handleLogoClick}
             className="hover:opacity-80 transition-opacity relative z-10"
@@ -99,20 +100,20 @@ export default function Navbar() {
               className="h-9 md:h-10 w-auto"
               priority
             />
-          </a>
+          </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6 whitespace-nowrap">
-            <a
+            <Link
               href="/"
               onClick={handleLogoClick}
               className="inline-flex items-center gap-1.5 text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
               <Home className="w-4 h-4" aria-hidden="true" />
               Home
-            </a>
+            </Link>
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.id}
                 href={`/#${link.id}`}
                 onClick={(e) => handleSectionClick(e, link.id)}
@@ -123,45 +124,45 @@ export default function Navbar() {
                 }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <a
+            <Link
               href="/ai-os"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
               AI OS
-            </a>
-            <a
+            </Link>
+            <Link
               href="/demos"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
               Live Demos
-            </a>
-            <a
+            </Link>
+            <Link
               href="/tools"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
               Free Tools
-            </a>
-            <a
+            </Link>
+            <Link
               href="/stack-report"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
               Stack Report
-            </a>
-            <a
+            </Link>
+            <Link
               href="/login"
               className="text-sm transition-colors duration-200 font-medium text-navy-900/70 hover:text-navy-900 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-brand after:transition-all after:duration-300 after:w-0 hover:after:w-full"
             >
               Client Portal
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
               className="btn-cta-call text-sm"
             >
               Get Started
-            </a>
+            </Link>
           </div>
 
           <button
@@ -176,7 +177,7 @@ export default function Navbar() {
 
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 space-y-2">
-            <a
+            <Link
               href="/"
               onClick={(e) => {
                 handleLogoClick(e);
@@ -186,59 +187,59 @@ export default function Navbar() {
             >
               <Home className="w-4 h-4" aria-hidden="true" />
               Home
-            </a>
+            </Link>
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.id}
                 href={`/#${link.id}`}
                 onClick={(e) => handleSectionClick(e, link.id)}
                 className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <a
+            <Link
               href="/ai-os"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               AI OS
-            </a>
-            <a
+            </Link>
+            <Link
               href="/demos"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               Live Demos
-            </a>
-            <a
+            </Link>
+            <Link
               href="/tools"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               Free Tools
-            </a>
-            <a
+            </Link>
+            <Link
               href="/stack-report"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               Stack Report
-            </a>
-            <a
+            </Link>
+            <Link
               href="/login"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left px-4 py-2 text-navy-900/80 hover:bg-soft rounded-md font-medium"
             >
               Client Portal
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#contact"
               onClick={(e) => handleSectionClick(e, "contact")}
               className="btn-cta-call block w-full text-center"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         )}
       </div>

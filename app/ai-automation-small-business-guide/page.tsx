@@ -236,17 +236,17 @@ export default function AiAutomationGuidePage() {
       <article className="py-16 px-4">
         <div className="max-w-3xl mx-auto prose-lg space-y-6 text-lg leading-relaxed">
           <p>
-            Most "AI for small business" content online is written either by
-            people who've never run a small business, or by tool vendors trying
-            to sell you their platform. This guide is neither. It's a working
+            Most &ldquo;AI for small business&rdquo; content online is written either by
+            people who&rsquo;ve never run a small business, or by tool vendors trying
+            to sell you their platform. This guide is neither. It&rsquo;s a working
             list of the AI automations that small businesses are actually using
             in 2026, what they cost, what tools to use, and which ones to start
             with.
           </p>
           <p>
             If you run a 1-20 person business — service, retail, professional
-            services, hospitality, healthcare — this is for you. We'll skip the
-            "ChatGPT will change everything" intro and get into specifics.
+            services, hospitality, healthcare — this is for you. We&rsquo;ll skip the
+            &ldquo;ChatGPT will change everything&rdquo; intro and get into specifics.
           </p>
           <div className="not-prose flex flex-col sm:flex-row gap-3 mt-8">
             <Link

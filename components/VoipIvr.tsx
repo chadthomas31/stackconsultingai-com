@@ -92,7 +92,7 @@ export default function VoipIvr() {
 
               <div className="mt-4 text-sm text-muted-foreground">
                 <div className="font-medium text-foreground mb-1">Script</div>
-                <p>"{demo.script}"</p>
+                <p>&ldquo;{demo.script}&rdquo;</p>
               </div>
             </div>
           ))}

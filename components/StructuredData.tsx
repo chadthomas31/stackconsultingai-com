@@ -17,7 +17,8 @@ export default function StructuredData() {
     "address": {
       "@type": "PostalAddress",
       "addressRegion": "CA",
-      "addressLocality": "South Orange County",
+      "addressLocality": "San Clemente",
+      "postalCode": "92673",
       "addressCountry": "US"
     },
     "areaServed": [
@@ -60,35 +61,10 @@ export default function StructuredData() {
       "Business Process Automation",
       "Southern California Web Development"
     ],
-    "sameAs": [
-      "https://stackconsultingai.com"
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "reviewCount": "3",
-      "bestRating": "5"
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "author": { "@type": "Person", "name": "Paul Ries" },
-        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-        "reviewBody": "Stack Consulting AI transformed our online presence. The booking system they built has increased our appointments by 40%. Their attention to detail and understanding of our business needs was exceptional."
-      },
-      {
-        "@type": "Review",
-        "author": { "@type": "Person", "name": "Kate McCluskey" },
-        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-        "reviewBody": "Working with Stack Consulting AI was seamless. They delivered a beautiful, functional website that perfectly represents our brand. Our leads have doubled since launch."
-      },
-      {
-        "@type": "Review",
-        "author": { "@type": "Person", "name": "David Thompson" },
-        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-        "reviewBody": "The project management portal they developed has streamlined our entire workflow. Communication was excellent throughout the project, and the final product exceeded expectations."
-      }
-    ]
+    // sameAs intentionally omitted until real external profiles exist (GBP, Yelp,
+    // LinkedIn) — self-referencing sameAs is meaningless to Google.
+    // aggregateRating/review removed: Google ignores self-serving review markup on
+    // LocalBusiness and it risks a structured-data spam flag. Reviews belong on GBP.
   };
 
   return (

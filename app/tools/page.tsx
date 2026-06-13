@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Free AI & Website Tools for Small Business | Stack Consulting AI",
+  description:
+    "Free tools for small business owners: AI site audit, automation opportunity finder, ROI calculator, SEO audit, speed checker, and more. No signup required.",
+  alternates: { canonical: "https://stackconsultingai.com/tools" },
+};
 import { Calculator, Zap, Search, TrendingUp, Calendar, Code, BarChart3, Workflow, Gift, UserX, Award, ArrowRight } from "lucide-react";
 
 const tools = [

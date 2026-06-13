@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import {
   Zap,
   Globe,
@@ -529,13 +530,13 @@ export default function SpeedChecker() {
                 <p className="text-muted-foreground mb-4">
                   Our team specializes in performance optimization. We have helped businesses cut load times by over 60% and boost conversions.
                 </p>
-                <a
+                <Link
                   href="/#contact"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
                 >
                   Schedule Free Consultation
                   <ArrowRight className="w-5 h-5" />
-                </a>
+                </Link>
               </div>
             </div>
           )}

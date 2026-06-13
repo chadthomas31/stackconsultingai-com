@@ -3,7 +3,7 @@
  *
  * Each entry maps a vertical slug to:
  *   - displayName: marketing-facing label
- *   - extension: FreeSWITCH extension that runs the agent (5003-5006)
+ *   - extension: FreeSWITCH extension that runs the agent
  *   - systemPrompt: full text loaded by the agent runtime
  *   - intakeFields: the structured slots Claude pulls from the transcript
  *   - didEnvKey: env var holding the public Telnyx DID for this vertical

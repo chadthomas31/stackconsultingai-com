@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   Calendar,
   Receipt,
@@ -1149,13 +1150,13 @@ export default function AutomationFinder() {
                 businesses. Book a free strategy call to discuss your roadmap.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
+                <Link
                   href="/#contact"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
                 >
                   Book a Free Strategy Call
                   <ArrowRight className="w-5 h-5" />
-                </a>
+                </Link>
                 <button
                   onClick={() => {
                     setShowResults(false);

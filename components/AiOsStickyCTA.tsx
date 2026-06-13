@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 // Floating "Book a fit call" that appears once the visitor scrolls past the hero,
 // so the primary action is always one tap away on the /ai-os landing page.
@@ -16,7 +17,7 @@ export default function AiOsStickyCTA() {
   }, []);
 
   return (
-    <a
+    <Link
       href="/#contact"
       aria-hidden={!show}
       tabIndex={show ? 0 : -1}
@@ -26,6 +27,6 @@ export default function AiOsStickyCTA() {
     >
       Book a fit call
       <ArrowRight aria-hidden="true" className="w-4 h-4" />
-    </a>
+    </Link>
   );
 }

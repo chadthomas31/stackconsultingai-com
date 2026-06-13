@@ -2,6 +2,7 @@
 
 import { Mail, Phone } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Footer() {
@@ -60,34 +61,34 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Services</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   All Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/web-development" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/web-development" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Web Development
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/business-automation" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/business-automation" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Business Automation
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/ecommerce" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ecommerce" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   E-commerce
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/maintenance" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/maintenance" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Maintenance
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/guest-wifi" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/guest-wifi" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Guest WiFi
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -97,49 +98,49 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Products &amp; Tools</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/ai-os" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/ai-os" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   AI OS
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/ai-receptionist" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/ai-receptionist" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   AI Receptionist
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/ai-readiness-audit" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/ai-readiness-audit" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   AI Readiness Audit
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/free-ai-site-audit" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/free-ai-site-audit" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Free Site Audit
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/ai-automation-small-business-guide" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/ai-automation-small-business-guide" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Automation Guide
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/demos" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/demos" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Live Demos
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/portfolio" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/portfolio" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Portfolio
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/tools" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/tools" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Free Tools
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/stack-report" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/stack-report" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   The Stack Report
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -149,34 +150,34 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Service Area</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/services/ai-consulting-orange-county" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ai-consulting-orange-county" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Orange County
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/ai-consulting-irvine" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ai-consulting-irvine" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Irvine
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/ai-consulting-newport-beach" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ai-consulting-newport-beach" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Newport Beach
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/ai-consulting-costa-mesa" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ai-consulting-costa-mesa" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Costa Mesa
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/ai-consulting-mission-viejo" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ai-consulting-mission-viejo" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   Mission Viejo
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services/ai-consulting-san-clemente" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                <Link href="/services/ai-consulting-san-clemente" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
                   San Clemente
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -198,9 +199,9 @@ export default function Footer() {
             — AI automation &amp; integration for businesses with existing phone, CRM, and workflow systems.
           </p>
           <div className="flex justify-center gap-4 text-sm">
-            <a href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</a>
+            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
             <span>|</span>
-            <a href="/terms" className="hover:text-primary transition-colors">Terms of Service</a>
+            <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

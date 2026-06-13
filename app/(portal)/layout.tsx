@@ -1,6 +1,12 @@
+import type { Metadata } from "next"
 import { getRequiredSession } from "@/lib/auth-utils"
 import { LayoutDashboard, FolderKanban, FileText, MessageSquare } from "lucide-react"
 import { Sidebar } from "@/components/sidebar"
+
+export const metadata: Metadata = {
+  title: "Client Portal | Stack Consulting AI",
+  robots: { index: false, follow: false },
+}
 
 const navItems: { href: string; label: string; icon: "LayoutDashboard" | "FolderKanban" | "FileText" | "MessageSquare" }[] = [
   { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard" },

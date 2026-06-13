@@ -17,19 +17,20 @@ import {
 
 import PricingTier from "@/components/PricingTier";
 import CallOptions from "@/components/CallOptions";
+import RetroCallPreview from "@/components/RetroCallPreview";
 
 export const metadata: Metadata = {
   title:
     "AI Receptionist for Small Business | 24/7 Voice Agent | Stack Consulting AI",
   description:
-    "An AI receptionist that answers your phone, qualifies callers, books appointments, transfers to humans, and emails the transcript — 24/7. Built on FreeSWITCH + OpenAI Realtime. Live demo on the homepage. Setup from $4,997.",
+    "An AI receptionist that answers missed calls, qualifies callers, transfers to humans, and emails the transcript — start with a free pilot.",
   keywords: [
     "AI receptionist",
     "AI voice agent",
     "AI phone agent small business",
     "AI answering service",
     "OpenAI Realtime voice agent",
-    "FreeSWITCH AI",
+    "missed call automation",
     "AI receptionist Orange County",
     "small business AI phone system",
     "after hours AI receptionist",
@@ -88,12 +89,12 @@ const capabilities = [
 ];
 
 const stack = [
-  { label: "Telephony", value: "FreeSWITCH (self-hosted, no per-minute Twilio markup)" },
+  { label: "Telephony", value: "Managed phone number or your existing line forwarded after-hours" },
   { label: "Voice model", value: "OpenAI Realtime API (gpt-realtime)" },
-  { label: "Trunking", value: "Telnyx or BYO SIP trunk" },
-  { label: "Calendar", value: "Google, Microsoft 365, Cal.com, GoHighLevel" },
-  { label: "CRM logging", value: "HubSpot, GoHighLevel, Supabase, custom webhook" },
-  { label: "Hosting", value: "Your VPS or ours · 100% your data" },
+  { label: "Phone routing", value: "Ring your cell, shop line, team number, or voicemail fallback" },
+  { label: "Calendar", value: "Google Calendar, Microsoft 365, Cal.com, or simple callback request" },
+  { label: "Lead logging", value: "Email summary first; CRM/webhook when you are ready" },
+  { label: "Upgrade path", value: "Start simple, then add deeper phone-system control if call volume proves it" },
 ];
 
 const useCases = [
@@ -121,58 +122,58 @@ const useCases = [
 
 const tiers = [
   {
-    name: "Pilot",
-    price: "$4,997",
-    cadence: "one-time setup · ~$300/mo infra",
+    name: "Free Missed Call Pilot",
+    price: "Free",
+    cadence: "limited starter pilot",
     pitch:
-      "One inbound number, one persona, one calendar integration, one CRM webhook. We launch in 10 business days. Perfect for proving it out before scaling.",
+      "For the owner who just needs help right now. We answer missed calls, capture the lead, and send it to you. If it helps your business, then we talk about keeping it on.",
     bullets: [
-      "Single phone line + AI persona",
-      "1 calendar integration (Google or Microsoft)",
-      "1 CRM webhook (HubSpot, GHL, Supabase, or custom)",
-      "Email transcript + summary on every call",
-      "Warm transfer to a single destination",
-      "30 days of post-launch tuning included",
-      "You own the FreeSWITCH config + repo",
+      "One AI receptionist persona",
+      "After-hours or missed-call forwarding",
+      "Caller name, phone, reason, and urgency captured",
+      "Text/email summary after each qualified call",
+      "Transfer to one owner or front-desk number",
+      "Simple script tuning included during the pilot",
+      "No setup fee to prove the idea",
     ],
-    ctaLabel: "Start a pilot",
-    ctaHref: "/#contact",
-    highlight: false,
-  },
-  {
-    name: "Production",
-    price: "$9,997",
-    cadence: "one-time setup · ~$500/mo infra",
-    pitch:
-      "Multiple lines, multiple personas, IVR routing, after-hours rules, bilingual support, and analytics. The full receptionist your front desk wishes they were.",
-    bullets: [
-      "Multiple lines + per-line persona",
-      "IVR menu routing + after-hours logic",
-      "English + Spanish (or other language pair)",
-      "Multiple calendar + CRM integrations",
-      "Recorded call analytics dashboard",
-      "Custom escalation paths (cell, team, on-call)",
-      "60 days of post-launch tuning + monthly tuning calls",
-      "SLA on uptime + response time",
-    ],
-    ctaLabel: "Talk through production scope",
+    ctaLabel: "Start free",
     ctaHref: "/#contact",
     highlight: true,
+  },
+  {
+    name: "Keep It Running",
+    price: "Custom",
+    cadence: "only after it works",
+    pitch:
+      "Once the pilot is catching real leads and the owner is happy, keep it on and add booking, CRM, bilingual routing, analytics, and deeper phone-system control.",
+    bullets: [
+      "Everything in the free pilot",
+      "Calendar booking or appointment request flow",
+      "Business-hours and after-hours rules",
+      "Two transfer destinations",
+      "English + Spanish option",
+      "Monthly script improvements from real calls",
+      "CRM or Google Sheet logging",
+      "Upgrade credit toward a custom phone system",
+    ],
+    ctaLabel: "Upgrade after it works",
+    ctaHref: "/#contact",
+    highlight: false,
   },
 ];
 
 const faqs = [
   {
     q: "Can I actually call your AI receptionist before paying anything?",
-    a: "Yes. The live demo on our homepage uses the exact same FreeSWITCH + OpenAI Realtime stack we deploy for clients. Enter your phone number, the system places an outbound call to you, and you talk to the agent. That's the demo. No watered-down sandbox version.",
+    a: "Yes. Use the live demo before you buy anything. Enter your phone number, the system places an outbound call to you, and you talk to the agent. The point is not a slide deck. The point is hearing whether this can answer a real call.",
   },
   {
     q: "How is this different from Goodcall, Smith.ai, Ruby, or PolyAI?",
-    a: "Goodcall, Smith.ai, and Ruby are subscription answering services — you pay per minute or per call forever. PolyAI sells to enterprises only. We build a one-time, owned system on FreeSWITCH that you keep. Lower long-term cost, no per-minute markup, full control over the voice and the script.",
+    a: "Goodcall, Smith.ai, and Ruby are answering services. They can be useful, but you are usually paying for a generic workflow. We start smaller: answer missed calls, capture the lead, route it to you, and tune the script around your business. If call volume proves the value, we can later build the deeper phone-system version.",
   },
   {
-    q: "I saw someone selling an \"AI receptionist\" on Facebook Marketplace for $300. Why is yours $4,997?",
-    a: "At $300 flat, somebody is either losing money on every install, gating the real work behind a monthly fee they haven't told you about yet, or shipping a no-code wrapper (Vapi, Bland, Retell trial) that breaks the day the trial ends. Running a real production AI voice agent costs ~$0.06–0.30/minute in OpenAI Realtime API time alone — that math doesn't close at $300. We charge $4,997 because we ship the actual stack: your FreeSWITCH instance on your VPS, your OpenAI account, your CRM webhook, your repo. Nothing rented, nothing hidden. Same demo number live on this page is the receptionist we'd build you.",
+    q: "Do I really need to spend thousands before I know this works?",
+    a: "No. Start with the free missed-call pilot. The goal is simple: stop missed calls from dying in voicemail, collect the caller details, and send you the lead. If it helps, then we talk about what it should cost to keep running.",
   },
   {
     q: "What does the voice sound like?",
@@ -180,7 +181,7 @@ const faqs = [
   },
   {
     q: "Where does the data live?",
-    a: "Your infrastructure. We host FreeSWITCH on your VPS (or ours, if you don't have one). Calls are logged to your CRM, transcripts stored in your storage. We don't keep copies. OpenAI handles voice processing under their no-train commercial terms.",
+    a: "For the starter plans, call summaries are sent to your inbox and optional CRM/Sheet. We keep the minimum needed to operate and tune the service. If you need stricter ownership or compliance, we can scope that separately.",
   },
   {
     q: "What if the AI gets confused or a caller demands a human?",
@@ -188,11 +189,11 @@ const faqs = [
   },
   {
     q: "How long until it's live?",
-    a: "Pilot: ~10 business days from contract signed. Production: 3–4 weeks. The bottleneck is usually the calendar/CRM integration on your side, not the voice agent.",
+    a: "The starter version can usually go live in a few business days once the script, forwarding number, and notification destination are confirmed. Calendar booking and CRM integrations add time, but we do not need those to start answering calls.",
   },
   {
     q: "What happens if OpenAI's API goes down?",
-    a: "We configure FreeSWITCH to fail gracefully — caller hears a brief 'one moment' and is transferred to a fallback number (your cell, voicemail, or an answering service). We've never lost a call to an outage in production.",
+    a: "We configure a fallback path. If the AI cannot answer, the call routes to your cell, front desk, voicemail, or another destination you choose.",
   },
   {
     q: "Can it handle HIPAA, PCI, or other regulated data?",
@@ -200,7 +201,7 @@ const faqs = [
   },
   {
     q: "Do you build receptionists for businesses outside Orange County?",
-    a: "Yes. Most of the work is remote — calendar APIs, FreeSWITCH config, voice tuning. We've shipped to clients across Southern California and remote across the US.",
+    a: "Yes. Most of the work is remote: script, routing, voice tuning, and notifications. We've shipped to clients across Southern California and remote across the US.",
   },
 ];
 
@@ -210,7 +211,7 @@ const serviceJsonLd = {
   "@id": `${SERVICE_URL}#service`,
   name: "AI Receptionist for Small Business",
   description:
-    "24/7 AI voice agent built on FreeSWITCH + OpenAI Realtime. Answers calls, qualifies callers, books appointments, transfers to humans, and emails transcripts. Owned, not subscribed.",
+    "AI receptionist for small businesses that answers missed calls, qualifies callers, transfers to humans, and sends summaries through a free starter pilot.",
   provider: {
     "@type": "LocalBusiness",
     "@id": "https://stackconsultingai.com/#organization",
@@ -238,19 +239,17 @@ const serviceJsonLd = {
   offers: [
     {
       "@type": "Offer",
-      name: "Pilot",
+      name: "Free Missed Call Pilot",
       description:
-        "Single-line AI receptionist pilot with one calendar and CRM integration. Launches in ~10 business days.",
-      price: "4997",
+        "Free starter AI receptionist pilot for missed calls, caller qualification, transfer, and email/text summaries.",
+      price: "0",
       priceCurrency: "USD",
     },
     {
       "@type": "Offer",
-      name: "Production",
+      name: "Keep It Running",
       description:
-        "Multi-line AI receptionist with IVR routing, bilingual support, multiple integrations, analytics, and SLAs.",
-      price: "9997",
-      priceCurrency: "USD",
+        "AI receptionist with booking flow, after-hours rules, bilingual option, and lead logging.",
     },
   ],
   url: SERVICE_URL,
@@ -337,7 +336,7 @@ export default function AiReceptionistPage() {
 
           <div className="flex flex-col sm:flex-row gap-3 items-start mb-10">
             <Link
-              href="/#call-me"
+              href="/#assessment"
               className="btn-cta-call inline-flex items-center gap-2 text-base"
             >
               <Phone aria-hidden="true" className="w-4 h-4" />
@@ -369,21 +368,18 @@ export default function AiReceptionistPage() {
           <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
             Goodcall, Smith.ai, and Ruby will rent you a receptionist for
             $300&ndash;$1,200 a month forever. PolyAI builds enterprise-only.
-            DIY no-code voice tools sound like robots and break the moment a
-            caller goes off-script.
+            DIY no-code voice tools can work, but most owners do not want
+            another dashboard to babysit.
           </p>
           <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-            On the other end: somebody on Facebook Marketplace will sell you an
-            &ldquo;AI receptionist&rdquo; for $300. Ask where the FreeSWITCH
-            config lives, who pays the per-minute OpenAI Realtime bill at scale,
-            and what happens when the trial API key expires. The answer is
-            usually &ldquo;don&rsquo;t worry about it&rdquo; &mdash; which is
-            the answer right up until your phone stops ringing.
+            The answer is not a giant phone-system rebuild on day one. The
+            answer is to make sure the phone gets answered, the lead gets
+            captured, and the owner gets a clean next step.
           </p>
           <p className="text-lg text-navy-900 font-semibold leading-relaxed">
-            We build you the receptionist instead of renting it &mdash; and we
-            show you every part we&rsquo;re building. One-time setup, your
-            infrastructure, your data, your voice. Pay once. Operate for years.
+            Start small. Make the phone ring. If the calls turn into money,
+            then we can add booking, CRM, bilingual routing, and custom
+            infrastructure.
           </p>
         </div>
       </section>
@@ -415,7 +411,7 @@ export default function AiReceptionistPage() {
                 Icon: PhoneCall,
                 t: "0s",
                 title: "Caller dials in",
-                desc: "Inbound number, day or night. Telnyx routes to FreeSWITCH.",
+                desc: "Inbound number, day or night. Forward missed calls or after-hours calls.",
               },
               {
                 Icon: Mic,
@@ -459,7 +455,7 @@ export default function AiReceptionistPage() {
           <p className="text-sm text-white/60 mt-12">
             Want to hear it?{" "}
             <Link
-              href="/#call-me"
+              href="/#assessment"
               className="text-brand-soft hover:text-white underline underline-offset-4"
             >
               Call the live demo
@@ -468,6 +464,8 @@ export default function AiReceptionistPage() {
           </p>
         </div>
       </section>
+
+      <RetroCallPreview />
 
       {/* Capabilities — full-width numbered editorial rows */}
       <section className="py-24">
@@ -521,13 +519,10 @@ export default function AiReceptionistPage() {
               We name our parts. No black boxes.
             </h2>
             <p className="text-lg text-muted-foreground">
-              Every layer is open, owned, and replaceable. Nothing locked
-              behind a proprietary &ldquo;AI platform.&rdquo; This is also the
-              <span className="font-semibold text-navy-900">
-                {" "}
-                FreeSWITCH + OpenAI Realtime
-              </span>{" "}
-              stack live on this site&rsquo;s hero demo.
+              The starter version stays intentionally boring: answer the call,
+              collect the lead, route it, and send the summary. When you need
+              more control, the same approach can grow into a full custom phone
+              stack.
             </p>
           </div>
 
@@ -620,11 +615,12 @@ export default function AiReceptionistPage() {
           <div className="mb-14 max-w-2xl">
             <span className="section-kicker">Pricing</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mt-3 mb-4 tracking-tight">
-              Two tiers. Owned, not rented.
+              Free pilot. Make the phone ring first.
             </h2>
             <p className="text-lg text-muted-foreground">
-              One-time build fee plus your own infrastructure costs. No
-              per-minute markup. No subscription that doubles next year.
+              People are struggling. The offer is simple: let us help first.
+              If the pilot catches leads and you want to keep it, then we talk
+              about a fair monthly plan.
             </p>
           </div>
 
@@ -639,36 +635,36 @@ export default function AiReceptionistPage() {
               <div className="flex items-center gap-2 mb-2">
                 <Clock aria-hidden="true" className="w-4 h-4 text-brand" />
                 <h4 className="font-heading font-semibold text-navy-900 text-sm">
-                  10-day pilot
+                  Fast start
                 </h4>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Most pilots are answering real calls in ten business days from
-                contract signed.
+                Most starter installs are ready in a few business days once
+                the script and forwarding number are confirmed.
               </p>
             </div>
             <div className="p-5 rounded-md bg-white border border-border">
               <div className="flex items-center gap-2 mb-2">
                 <ShieldCheck aria-hidden="true" className="w-4 h-4 text-brand" />
                 <h4 className="font-heading font-semibold text-navy-900 text-sm">
-                  Your data stays yours
+                  Simple by default
                 </h4>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Hosted on your infrastructure. OpenAI no-train commercial
-                terms by default. NDA + DPA on request.
+                Start with call summaries by email or text. Add CRM,
+                dashboards, and custom routing only when the calls justify it.
               </p>
             </div>
             <div className="p-5 rounded-md bg-white border border-border">
               <div className="flex items-center gap-2 mb-2">
                 <Zap aria-hidden="true" className="w-4 h-4 text-brand" />
                 <h4 className="font-heading font-semibold text-navy-900 text-sm">
-                  No per-minute markup
+                  Charge after trust
                 </h4>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                You pay OpenAI + your SIP trunk at cost. We don&rsquo;t resell
-                minutes.
+                No owner should pay before they understand the value. Prove it
+                on real calls, then make the monthly math fair.
               </p>
             </div>
           </div>
@@ -718,7 +714,7 @@ export default function AiReceptionistPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/#call-me"
+              href="/#assessment"
               className="btn-cta-call inline-flex items-center justify-center gap-2 text-base"
             >
               <Phone aria-hidden="true" className="w-4 h-4" />

@@ -44,7 +44,8 @@ Do not book the appointment; end the call after that instruction.
 export const HVAC_AGENT = {
   vertical: "hvac" as const,
   displayName: "HVAC",
-  extension: "5003",
+  // 5003 is the live Stacks Assessment agent. The PBX routes HVAC demos to 5007.
+  extension: "5007",
   systemPrompt: HVAC_SYSTEM_PROMPT,
   intakeFields: HVAC_INTAKE_FIELDS,
 };

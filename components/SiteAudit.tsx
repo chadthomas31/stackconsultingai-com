@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   Globe,
   CheckCircle,
@@ -1271,13 +1272,13 @@ export default function SiteAudit() {
                   </p>
                 </div>
                 <div className="md:col-span-5 flex flex-col gap-3">
-                  <a
+                  <Link
                     href="/#contact"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand hover:bg-brand-hover text-white rounded-md font-semibold transition-colors"
                   >
                     Schedule a free review call
                     <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </Link>
                   <button
                     onClick={() => {
                       setResult(null);

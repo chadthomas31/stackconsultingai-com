@@ -72,15 +72,15 @@
 - [ ] **Step 2 (HUMAN):** Add the 4 numbers to `.env.local` + Vercel: `DEMO_DID_HVAC`, `DEMO_DID_PLUMBING`, `DEMO_DID_AUTO`, `DEMO_DID_MEDSPA`
 
 ### Task 14: FusionPBX dialplan rows
-- [ ] **Step 1:** SSH `fspbx` → for each DID, insert dialplan row routing DID → `<extension>@<domain>` (5003/4/5/6). Insert via Postgres directly (per memory `fusionpbx_dialplan`).
-- [ ] **Step 2:** `rm -rf /var/cache/fusionpbx/dialplan.*` and reload.
+- [x] **Step 1:** SSH `fspbx` → for each DID, insert dialplan row routing DID → `<extension>@<domain>`. Live map verified 2026-06-05: HVAC 5007, plumbing 5004, auto 5005, medspa 5006. `5003` remains Stacks Assessment.
+- [x] **Step 2:** `rm -rf /var/cache/fusionpbx/dialplan.*` and reload.
 - [ ] **Step 3:** Test inbound: call each DID from cell, confirm extension picks up.
 
 ### Task 15: Per-vertical FreeSWITCH agent extensions
-- [ ] **Step 1:** Clone the existing `ext 5002` (voice assistant) config 4 times → `5003`–`5006`
-- [ ] **Step 2:** Each extension loads its vertical prompt via env (`AGENT_PROMPT_FILE=hvac.txt` etc.) — TypeScript prompts exported as plain text at build time
-- [ ] **Step 3:** Configure 3-min hard cap (FreeSWITCH `sched_hangup` or per-leg timeout)
-- [ ] **Step 4:** Configure hangup webhook → `POST https://stackconsultingai.com/api/call-ended` with `industryId=<vertical>`, `callerPhoneNumber=<from>`, `transcript=<from OpenAI Realtime output>`
+- [x] **Step 1:** Clone/configure vertical demo extensions → `5007`, `5004`, `5005`, `5006`.
+- [x] **Step 2:** `ai_assistant_demo.lua` branches on destination extension and injects vertical prompt text at runtime.
+- [x] **Step 3:** Configure 3-min hard cap (FreeSWITCH `sched_hangup` or per-leg timeout)
+- [ ] **Step 4:** Decide report architecture. Live PBX currently handles `send_call_summary` through local `ai_webhook_server.py` on `127.0.0.1:8089`, writing `/var/lib/freeswitch/ai_leads` and sending Postfix emails. It does not POST the full transcript to website `/api/call-ended`.
 
 ### Task 16: Calendar fake-busy
 - [ ] **Step 1:** Create a Google Calendar / Cal.com calendar dedicated to demos

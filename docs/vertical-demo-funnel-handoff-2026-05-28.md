@@ -16,6 +16,32 @@ Build green at commit time. Vercel preview deploys automatically off this branch
 
 ---
 
+## Current live PBX state (verified 2026-06-05)
+
+The PBX has moved past the original May 28 handoff. Do not route HVAC to
+`5003`; that extension is the live Stacks Assessment agent.
+
+| E.164 | Vertical | Live route |
+|---|---|---|
+| `+19492397923` | HVAC | `5007 XML stackconsultingai.com` |
+| `+19492397924` | Plumbing | `5004 XML stackconsultingai.com` |
+| `+19492397925` | Auto | `5005 XML stackconsultingai.com` |
+| `+19492397926` | Medspa | `5006 XML stackconsultingai.com` |
+
+FusionPBX has enabled public DID routes for all four demo numbers and tenant
+routes for `5004`, `5005`, `5006`, and `5007`. The tenant routes run
+`/usr/share/freeswitch/scripts/ai_assistant_demo.lua` and set
+`execute_on_answer=sched_hangup +180 normal_clearing`.
+
+The runtime report path currently uses the local OpenAI tool-call handler,
+not the website `/api/call-ended` webhook. Function calls go through
+`/usr/share/freeswitch/scripts/ai_function_handler.lua` to
+`http://127.0.0.1:8089/`, served by
+`/usr/share/freeswitch/scripts/ai_webhook_server.py`, which writes summaries
+under `/var/lib/freeswitch/ai_leads` and sends Postfix emails. The website
+`/api/call-ended` demo-lead report pipeline still exists, but the live demo
+Lua script does not POST transcripts to it.
+
 ## Human-required steps (in order)
 
 ### 1. Apply the migration in Supabase
@@ -34,7 +60,7 @@ select count(*) from demo_leads;   -- expect 0
 | E.164 | Role |
 |---|---|
 | `+19492397922` | SMS sender (outbound codes + DID-reveal texts) |
-| `+19492397923` | HVAC inbound (ext 5003) |
+| `+19492397923` | HVAC inbound (ext 5007; `5003` is Stacks Assessment) |
 | `+19492397924` | Plumbing inbound (ext 5004) |
 | `+19492397925` | Auto inbound (ext 5005) |
 | `+19492397926` | Medspa inbound (ext 5006) |
@@ -89,31 +115,28 @@ Used by `/api/demos/verify` GET (the FreeSWITCH bridge calls this with
 `X-Internal-Secret: <secret>` to confirm an incoming caller is a known
 demo lead before routing to a vertical agent).
 
-### 6. FusionPBX dialplans (next session — needs SSH to `fspbx`)
+### 6. FusionPBX dialplans — DONE as of 2026-06-05
 
-For each of the 4 DIDs, insert a dialplan row routing the DID → vertical
-extension. Per memory `phone/fusionpbx_dialplan`: dialplans live in
-**Postgres + `/var/cache/fusionpbx/`**, not the XML files. After insert,
-clear the cache:
+Verified via Postgres on `fspbx-pub`: all four public DID routes exist and
+route to live tenant demo extensions. If changed later, remember FusionPBX
+dialplans live in **Postgres + `/var/cache/fusionpbx/`**, not static XML.
+Always clear `/var/cache/fusionpbx/dialplan.*` and reload FreeSWITCH after
+dialplan edits.
 
-```bash
-ssh fspbx
-sudo -u postgres psql fusionpbx -c "\copy ..."   # one row per DID
-sudo rm -rf /var/cache/fusionpbx/dialplan.*
-sudo systemctl reload freeswitch
-```
+### 7. FreeSWITCH vertical agents — DONE as of 2026-06-05
 
-### 7. FreeSWITCH vertical agents (next session)
+Verified via Postgres and script inspection: `5004`, `5005`, `5006`, and
+`5007` run `ai_assistant_demo.lua`; the script maps destination extension to
+vertical internally:
 
-Clone the existing voice-agent extension (`5002`) four times into `5003`
-through `5006`. Each loads the corresponding prompt from
-`lib/voice-agents/<vertical>.ts`. Configure:
-- 3-minute hard cap (`sched_hangup` or per-leg timeout)
-- Hangup webhook → `POST https://stackconsultingai.com/api/call-ended`
-  with `industryId=<vertical>`, `callerPhoneNumber=<caller E.164>`,
-  `transcript=<from OpenAI Realtime output>`, `uuid=<call uuid>`,
-  `durationSeconds=<int>`
-- HMAC: `X-Signature: sha256=<hex>` of body using `CALL_WEBHOOK_SECRET`
+- `5007` = HVAC
+- `5004` = Plumbing
+- `5005` = Auto
+- `5006` = Medspa
+
+Open follow-up: decide whether to keep the current local webhook-report path
+or wire the demo script into website `/api/call-ended` so Supabase
+`demo_leads` rows get call summaries and branded Resend reports.
 
 ### 8. Demo calendar (fake-busy)
 

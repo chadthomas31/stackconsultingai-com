@@ -2,6 +2,10 @@
 
 **Goal:** route each of the 4 vertical Telnyx DIDs to a dedicated FreeSWITCH extension that runs the OpenAI Realtime agent with the matching vertical system prompt.
 
+**Live-state note (verified 2026-06-05):** this setup is now mostly done.
+HVAC uses extension `5007`, not `5003`; `5003` is the live Stacks Assessment
+agent. The live demo runtime is `/usr/share/freeswitch/scripts/ai_assistant_demo.lua`.
+
 **Companion to:** `docs/vertical-demo-funnel-handoff-2026-05-28.md`
 **Memory ref:** `phone/fusionpbx_dialplan` (dialplan lives in Postgres + `/var/cache/fusionpbx/`, NOT XML)
 **Existing agent ext:** `5002` (voice assistant, FreeSWITCH + OpenAI Realtime, webhook 8089)
@@ -24,7 +28,7 @@ Expect: `fspbx` + `active` + `active`.
 
 | E.164 | Vertical | Ext | Webhook industryId |
 |---|---|---|---|
-| `+19492397923` | HVAC | `5003` | `hvac` |
+| `+19492397923` | HVAC | `5007` | `hvac` |
 | `+19492397924` | Plumbing | `5004` | `plumbing` |
 | `+19492397925` | Auto | `5005` | `auto` |
 | `+19492397926` | Medspa | `5006` | `medspa` |
@@ -55,7 +59,7 @@ Easier and less error-prone than direct Postgres inserts. Repeat 4 times.
 2. Fill:
    - **Domain**: your primary domain (the one ext 5002 lives under)
    - **Destination Number**: the DID with no `+`, e.g. `19492397923`
-   - **Action**: `Transfer extension` → `5003 XML <domain>`
+   - **Action**: `Transfer extension` → `5007 XML <domain>`
    - **Description**: `Vertical demo · HVAC · 7923`
 3. Save.
 4. Repeat for `5004 / plumbing / 7924`, `5005 / auto / 7925`, `5006 / medspa / 7926`.
@@ -68,7 +72,7 @@ sudo rm -rf /var/cache/fusionpbx/dialplan.*
 sudo systemctl reload freeswitch
 ```
 
-Test: dial `+19492397923` → expect ext `5003` to ring. (Ext doesn't exist yet — it'll fail. That's fine. Confirms the route works.)
+Test: dial `+19492397923` → expect ext `5007` to ring.
 
 ---
 
@@ -107,10 +111,10 @@ insert into v_dialplans
    dialplan_continue, dialplan_order, dialplan_enabled, dialplan_description)
 values
   (gen_random_uuid(), '<domain_uuid>', 'Vertical demo · HVAC · 7923',
-   '19492397923', 'public', 'false', '100', 'true', 'Routes Telnyx DID to ext 5003');
+   '19492397923', 'public', 'false', '100', 'true', 'Routes Telnyx DID to ext 5007');
 ```
 
-Then the matching `v_dialplan_details` rows (condition: `destination_number ^19492397923$`, action: `transfer 5003 XML <domain>`). It's easier to add via the UI and let FusionPBX populate the details table.
+Then the matching `v_dialplan_details` rows (condition: `destination_number ^19492397923$`, action: `transfer 5007 XML <domain>`). It's easier to add via the UI and let FusionPBX populate the details table.
 
 **ALWAYS clear the cache after** (XML files in cache out-of-sync with Postgres = silent failure):
 
@@ -121,7 +125,7 @@ sudo systemctl reload freeswitch
 
 ---
 
-## 5. Cloning ext 5002 → 5003, 5004, 5005, 5006
+## 5. Cloning ext 5002 → 5007, 5004, 5005, 5006
 
 The agent extensions need to:
 1. Answer the call
@@ -144,7 +148,7 @@ Note where the extension config lives (likely `/etc/freeswitch/directory/<domain
 Easier and safer than file copies:
 
 1. FusionPBX → **Accounts → Extensions** → click `5002` → top-right **Copy** (or use the Copy button on the list)
-2. Set new extension number `5003`. Description: `Vertical demo agent · HVAC`.
+2. Set new extension number `5007`. Description: `Vertical demo agent · HVAC`.
 3. Save.
 4. Repeat for `5004`, `5005`, `5006`.
 
@@ -160,7 +164,7 @@ In the agent runtime config (wherever the prompt is loaded), branch on the desti
 
 ```ts
 const verticalByExt: Record<string, Vertical> = {
-  "5003": "hvac",
+  "5007": "hvac",
   "5004": "plumbing",
   "5005": "auto",
   "5006": "medspa",
@@ -190,7 +194,7 @@ with header `X-Signature: sha256=<HMAC of body using CALL_WEBHOOK_SECRET>`.
 
 Add to each extension's dialplan or to the agent runtime: `sched_hangup +180 normal_clearing` (FreeSWITCH variable, applied right after answer). Pads the agent's own wrap-up window.
 
-In FusionPBX UI: **Dialplan → Extensions → 5003 → Conditions → Add Action**:
+In FusionPBX UI: **Dialplan → Extensions → 5007 → Conditions → Add Action**:
 - Application: `set`
 - Data: `execute_on_answer=sched_hangup +180 normal_clearing`
 
