@@ -93,10 +93,10 @@ export default function Navbar() {
             className="hover:opacity-80 transition-opacity relative z-10"
           >
             <Image
-              src="/stack-logo-trimmed.png"
+              src="/stack-logo-2026.webp"
               alt="Stack Consulting AI"
-              width={744}
-              height={206}
+              width={1000}
+              height={321}
               className="h-9 md:h-10 w-auto"
               priority
             />
