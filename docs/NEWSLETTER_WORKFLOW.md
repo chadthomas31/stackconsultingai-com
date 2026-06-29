@@ -252,19 +252,39 @@ Optional:
 ## Content Sources
 
 **Trending repos:**
-- [findarepo.com/trending](https://findarepo.com/trending/) - Daily rankings
-- [GitHub Trending](https://github.com/trending)
-- ByteByteGo newsletter
-- Hacker News trending
-- Dev Twitter/X
-- YouTube tech channels (original pipeline)
+- [findarepo.com/trending](https://findarepo.com/trending/) - Daily rankings with published math
+- [GitHub Trending](https://github.com/trending) - Official daily/weekly/monthly lists
+- ByteByteGo newsletter - Curated breakdowns of AI/infra repos
+- Hacker News trending (Show HN, Ask HN) - Community validation
+- Dev Twitter/X - Real-time buzz from builders
+- YouTube tech channels (original pipeline) - ThePrimeagen, Fireship, ByteByteGo, etc.
 
-**Quality filters:**
-- Practical value for SMB owners / devs
-- Agent tooling, automation, self-hosted alternatives
-- Concrete over abstract
-- Open source over closed
-- Skip: deep systems plumbing, very niche crypto, academic novelties (unless wildly clever)
+**Research Flow (30-45 minutes):**
+1. **Scan findarepo.com/trending** - Note top 20 repos with 7-day growth
+2. **Check GitHub Trending** - Cross-reference against official list
+3. **Read ByteByteGo** - Identify deep dives on infrastructure/AI repos
+4. **Browse Hacker News** - See which repos sparked discussion
+5. **Filter for audience** - Keep agent tools, automation, self-hosted alternatives, cost-savers
+6. **Test clarity** - Can you explain it in 2-3 concrete sentences? If not, skip.
+7. **Verify links** - Open every GitHub URL to confirm it exists and matches description
+
+**Quality Filters:**
+- Practical value for SMB owners / devs (not just cool tech demos)
+- Agent tooling, automation, self-hosted alternatives to expensive SaaS
+- Concrete over abstract (no vague "AI frameworks" — name what they replace)
+- Open source over closed (unless closed source is exceptionally useful)
+- **Skip:** Deep systems plumbing (kernel modules, compilers), very niche crypto (unless wildly clever), academic novelties (unless production-ready)
+
+**Curation Tips:**
+- Look for "exploded to Xk stars this week" stories (massive growth = signal)
+- Prioritize repos that **replace expensive tools** (e.g., "replaces ElasticSearch")
+- Include 1-2 Microsoft/Google/ByteDance repos (credibility + reader recognition)
+- Balance categories: 2-3 agent skills, 2-3 dev tools, 1-2 data/infra
+- Quick hits can be more niche or experimental (reader can skip if irrelevant)
+
+**Estimated API Cost per Generation:**
+- Claude Opus 4-8 (~4096 output tokens): **~$0.08-0.12** per newsletter draft
+- Budget: ~$2-3/month for biweekly cadence + retries
 
 ## Brand Voice Reference
 
