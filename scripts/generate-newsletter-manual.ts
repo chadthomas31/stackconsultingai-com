@@ -33,10 +33,16 @@ interface CuratedContent {
 }
 
 /**
- * Example curated content for June 29, 2026
- * This would normally be filled in by the newsletter curator
+ * Curated content for the current week's newsletter
+ * 
+ * INSTRUCTIONS FOR CURATORS:
+ * 1. Update the repos below with this week's trending content
+ * 2. Use builder voice: concrete, specific, name what it replaces
+ * 3. Verify all GitHub URLs are correct
+ * 4. Keep descriptions 2-3 sentences for featured, 1 sentence for quick hits
+ * 5. Run `npm run newsletter:preview` to review before generating
  */
-const CURATED_CONTENT_JUNE_29_2026: CuratedContent = {
+const CURATED_CONTENT: CuratedContent = {
   weekSummary: `GitHub trending this week was all about agent tooling that actually solves problems. No more generic AI slop — these are repos that give agents skills, taste, and memory. Plus practical tools for scraping, document parsing, and workflow automation that small businesses can actually use.`,
   
   featuredRepos: [
@@ -166,6 +172,28 @@ function formatCuratedContentAsTranscript(content: CuratedContent): string {
 }
 
 async function main() {
+  // Validate environment before proceeding
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("\n❌ Error: ANTHROPIC_API_KEY is not set in .env.local");
+    console.error("\nThe newsletter generator requires Claude API access.");
+    console.error("Add your API key to .env.local:");
+    console.error("  ANTHROPIC_API_KEY=sk-ant-...\n");
+    process.exit(1);
+  }
+
+  // Validate curated content has minimum requirements
+  if (CURATED_CONTENT.featuredRepos.length === 0) {
+    console.error("\n❌ Error: featuredRepos cannot be empty");
+    console.error("Add at least 4-6 featured repos before generating.\n");
+    process.exit(1);
+  }
+
+  if (CURATED_CONTENT.quickHits.length === 0) {
+    console.error("\n❌ Error: quickHits cannot be empty");
+    console.error("Add at least 5-8 quick hits before generating.\n");
+    process.exit(1);
+  }
+
   const rl = readline.createInterface({ input, output });
 
   console.log("\n🗞️  The Stack Report - Manual Newsletter Generator\n");
@@ -173,8 +201,8 @@ async function main() {
 
   // Show curated content summary
   console.log("📊 Current curated content:");
-  console.log(`   - ${CURATED_CONTENT_JUNE_29_2026.featuredRepos.length} featured repos`);
-  console.log(`   - ${CURATED_CONTENT_JUNE_29_2026.quickHits.length} quick hits`);
+  console.log(`   - ${CURATED_CONTENT.featuredRepos.length} featured repos`);
+  console.log(`   - ${CURATED_CONTENT.quickHits.length} quick hits`);
   console.log(`   - Theme: Agent tooling and practical automation\n`);
 
   const shouldContinue = await rl.question("Generate newsletter with this content? (y/n): ");
@@ -185,9 +213,10 @@ async function main() {
     return;
   }
 
-  console.log("\n⚙️  Generating newsletter draft with Claude...\n");
+  console.log("\n⚙️  Generating newsletter draft with Claude...");
+  console.log("   (This may take 30-60 seconds for complex newsletters)\n");
 
-  const transcript = formatCuratedContentAsTranscript(CURATED_CONTENT_JUNE_29_2026);
+  const transcript = formatCuratedContentAsTranscript(CURATED_CONTENT);
 
   try {
     const draft: NewsletterDraft = await generateNewsletter({
@@ -200,7 +229,7 @@ async function main() {
         durationSeconds: null,
       },
       videoUrl: "https://stackconsultingai.com/stack-report",
-      customInstructions: CURATED_CONTENT_JUNE_29_2026.customInstructions,
+      customInstructions: CURATED_CONTENT.customInstructions,
     });
 
     console.log("\n✅ Draft generated!\n");

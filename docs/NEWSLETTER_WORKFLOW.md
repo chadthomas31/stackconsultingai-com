@@ -8,6 +8,27 @@ The Stack Report is a biweekly newsletter that curates trending GitHub repos, AI
 
 ## Two Generation Modes
 
+### When to Use Manual Curation vs YouTube Pipeline
+
+**Use Manual Curation when:**
+- No suitable YouTube video available this week
+- You want precise control over featured repos and messaging
+- The trending repos don't align well with a single video
+- You're curating from multiple sources (GitHub Trending, HN, Twitter, newsletters)
+- You want to add opinionated takes or local SoCal context
+- Time-sensitive: need to ship faster than finding/analyzing a video
+
+**Use YouTube Pipeline when:**
+- A trusted creator (ThePrimeagen, Fireship, ByteByteGo) published a trending repos roundup
+- You want to credit the source creator and drive traffic to their channel
+- The video's curation and commentary align with Stack's brand voice
+- You want Gemini video analysis (on-screen repos + host commentary)
+- Less work: paste URL → generate → review → publish
+
+**Best Practice:**
+- Manual curation for **biweekly cadence** (ensures consistent schedule)
+- YouTube pipeline for **opportunistic bonus issues** (when great video drops)
+
 ### 1. YouTube Video Pipeline (Original)
 
 The original workflow generates newsletter content from a YouTube video about trending repos:

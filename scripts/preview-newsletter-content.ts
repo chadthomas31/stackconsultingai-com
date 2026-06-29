@@ -23,9 +23,15 @@ interface CuratedContent {
 }
 
 /**
- * Curated content for June 29, 2026 - The Stack Report
+ * Curated content for the current week's newsletter
+ * 
+ * INSTRUCTIONS FOR CURATORS:
+ * 1. Update the repos below with this week's trending content
+ * 2. Use builder voice: concrete, specific, name what it replaces
+ * 3. Verify all GitHub URLs are correct
+ * 4. Run `npm run newsletter:preview` to review before generating
  */
-const CURATED_CONTENT_JUNE_29_2026: CuratedContent = {
+const CURATED_CONTENT: CuratedContent = {
   weekSummary: `GitHub trending this week was all about agent tooling that actually solves problems. No more generic AI slop — these are repos that give agents skills, taste, and memory. Plus practical tools for scraping, document parsing, and workflow automation that small businesses can actually use.`,
   
   featuredRepos: [
@@ -150,12 +156,12 @@ function formatCuratedContentAsTranscript(content: CuratedContent): string {
 console.log("\n📋 The Stack Report - Content Preview\n");
 console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-const transcript = formatCuratedContentAsTranscript(CURATED_CONTENT_JUNE_29_2026);
+const transcript = formatCuratedContentAsTranscript(CURATED_CONTENT);
 
 console.log("📊 STATISTICS:");
-console.log(`   Featured repos: ${CURATED_CONTENT_JUNE_29_2026.featuredRepos.length}`);
-console.log(`   Quick hits: ${CURATED_CONTENT_JUNE_29_2026.quickHits.length}`);
-console.log(`   Total items: ${CURATED_CONTENT_JUNE_29_2026.featuredRepos.length + CURATED_CONTENT_JUNE_29_2026.quickHits.length}`);
+console.log(`   Featured repos: ${CURATED_CONTENT.featuredRepos.length}`);
+console.log(`   Quick hits: ${CURATED_CONTENT.quickHits.length}`);
+console.log(`   Total items: ${CURATED_CONTENT.featuredRepos.length + CURATED_CONTENT.quickHits.length}`);
 console.log(`   Transcript length: ${transcript.length} chars (~${Math.ceil(transcript.length / 4)} tokens)\n`);
 
 console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -164,7 +170,7 @@ console.log(transcript);
 console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
 console.log("💡 CUSTOM INSTRUCTIONS:\n");
-console.log(CURATED_CONTENT_JUNE_29_2026.customInstructions);
+console.log(CURATED_CONTENT.customInstructions);
 console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
 console.log("\n✅ Content structure looks good!");
