@@ -36,7 +36,7 @@ export default function PortfolioHeader() {
 
         <div className="flex items-center gap-2">
           <a
-            href="https://github.com/chadmccluskey"
+            href="https://github.com/chadthomas31"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"

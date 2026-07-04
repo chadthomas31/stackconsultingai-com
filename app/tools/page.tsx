@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Free AI & Website Tools for Small Business | Stack Consulting AI",
+  title: "Free AI & Website Tools | Stack Consulting AI",
   description:
     "Free tools for small business owners: AI site audit, automation opportunity finder, ROI calculator, SEO audit, speed checker, and more. No signup required.",
   alternates: { canonical: "https://stackconsultingai.com/tools" },

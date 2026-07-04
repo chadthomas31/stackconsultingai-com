@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title: "ROI Calculator | Website Investment Returns | Stack Consulting AI",
+  title: "ROI Calculator | Website Returns | Stack Consulting AI",
   description:
     "Calculate the potential return on investment for your new website. See projected revenue increases, payback period, and ROI percentage. Free, no signup required.",
 };
@@ -37,6 +37,8 @@ export default function ROICalculatorPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Website ROI Calculator</h1>
 
       {/* Calculator */}
       <ROICalculator />

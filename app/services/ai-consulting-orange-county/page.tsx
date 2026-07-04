@@ -228,15 +228,6 @@ const serviceJsonLd = {
     "@type": "LocalBusiness",
     "@id": "https://stackconsultingai.com/#organization",
     name: "Stack Consulting AI",
-    url: "https://stackconsultingai.com",
-    telephone: "+1-949-749-0001",
-    email: "hello@stackconsultingai.com",
-    address: {
-      "@type": "PostalAddress",
-      addressRegion: "CA",
-      addressLocality: "South Orange County",
-      addressCountry: "US",
-    },
   },
   areaServed: [
     {

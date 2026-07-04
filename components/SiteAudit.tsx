@@ -20,6 +20,7 @@ import {
   Eye,
   BarChart3,
 } from "lucide-react";
+import { trackConversionEvent } from "@/lib/analytics-client";
 
 /* ---------- Types ---------- */
 
@@ -538,6 +539,9 @@ export default function SiteAudit() {
       setLoading(true);
       setResult(null);
       setScanMsgIndex(0);
+      trackConversionEvent("site_audit_start", {
+        lead_source: "site_audit_tool",
+      });
 
       try {
         const res = await fetch("/api/site-audit", {
@@ -620,14 +624,14 @@ export default function SiteAudit() {
         setTimeout(() => {
           setResult(final as AuditResult);
           setLoading(false);
-          if (typeof window !== "undefined" && (window as any).dataLayer) {
-            (window as any).dataLayer.push({
-              event: "site_audit_complete",
-              audit_url: (final as AuditResult).url,
-              audit_grade: (final as AuditResult).overallGrade,
-              audit_score: (final as AuditResult).overallScore,
-            });
-          }
+          trackConversionEvent("site_audit_complete", {
+            audit_grade: (final as AuditResult).overallGrade,
+            audit_score: (final as AuditResult).overallScore,
+            lead_source: "site_audit_tool",
+          });
+          trackConversionEvent("site_audit_lead", {
+            lead_source: "site_audit_tool",
+          });
           setTimeout(() => {
             resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
           }, 200);

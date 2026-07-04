@@ -17,6 +17,7 @@ import CallOpsConsole, {
   type ConsoleStage,
   type StageStatus,
 } from "./CallOpsConsole";
+import { trackConversionEvent } from "@/lib/analytics-client";
 
 const STACKS_PHONE = "+14422121616";
 const STACKS_PHONE_DISPLAY = "(442) 212-1616";
@@ -124,13 +125,10 @@ export default function FreeAssessmentOffer() {
   const valid = normalize(phone).length >= 10;
 
   const trackCallClick = () => {
-    if (typeof window !== "undefined" && window.dataLayer) {
-      window.dataLayer.push({
-        event: "phone_click",
-        phone_number: STACKS_PHONE,
-        source: "free_assessment_offer",
-      });
-    }
+    trackConversionEvent("phone_click", {
+      phone_number: STACKS_PHONE,
+      source: "free_assessment_offer",
+    });
   };
 
   const markStage = useCallback(
@@ -160,6 +158,11 @@ export default function FreeAssessmentOffer() {
 
     const digits = normalize(phone);
     const e164 = digits.length === 11 ? `+${digits}` : `+1${digits}`;
+
+    trackConversionEvent("ai_assessment_callback_start", {
+      lead_source: "free_assessment_offer",
+      industry,
+    });
 
     setStreamPhone(e164);
     setStreamIndustry(industry);
@@ -239,6 +242,10 @@ export default function FreeAssessmentOffer() {
           } else if (ev === "done") {
             const t = Number(parsed.totalMs ?? 0);
             setTotalMs(t);
+            trackConversionEvent("ai_assessment_callback_request", {
+              lead_source: "free_assessment_offer",
+              industry,
+            });
             // In case any remaining stages didn't receive explicit events
             for (let i = nextIdx; i < stageOrder.length; i++) {
               markStage(stageOrder[i], { status: "done" });

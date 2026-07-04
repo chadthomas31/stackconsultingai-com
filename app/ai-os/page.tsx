@@ -33,7 +33,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
   name: "Stack AI OS",
-  provider: { "@type": "Organization", name: "Stack Consulting AI", url: "https://stackconsultingai.com" },
+  provider: { "@type": "LocalBusiness", "@id": "https://stackconsultingai.com/#organization", name: "Stack Consulting AI" },
   description:
     "A managed AI workstation: a Mac, Windows, or Linux machine set up with the AI tools and automations a business needs, maintained on a monthly Care plan.",
   areaServed: "Orange County, California",

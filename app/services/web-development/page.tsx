@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Custom Web Development for Southern California | Next.js & React | Stack Consulting AI",
+  title: "Custom Web Development with Next.js | Stack Consulting AI",
   description:
     "Custom website and web application development for businesses in Orange County and Southern California. We build fast, scalable sites with Next.js, TypeScript, and Tailwind CSS. Free consultation.",
   keywords: [

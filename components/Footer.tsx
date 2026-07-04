@@ -90,6 +90,16 @@ export default function Footer() {
                   Guest WiFi
                 </Link>
               </li>
+              <li>
+                <Link href="/services/ai-receptionist-orange-county" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  AI Receptionist OC
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/business-automation-orange-county" className="text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block">
+                  Automation OC
+                </Link>
+              </li>
             </ul>
           </div>
 

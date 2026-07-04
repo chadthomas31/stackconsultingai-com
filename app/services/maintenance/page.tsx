@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Website Maintenance & Support | Orange County | Stack Consulting AI",
+  title: "Website Maintenance & Support | Stack Consulting AI",
   description:
     "Professional website maintenance, security updates, performance optimization, and technical support for businesses in Orange County and Southern California. Keep your site fast, secure, and up-to-date.",
   keywords: [

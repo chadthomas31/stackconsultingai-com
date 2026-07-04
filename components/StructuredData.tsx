@@ -8,7 +8,7 @@ export default function StructuredData() {
     "url": "https://stackconsultingai.com",
     "telephone": "+1-949-749-0001",
     "email": "hello@stackconsultingai.com",
-    "logo": "https://stackconsultingai.com/icon.svg",
+    "logo": "https://stackconsultingai.com/stack-logo.png",
     "image": "https://stackconsultingai.com/og-image.png",
     "founder": {
       "@type": "Person",

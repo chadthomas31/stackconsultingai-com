@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "E-commerce Development Orange County | Online Store Solutions | Stack Consulting AI",
+  title: "E-commerce Development Orange County | Stack Consulting AI",
   description:
     "E-commerce development for businesses in Orange County and Southern California. Custom online stores, Shopify development, payment processing, and inventory management. Free consultation.",
   keywords: [

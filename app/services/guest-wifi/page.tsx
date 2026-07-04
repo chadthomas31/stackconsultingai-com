@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Guest WiFi + Email Capture for Small Businesses | Orange County | Stack Consulting AI",
+  title: "Guest WiFi + Email Capture | Stack Consulting AI",
   description:
     "Branded guest WiFi captive portals for cafes, clinics, salons, gyms, and offices in Orange County. Customers connect, you collect emails into your newsletter. pfSense + UniFi.",
   keywords: [

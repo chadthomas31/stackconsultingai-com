@@ -4,7 +4,7 @@ import CityAiConsultingPage, {
 } from "@/components/CityAiConsultingPage";
 
 export const metadata: Metadata = {
-  title: "AI Consulting Newport Beach | Voice Agents & Automation for Newport Beach Small Businesses | Stack Consulting AI",
+  title: "AI Consulting Newport Beach | Stack Consulting AI",
   description:
     "Founder-led AI consulting in Newport Beach, CA. We build voice agents, chatbots, and automations for professional services, medical, and finance firms. Free assessment.",
   keywords: [

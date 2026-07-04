@@ -4,10 +4,11 @@
  * Input: call transcript + industry id (known post-call from Stacks' branching).
  * Output: structured Assessment JSON matching /lib/assessment-schema.ts.
  *
- * Uses Claude Sonnet 4.6 (cheaper than Opus for this structured-output task,
- * and still strong on JSON adherence). Adaptive thinking. Prompt caching on
- * the tool catalog + extraction rubric — the stable prefix saves ~90% on
- * repeated extractions.
+ * Defaults to Claude Opus 4.8 (override via options.model). Adaptive thinking.
+ * A cache_control marker sits on the tool catalog + extraction rubric, but note:
+ * the assembled prefix is ~1.9K tokens, below Opus/Haiku's 4096-token cache
+ * minimum, so it does NOT currently cache. It would only start caching on a
+ * model with a lower floor (e.g. Sonnet 4.5 @ 1024 tokens).
  */
 
 import Anthropic from "@anthropic-ai/sdk";

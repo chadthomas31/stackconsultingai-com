@@ -4,7 +4,7 @@ import CityAiConsultingPage, {
 } from "@/components/CityAiConsultingPage";
 
 export const metadata: Metadata = {
-  title: "AI Consulting Mission Viejo | Orange County Voice Agents & Automation | Stack Consulting AI",
+  title: "AI Consulting Mission Viejo | Stack Consulting AI",
   description:
     "Founder-led AI consulting in Mission Viejo and across Orange County. We build voice agents, chatbots, and automations for South OC small businesses. Free 30-minute assessment.",
   keywords: [

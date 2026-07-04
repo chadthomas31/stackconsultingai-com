@@ -16,6 +16,12 @@ export function generateStaticParams(): { vertical: Vertical }[] {
   return VERTICALS.map((v) => ({ vertical: v }));
 }
 
+const servicePageByVertical: Partial<Record<Vertical, string>> = {
+  hvac: "/services/ai-receptionist-for-hvac",
+  auto: "/services/ai-receptionist-for-auto-shops",
+  medspa: "/services/ai-receptionist-for-medspas",
+};
+
 export async function generateMetadata({
   params,
 }: Params): Promise<Metadata> {
@@ -43,6 +49,8 @@ export default async function VerticalDemoPage({ params }: Params) {
   const { vertical } = await params;
   if (!isVertical(vertical)) notFound();
   const c = COPY[vertical];
+  const serviceHref =
+    servicePageByVertical[vertical] ?? "/services/ai-receptionist-orange-county";
 
   return (
     <main className="bg-white">
@@ -126,7 +134,7 @@ export default async function VerticalDemoPage({ params }: Params) {
             about a week. We run it; you never touch the tools.
           </p>
           <Link
-            href="/ai-os"
+            href={serviceHref}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors"
           >
             {c.cta} →
@@ -143,9 +151,9 @@ export default async function VerticalDemoPage({ params }: Params) {
             "@type": "Service",
             serviceType: `${c.displayName} AI Receptionist`,
             provider: {
-              "@type": "Organization",
+              "@type": "LocalBusiness",
+              "@id": "https://stackconsultingai.com/#organization",
               name: "Stack Consulting AI",
-              url: "https://stackconsultingai.com",
             },
             areaServed: { "@type": "Place", name: "Orange County, California" },
             description: c.subhead,

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Mail, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 import Section from "@/components/Section";
+import { trackConversionEvent } from "@/lib/analytics-client";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -35,6 +36,9 @@ export default function Newsletter() {
 
       if (res.ok && data.success) {
         setStatus("success");
+        trackConversionEvent("newsletter_signup", {
+          lead_source: "newsletter_section",
+        });
         return;
       }
 

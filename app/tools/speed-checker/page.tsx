@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title: "Website Speed Checker | Free Performance Analyzer | Stack Consulting AI",
+  title: "Website Speed Checker | Free Tool | Stack Consulting AI",
   description:
     "Analyze your website's speed and Core Web Vitals for free. Get a performance score, metric breakdown, and actionable recommendations to make your site faster.",
 };
@@ -37,6 +37,8 @@ export default function SpeedCheckerPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Free Website Speed Checker</h1>
 
       {/* Speed Checker */}
       <SpeedChecker />

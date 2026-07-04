@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title: "Project Timeline Estimator | Free Schedule Planner | Stack Consulting AI",
+  title: "Project Timeline Estimator | Stack Consulting AI",
   description: "Estimate your web project timeline instantly. See phase breakdowns, milestones, and realistic delivery dates. Free tool, no signup required.",
 };
 
@@ -36,6 +36,8 @@ export default function TimelineEstimatorPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Project Timeline Estimator</h1>
 
       {/* Estimator */}
       <TimelineEstimator />

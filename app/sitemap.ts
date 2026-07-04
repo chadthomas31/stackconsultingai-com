@@ -41,7 +41,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/services/ai-consulting-san-clemente`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/services/ai-consulting-mission-viejo`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/services/ai-consulting-costa-mesa`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
-    { url: `${baseUrl}/stack-report`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.95 },
+    { url: `${baseUrl}/services/ai-receptionist-orange-county`, lastModified: new Date('2026-06-23'), changeFrequency: 'monthly', priority: 0.88 },
+    { url: `${baseUrl}/services/ai-receptionist-for-hvac`, lastModified: new Date('2026-06-23'), changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${baseUrl}/services/ai-receptionist-for-medspas`, lastModified: new Date('2026-06-23'), changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${baseUrl}/services/ai-receptionist-for-auto-shops`, lastModified: new Date('2026-06-23'), changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${baseUrl}/services/business-automation-orange-county`, lastModified: new Date('2026-06-23'), changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${baseUrl}/services/website-automation-audit-orange-county`, lastModified: new Date('2026-06-23'), changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${baseUrl}/stack-report`, lastModified: new Date('2026-06-12'), changeFrequency: 'weekly', priority: 0.95 },
   ]
 
   let issueEntries: MetadataRoute.Sitemap = []
@@ -49,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const issues = await listIssues()
     issueEntries = issues.map((i) => ({
       url: `${baseUrl}/stack-report/${i.slug}`,
-      lastModified: new Date(i.published_at),
+      lastModified: new Date(i.date_modified ?? i.published_at),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     }))

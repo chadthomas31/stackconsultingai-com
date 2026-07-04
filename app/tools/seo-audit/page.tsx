@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title: "SEO Quick Audit | Free Website SEO Analysis | Stack Consulting AI",
+  title: "SEO Quick Audit | Free Tool | Stack Consulting AI",
   description:
     "Run a free instant SEO audit on any website. Get actionable recommendations for technical SEO, on-page optimization, content, and performance. No signup required.",
 };
@@ -37,6 +37,8 @@ export default function SEOAuditPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Free SEO Quick Audit</h1>
 
       {/* SEO Audit Tool */}
       <SEOAudit />

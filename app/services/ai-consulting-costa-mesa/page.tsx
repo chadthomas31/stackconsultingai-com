@@ -4,7 +4,7 @@ import CityAiConsultingPage, {
 } from "@/components/CityAiConsultingPage";
 
 export const metadata: Metadata = {
-  title: "AI Consulting Costa Mesa | Southern California Voice Agents & Automation | Stack Consulting AI",
+  title: "AI Consulting Costa Mesa | Stack Consulting AI",
   description:
     "Founder-led AI consulting in Costa Mesa and across Southern California. We build voice agents, chatbots, and automations for restaurants, retail, and SOCO-area businesses. Free assessment.",
   keywords: [

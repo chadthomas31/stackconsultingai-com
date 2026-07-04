@@ -173,6 +173,7 @@ const ldJson = {
     "AI Automation for Small Businesses: Practical Use Cases, Costs, and Tools",
   description:
     "A practical 2026 guide to AI automation for small businesses with real use cases, honest cost ranges, and the tools that actually work.",
+  image: "https://stackconsultingai.com/og-image.png",
   author: {
     "@type": "Person",
     name: "Chad McCluskey",

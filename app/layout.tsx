@@ -10,6 +10,7 @@ import StructuredData from "@/components/StructuredData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Providers } from "@/components/providers";
+import ConversionTracker from "@/components/ConversionTracker";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" });
@@ -73,6 +74,7 @@ export default function RootLayout({
         <VercelAnalytics />
         <SpeedInsights />
         <CookieConsent />
+        <ConversionTracker />
         <Navbar />
         <div id="main-content">
           <Providers>{children}</Providers>

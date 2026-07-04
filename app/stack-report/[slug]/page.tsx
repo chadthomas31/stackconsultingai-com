@@ -83,14 +83,29 @@ export default async function StackReportIssuePage({
   const isArticle = issue.content_type === "article";
   const authorName = issue.author_name ?? "Stack Consulting AI";
 
+  // Always emit a valid ISO 8601 date — fall back through published_at, then a
+  // hardcoded site launch date so the schema never carries null/empty dates.
+  const SITE_LAUNCH_ISO = "2026-01-01T00:00:00-08:00";
+  const toIso = (value?: string | null): string | undefined => {
+    if (!value) return undefined;
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+  };
+  const datePublished =
+    toIso(issue.source_published_at) ??
+    toIso(issue.published_at) ??
+    SITE_LAUNCH_ISO;
+  const dateModified =
+    toIso(issue.date_modified) ?? datePublished;
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": isArticle ? "BlogPosting" : "Article",
     headline: issue.subject,
     description: issue.preheader,
-    ...(heroImage && { image: heroImage }),
-    datePublished: issue.source_published_at ?? issue.published_at,
-    dateModified: issue.date_modified ?? issue.published_at,
+    image: heroImage ?? "https://stackconsultingai.com/og-image.png",
+    datePublished,
+    dateModified,
     author: issue.author_name
       ? {
           "@type": "Person",
@@ -105,11 +120,12 @@ export default async function StackReportIssuePage({
         },
     publisher: {
       "@type": "Organization",
+      "@id": "https://stackconsultingai.com/#organization",
       name: "Stack Consulting AI",
       url: "https://stackconsultingai.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://stackconsultingai.com/icon.svg",
+        url: "https://stackconsultingai.com/stack-logo.png",
       },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },

@@ -3,8 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title:
-    "Free Automation Opportunity Finder | Save Time & Money | Stack Consulting AI",
+  title: "Automation Opportunity Finder | Stack Consulting AI",
   description:
     "Discover which parts of your business can be automated. Get a personalized automation roadmap with estimated time and cost savings — completely free.",
   openGraph: {
@@ -46,6 +45,8 @@ export default function AutomationFinderPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Free Automation Opportunity Finder</h1>
 
       {/* Tool */}
       <AutomationFinder />

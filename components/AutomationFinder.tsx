@@ -30,6 +30,7 @@ import {
   Star,
   type LucideIcon,
 } from "lucide-react";
+import { trackConversionEvent } from "@/lib/analytics-client";
 
 /* ---------- Types ---------- */
 
@@ -605,14 +606,9 @@ export default function AutomationFinder() {
       }
       setSubmitting(false);
 
-      // GTM event
-      if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).dataLayer) {
-        ((window as unknown as Record<string, unknown[]>).dataLayer).push({
-          event: "automation_finder_complete",
-          business_name: data.businessName,
-          industry: data.industry,
-        });
-      }
+      trackConversionEvent("automation_finder_complete", {
+        industry: data.industry,
+      });
 
       setShowResults(true);
       setTimeout(() => {

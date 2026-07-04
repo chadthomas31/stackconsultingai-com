@@ -4,7 +4,7 @@ import CityAiConsultingPage, {
 } from "@/components/CityAiConsultingPage";
 
 export const metadata: Metadata = {
-  title: "AI Consulting San Clemente | Local AI Consultant for San Clemente Small Businesses | Stack Consulting AI",
+  title: "AI Consulting San Clemente | Stack Consulting AI",
   description:
     "Local San Clemente AI consultant. We build voice agents, chatbots, and workflow automations for South OC small businesses. Real local team. Free 30-minute assessment.",
   keywords: [

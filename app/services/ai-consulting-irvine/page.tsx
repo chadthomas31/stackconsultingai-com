@@ -4,7 +4,7 @@ import CityAiConsultingPage, {
 } from "@/components/CityAiConsultingPage";
 
 export const metadata: Metadata = {
-  title: "AI Consulting Irvine | Voice Agents & Automation for Irvine Small Businesses | Stack Consulting AI",
+  title: "AI Consulting Irvine | Stack Consulting AI",
   description:
     "Founder-led AI consulting in Irvine, CA. We build voice agents, chatbots, and workflow automations for Irvine small businesses. SoCal team, no offshore. Free assessment.",
   keywords: [

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title: "Website Cost Calculator | Free Project Estimator | Stack Consulting AI",
+  title: "Website Cost Calculator | Stack Consulting AI",
   description: "Get instant website cost estimates for your project. Free calculator shows pricing breakdowns, timelines, and what's included. No signup required.",
 };
 
@@ -36,6 +36,8 @@ export default function CostCalculatorPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Website Cost Calculator</h1>
 
       {/* Calculator */}
       <PricingCalculator />

@@ -2,13 +2,12 @@
 
 import { Phone } from "lucide-react";
 import CallOptions from "@/components/CallOptions";
+import { trackConversionEvent } from "@/lib/analytics-client";
 
 export default function Hero() {
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    if (typeof window !== "undefined" && window.dataLayer) {
-      window.dataLayer.push({ event: "cta_click", cta_text: id });
-    }
+    trackConversionEvent("cta_click", { cta_text: id });
   };
 
   return (

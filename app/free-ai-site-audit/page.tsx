@@ -102,12 +102,10 @@ const ldJson = {
   serviceType: "Website Audit",
   provider: {
     "@type": "LocalBusiness",
+    "@id": "https://stackconsultingai.com/#organization",
     name: "Stack Consulting AI",
-    url: "https://stackconsultingai.com",
-    telephone: "+1-949-749-0001",
-    email: "hello@stackconsultingai.com",
-    areaServed: "Orange County, CA",
   },
+  areaServed: "Orange County, CA",
   url: SERVICE_URL,
   offers: {
     "@type": "Offer",

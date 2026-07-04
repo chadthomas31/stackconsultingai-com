@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Code2, Zap, ShoppingCart, Wrench, Wifi, ArrowRight, MapPin } from "lucide-react";
+import {
+  Bot,
+  Code2,
+  PhoneCall,
+  Search,
+  ShoppingCart,
+  Wrench,
+  Wifi,
+  ArrowRight,
+  MapPin,
+  Zap,
+} from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "AI Consulting & Web Development Services | Southern California | Stack Consulting AI",
+  title: "AI Consulting & Web Development | Stack Consulting AI",
   description:
     "Full-service AI consulting, custom web development, business automation, e-commerce, and website maintenance for small businesses in Southern California and Orange County.",
   keywords: [
@@ -18,7 +29,7 @@ export const metadata: Metadata = {
     canonical: "https://stackconsultingai.com/services",
   },
   openGraph: {
-    title: "AI Consulting & Web Development Services | Stack Consulting AI",
+    title: "AI Consulting & Web Development | Stack Consulting AI",
     description:
       "Full-service AI consulting, custom web development, business automation, e-commerce, and website maintenance for small businesses in Southern California.",
     url: "https://stackconsultingai.com/services",
@@ -74,6 +85,51 @@ const services = [
       "Ongoing website maintenance, security updates, performance optimization, and technical support to keep your site running smoothly around the clock.",
     href: "/services/maintenance",
     highlights: ["Security Updates", "Performance", "Backups", "24/7 Monitoring"],
+  },
+];
+
+const focusedAiServices = [
+  {
+    icon: PhoneCall,
+    title: "AI Receptionist Orange County",
+    description:
+      "Phone agents for local service businesses that miss calls, need better intake, or want after-hours booking coverage.",
+    href: "/services/ai-receptionist-orange-county",
+  },
+  {
+    icon: Bot,
+    title: "AI Receptionist for HVAC",
+    description:
+      "Dispatch-aware intake for no-cool, no-heat, maintenance, replacement, and emergency HVAC calls.",
+    href: "/services/ai-receptionist-for-hvac",
+  },
+  {
+    icon: Bot,
+    title: "AI Receptionist for Medspas",
+    description:
+      "Polished consultation routing and treatment-interest intake for aesthetics clinics and medspas.",
+    href: "/services/ai-receptionist-for-medspas",
+  },
+  {
+    icon: Bot,
+    title: "AI Receptionist for Auto Shops",
+    description:
+      "Vehicle, symptom, drop-off, mobile repair, and advisor handoff flows for busy service counters.",
+    href: "/services/ai-receptionist-for-auto-shops",
+  },
+  {
+    icon: Zap,
+    title: "Business Automation Orange County",
+    description:
+      "Lead routing, reporting, document generation, and workflow automation for small teams in OC.",
+    href: "/services/business-automation-orange-county",
+  },
+  {
+    icon: Search,
+    title: "Website Automation Audit Orange County",
+    description:
+      "A lead-path audit for businesses with traffic, unclear conversion tracking, and under-measured SEO.",
+    href: "/services/website-automation-audit-orange-county",
   },
 ];
 
@@ -149,6 +205,47 @@ export default function ServicesPage() {
 
                   <span className="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all duration-300">
                     Learn More <ArrowRight className="w-4 h-4" />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 bg-soft">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-3xl mb-10">
+            <p className="text-sm font-medium text-accent mb-4 tracking-wide uppercase">
+              Focused AI service pages
+            </p>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-900 mb-4">
+              Start with the search intent that matches the buyer.
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Broad AI consulting is crowded. These pages target the local and
+              vertical problems buyers actually search for: missed calls, lead
+              routing, service intake, and conversion tracking.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {focusedAiServices.map((service) => {
+              const Icon = service.icon;
+              return (
+                <Link
+                  key={service.href}
+                  href={service.href}
+                  className="group rounded-xl border border-border bg-white p-6 transition-all duration-300 hover:border-primary/50 hover:-translate-y-1"
+                >
+                  <Icon className="w-6 h-6 text-primary mb-4" aria-hidden="true" />
+                  <h3 className="font-heading text-xl font-semibold text-navy-900 mb-2 group-hover:text-primary transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    {service.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-primary font-semibold text-sm">
+                    View service <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </span>
                 </Link>
               );

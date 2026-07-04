@@ -66,7 +66,7 @@ export default function PortfolioPage() {
 
               <div className="flex flex-wrap gap-3 mb-8">
                 <a
-                  href="https://github.com/chadmccluskey"
+                  href="https://github.com/chadthomas31"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-cta-call inline-flex items-center gap-2 text-sm"
@@ -604,13 +604,13 @@ ws.on("error", (err) => {
                     chad.mccluskey@gmail.com
                   </a>
                   <a
-                    href="https://github.com/chadmccluskey"
+                    href="https://github.com/chadthomas31"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-sm text-navy-900 hover:text-brand-hover transition-colors"
                   >
                     <Github aria-hidden="true" className="w-4 h-4" />
-                    github.com/chadmccluskey
+                    github.com/chadthomas31
                   </a>
                   <a
                     href="https://www.linkedin.com/in/chadmccluskey"

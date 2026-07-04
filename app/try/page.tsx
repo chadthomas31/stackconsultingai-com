@@ -69,7 +69,7 @@ export default function TryPage() {
         {status === "done" ? (
           <div className="text-center space-y-6">
             <div className="text-5xl">📞</div>
-            <h1 className="text-2xl font-bold">You&apos;re set, {form.business_name}!</h1>
+            <h2 className="text-2xl font-bold">You&apos;re set, {form.business_name}!</h2>
             <p className="text-slate-300">
               Now call{" "}
               <a href={`tel:+19492397925`} className="font-bold text-emerald-400 whitespace-nowrap">

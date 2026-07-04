@@ -13,7 +13,14 @@ Caller dials a client's DID → Telnyx → LiveKit agent → resolves the tenant
 
 **SCA's live number:** **949-749-0001** (`+19497490001`).
 
-## Status: BUILT + UNIT-TESTED. Not yet live on the phone.
+## Status: BUILT + UNIT-TESTED. Telephony validation in progress on a TEST DID.
+
+### Live-state reconcile (2026-06-28 late, docs-verified)
+- `lk` authed → project `stackconsultingai` (`p_2xcfliji23w`).
+- **NOT deployed to Cloud yet.** `livekit.toml` has agent id `CA_5q6faLkrtETy` but `lk agent status` = "no agents found" (stub only). Serving off **local `python agent.py dev`** worker (`AW_GzwoKuUQXayE`, US West B).
+- **No trunk for the live number yet.** LiveKit inbound trunks exist for TEST DIDs only: `+19492397922` (`ST_CJAP2KZv42Tm`, rule `SDR_FPBFchik9kEN`) and `+19492397926` (`ST_xjn44gnhi9h3`, rule `SDR_u6E6ZsHNkgAn`). Nothing for `+19497490001`.
+- Agent registers with **no `agent_name`** → **automatic dispatch** (why test rules work with empty Agents col). Docs flag auto-dispatch "not recommended" + prefer explicit for SIP inbound — but single-agent/DID-resolves-tenant design = auto is fine. **Do NOT add `agent_name` now**; it would silently break the test rules. Switch to explicit only when a 2nd agent type exists.
+- **Step 1 (validate on test DID) underway:** cloned SCA config onto `+19492397922` via `seed/clone_test_did.py`. Dial that number to validate the whole path without touching the live line.
 
 ✅ Done (7 commits in `sca-voice-agent`, 6 unit tests green):
 - Supabase schema `tenants` / `tenant_configs` / `call_logs` applied to project **`iygtsyuftivmkbpfpdpe`** (RLS on — agent uses service key, anon blocked).
@@ -22,6 +29,35 @@ Caller dials a client's DID → Telnyx → LiveKit agent → resolves the tenant
 - `agent.py`: resolves tenant by dialed DID (`sip.trunkPhoneNumber`), persona/voice/greeting from config, **`transfer`** tool (LiveKit SIP REFER), **`take_message`** tool (routed voicemail → email + call_log), `send_call_summary` → email + call_log. `TENANT_DID` env lets the playground resolve a tenant without a real call.
 - All keys wired into `~/projects/sca-voice-agent/.env` (gitignored) + validated: **LiveKit, Supabase, Resend, OpenAI (from PBX), Telnyx** — all HTTP 200.
 - A local dev worker was running (`python agent.py dev`, registered to LiveKit Cloud project `stackconsultingai-4zfzi5o5`, US West B). May have been stopped since.
+
+## IVR REDESIGN SPEC (2026-06-29, locked with Chad)
+
+**Stack now (deployed `CA_KWdbN4njVzgN`, us-east, LiveKit Cloud, no Vultr):** STT-LLM-TTS pipeline via **LiveKit Inference** — STT `deepgram/nova-2-phonecall`, LLM `openai/gpt-4o-mini`, TTS `elevenlabs/eleven_flash_v2_5` (voice **Chris** `iP95p4xoKVk53GoZ742B`, env-swappable via `lk agent update-secrets`). Turn detector (local MultilingualModel) + preemptive_generation + BVCTelephony. All docs-verified as LiveKit's recommended telephony default.
+
+**Hours-aware IVR, press OR speak (DTMF via `room.on("sip_dtmf_received")` + LLM speech routing). Hours = Mon–Fri 9–5 PT.**
+
+Business-hours menu: 1) AI assessment 2) discovery w/ Chad or Robert 3) existing-client project update 4) other / leave message (callback ≤2 business hrs) 9) repeat.
+After-hours menu: 1) AI assessment (24/7) 2) leave message / stay on line.
+
+- **Press 1 — assessment:** offer choice → (a) **email** the `/ai-readiness-audit` link, or (b) **AI runs it live** (~5 Qs). After live run: business hrs → **connect to a live person** (warm transfer); after hrs → take message / promise callback.
+- **Press 2 (biz hrs) — discovery:** capture name+business+callback, **warm-transfer to Chad/Robert's Fanvil**; busy(486)/no-answer → take message. (after hrs press 2 = leave message)
+- **Press 3 (biz hrs):** transfer to Chad, else message. **Press 4:** take message. **Press 9:** repeat.
+- Always confirm callback # against caller ID ("I see you're calling from 949-…").
+
+### UPDATE 2026-06-29 — prebuilt LiveKit components + warm-transfer outbound path
+
+Adopted LiveKit's **prebuilt tools/tasks** (deterministic, replace prompt-only capture):
+- **`EndCallTool`** (`livekit.agents.beta.tools.end_call`) — real hangup + drain; kills the "you too / take care" goodbye loop. Registered in `AutoReceptionist.__init__` via `tools=[EndCallTool()]`.
+- **`GetEmailTask`** + **`GetPhoneNumberTask`** (`livekit.agents.beta.workflows`) — wrapped as `capture_email` / `capture_callback_number` function tools. Deterministic spoken-email/digit normalization + read-back confirmation. **Fixes the two prod data-integrity bugs** Chad caught: email `messing`→`messaging`, dropped phone digit. Prompt now instructs the LLM to CALL these tools, not transcribe.
+- **`WarmTransferTask`** (`livekit.agents.beta.workflows`) — now powers the `transfer` tool. Dials the human over SIP, **plays hold music while ringing** (fixes 45-sec dead air), hands off conversation context, merges calls; on no-answer/decline returns control → fall back to `take_message`.
+
+**Outbound SIP path BUILT (2026-06-29):**
+- Telnyx **credential connection `livekit-outbound-cred`** (id `2993163152432039640`, user `lkoutb792a97d`) with outbound voice profile **`livekit-outbound`** (`2984867140496000449`). Password in scratchpad `telnyx-out.env` (NOT committed).
+- LiveKit **outbound trunk `telnyx-outbound`** = **`ST_NPjCJ2L3c6JJ`** → `sip.telnyx.com`, caller-ID `+19492397922`.
+- Secrets (Cloud agent, out-of-band): `LIVEKIT_SIP_OUTBOUND_TRUNK=ST_NPjCJ2L3c6JJ`, `FALLBACK_TRANSFER_NUMBER=<Chad cell, E.164>`.
+- **Default transfer target = Chad's cell** (works now, no Fanvil dependency). Rings the cell via Telnyx outbound.
+
+**STILL PENDING — Fanvil desk option (optional upgrade over cell):** Fanvil registers to `sip.telnyx.com` as its OWN Telnyx credential connection (user/pass in Fanvil web UI); assign a spare DID to that connection so calling it rings the desk; then set `FALLBACK_TRANSFER_NUMBER` to that DID. The existing **"Forward Only"** credential connection (`2897015468504122451`) is unused/leftover — could be repurposed or replaced. Chad's manual step: enter SIP creds into the Fanvil web UI + pick which DID rings the desk.
 
 ## The greeting (in the DB, change anytime — it's config)
 

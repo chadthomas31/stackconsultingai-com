@@ -38,6 +38,8 @@ export default function TechStackPage() {
         </div>
       </div>
 
+      <h1 className="sr-only">Tech Stack Recommender</h1>
+
       {/* Recommender */}
       <TechStackRecommender />
 

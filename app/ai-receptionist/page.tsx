@@ -216,15 +216,6 @@ const serviceJsonLd = {
     "@type": "LocalBusiness",
     "@id": "https://stackconsultingai.com/#organization",
     name: "Stack Consulting AI",
-    url: "https://stackconsultingai.com",
-    telephone: "+1-949-749-0001",
-    email: "hello@stackconsultingai.com",
-    address: {
-      "@type": "PostalAddress",
-      addressRegion: "CA",
-      addressLocality: "South Orange County",
-      addressCountry: "US",
-    },
   },
   areaServed: [
     { "@type": "AdministrativeArea", name: "Orange County, California" },
@@ -244,12 +235,8 @@ const serviceJsonLd = {
         "Free starter AI receptionist pilot for missed calls, caller qualification, transfer, and email/text summaries.",
       price: "0",
       priceCurrency: "USD",
-    },
-    {
-      "@type": "Offer",
-      name: "Keep It Running",
-      description:
-        "AI receptionist with booking flow, after-hours rules, bilingual option, and lead logging.",
+      availability: "https://schema.org/InStock",
+      url: SERVICE_URL,
     },
   ],
   url: SERVICE_URL,

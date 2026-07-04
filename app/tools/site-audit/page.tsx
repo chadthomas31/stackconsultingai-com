@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata = {
-  title: "Free AI Site Audit | Website Performance & SEO Analysis | Stack Consulting AI",
+  title: "Free AI Site Audit | Performance & SEO | Stack Consulting AI",
   description:
     "Run a free website audit powered by Google Lighthouse. Get instant scores for performance, SEO, accessibility, and best practices. No signup required — results in 15 seconds.",
   openGraph: {
@@ -45,6 +45,8 @@ export default function SiteAuditPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="sr-only">Free AI Website Site Audit</h1>
 
       {/* Audit Tool */}
       <SiteAudit />

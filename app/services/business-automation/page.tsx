@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Business Automation & AI Integration | Orange County | Stack Consulting AI",
+  title: "Business Automation & AI | Stack Consulting AI",
   description:
     "Business automation consulting and AI integration for small businesses in Orange County and Southern California. Automate workflows, CRM, email sequences, and data pipelines. Free consultation.",
   keywords: [
