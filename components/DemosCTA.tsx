@@ -34,9 +34,9 @@ export default function DemosCTA() {
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
               Three working demos on the same infrastructure we ship for clients:
-              a voice agent that calls your phone, a lead-capture agent that
-              routes to Discord and email, and a knowledge-base Q&amp;A over our
-              actual service docs. No signup. No mockups.
+              call a live AI receptionist, route a lead through Claude Haiku to
+              Discord and email, and query our service-doc corpus with cited
+              answers. No signup. No mockups.
             </p>
             <Link
               href="/demos"

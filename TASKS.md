@@ -50,13 +50,12 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
   - Replace mock STAGES in `app/api/demos/call/route.ts`.
   - Existing `app/api/call-me/route.ts` is theatrical — do NOT reuse.
 
-- [ ] **Task 4 — Wire Demo 2: KB RAG Q&A**
-  - Seed corpus: 12 SMB FAQ docs (pricing, timelines, GHL, model picks).
-  - Pipeline: `pdf-parse` → `text-embedding-3-small` (OpenAI) → Supabase
-    pgvector. Retrieve top-k → Claude Haiku stream.
-  - Replace ANSWERS regex in `app/api/demos/kb/route.ts`.
-  - Migration: pgvector extension + `kb_chunks(id, source, chunk, embedding vector(1536))`.
-  - Open Q: Where do the 12 source docs come from? Write fresh, or pull from existing site copy?
+- [x] **Task 4 — Wire Demo 2: KB RAG Q&A** (2026-07-05)
+  - Implemented with `lib/portfolio/kb` in-memory corpus (10 service-doc topics) +
+    `/api/demos/kb` SSE: `text-embedding-3-small` retrieval → `gpt-4o-mini` stream
+    with citations. Rate-limited via `demo-kb`.
+  - Supabase pgvector migration remains optional future work if corpus grows beyond
+    in-process embeddings.
 
 - [x] **Task 5.5 — Rewrite audit results: consulting diagnosis flow** (2026-04-29)
   - New `lib/site-audit-diagnose.ts` — Claude Haiku 4.5 with structured tool-use
@@ -119,10 +118,13 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
     swap `mailto:` hrefs in CallOptions.tsx for direct booking URLs.
   - Build clean.
 
-- [ ] **Task 5 — Polish + ship `/demos`**
-  - Copy pass, motion budget audit, perf check (no LCP regression).
-  - Add /demos card on homepage (between portfolio and FAQ).
-  - Push to GitHub → Vercel auto-deploys → confirm live URL.
+- [~] **Task 5 — Polish + ship `/demos`** (nearly complete — pending live URL confirm)
+  - [x] Homepage card (`DemosCTA`) between Portfolio and Testimonials (2026-07-05).
+  - [x] Copy pass + a11y polish on `/demos` page and `components/demos/*` (2026-07-05):
+    truthful stack labels, KB input aria-label/maxLength, aria-live transcript,
+    reduced-motion live-dot rule in `globals.css`.
+  - [ ] Motion budget audit + perf check (no LCP regression).
+  - [ ] Push to GitHub → Vercel auto-deploys → confirm live URL.
   - Blocks Task 14.
 
 ---

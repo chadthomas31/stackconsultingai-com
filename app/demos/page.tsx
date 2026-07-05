@@ -9,7 +9,7 @@ import LeadAgentDemo from "@/components/demos/LeadAgentDemo";
 export const metadata: Metadata = {
   title: "Live AI Demos — Voice, Knowledge, Lead Agent | Stack Consulting AI",
   description:
-    "Working AI systems you can try right now: a voice agent that calls your phone, a knowledge-base Q&A on real docs, a lead-capture agent, and industry-specific AI receptionists for HVAC, plumbing, auto repair, and medspas. Built on FreeSWITCH, OpenAI Realtime, and Claude.",
+    "Working AI systems you can try right now: call a live AI receptionist, query a real document corpus with cited answers, route a lead through Claude Haiku, and try industry-specific receptionists for HVAC, plumbing, auto repair, and medspas. Built on FreeSWITCH, OpenAI Realtime, and Claude.",
   alternates: { canonical: "https://stackconsultingai.com/demos" },
   openGraph: {
     title: "Live AI Demos — Stack Consulting AI",
@@ -44,9 +44,10 @@ export default function DemosPage() {
             </h1>
 
             <p className="animate-fade-in-up animation-delay-200 text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed">
-              These aren&rsquo;t mockups. Each demo is wired to the same stack we deploy
-              for clients — FreeSWITCH for voice, Supabase + pgvector for retrieval,
-              Claude for reasoning. Pick one and try it.
+              These aren&rsquo;t mockups. Each demo runs the same stack we ship for
+              clients — FreeSWITCH for voice, Claude Haiku for lead routing, and
+              OpenAI text-embedding-3-small + gpt-4o-mini for KB RAG over 10 real
+              service-doc topics. Pick one and try it.
             </p>
 
             {/* Jump links — asymmetric, left aligned, no card grid */}
@@ -56,7 +57,7 @@ export default function DemosPage() {
             >
               <a href="#demo-call" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">01</span>
-                <span className="text-navy-900 font-medium">AI calls your phone</span>
+                <span className="text-navy-900 font-medium">Call a live AI receptionist</span>
                 <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
               </a>
               <a href="#demo-lead" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
@@ -189,7 +190,7 @@ export default function DemosPage() {
               <dl className="text-sm space-y-2 mb-6 max-w-md">
                 <div className="flex justify-between border-b border-border py-2">
                   <dt className="text-navy-900/70">Stack</dt>
-                  <dd className="text-navy-900 font-medium">Supabase pgvector + Claude</dd>
+                  <dd className="text-navy-900 font-medium">OpenAI embeddings + gpt-4o-mini</dd>
                 </div>
                 <div className="flex justify-between border-b border-border py-2">
                   <dt className="text-navy-900/70">Embeddings</dt>
@@ -197,7 +198,7 @@ export default function DemosPage() {
                 </div>
                 <div className="flex justify-between border-b border-border py-2">
                   <dt className="text-navy-900/70">Source</dt>
-                  <dd className="text-navy-900 font-medium">Sample SMB FAQ corpus</dd>
+                  <dd className="text-navy-900 font-medium">10 real service-doc topics</dd>
                 </div>
               </dl>
               <p className="text-sm text-navy-900/70 max-w-md">
