@@ -50,6 +50,28 @@
   }
 }
 
+@layer components {
+  /* Eyebrow / kicker — uppercase letter-spaced label above headings.
+     Space Grotesk, brand accent by default. Usage: <p class="eyebrow">…</p> */
+  .eyebrow {
+    font-family: var(--font-heading), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
+    color: hsl(var(--accent));
+  }
+
+  /* Technical/code callouts — reinforces the builder voice on stack mentions.
+     Usage: <code class="mono-callout">FreeSWITCH</code> or font-mono in Tailwind */
+  .mono-callout {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    font-feature-settings: "liga" 0;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--announcement-h, 0px) + 7rem);

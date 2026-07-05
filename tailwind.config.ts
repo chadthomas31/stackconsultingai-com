@@ -13,6 +13,7 @@ const config: Config = {
         heading: ["var(--font-heading)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
         body: ["var(--font-body)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["var(--font-body)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       colors: {
         background: "hsl(var(--background))",
