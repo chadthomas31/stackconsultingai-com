@@ -14,10 +14,11 @@ type Turn =
   | { role: "assistant"; text: string; citations: Citation[]; pending?: boolean };
 
 const SUGGESTED = [
-  "What's included in the AI Receptionist starter plan?",
-  "How long does a typical web build take?",
-  "Do you support GoHighLevel integrations?",
-  "What's the difference between Claude Haiku and Sonnet for our use case?",
+  "What are the AI Receptionist Pilot and Production tiers?",
+  "What's included in the Workflow Audit vs the Full AI Readiness Audit?",
+  "How does Stack Consulting handle customer data privacy?",
+  "How does the AI Receptionist compare to Smith.ai or Ruby?",
+  "What's included in the free 30-minute assessment?",
 ];
 
 export default function KbDemo() {
@@ -28,7 +29,11 @@ export default function KbDemo() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
   }, [turns]);
 
   const ask = async (text: string) => {
@@ -130,7 +135,7 @@ export default function KbDemo() {
             Sample SMB FAQ corpus
           </span>
         </div>
-        <span className="text-xs font-mono text-navy-900/50">12 docs · 184 chunks</span>
+        <span className="text-xs font-mono text-navy-900/50">10 topics · real embeddings</span>
       </div>
 
       {/* Transcript */}
@@ -172,7 +177,7 @@ export default function KbDemo() {
                   <span className="text-navy-900/50 italic">Retrieving…</span>
                 )}
                 {t.pending && t.text && (
-                  <span className="inline-block ml-1 w-2 h-4 bg-brand align-middle animate-pulse" aria-hidden="true" />
+                  <span className="inline-block ml-1 w-2 h-4 bg-brand align-middle animate-pulse motion-reduce:animate-none" aria-hidden="true" />
                 )}
               </div>
 
