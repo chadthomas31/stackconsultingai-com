@@ -9,6 +9,7 @@ import FoundingClientSpecial, {
 import StackComparison from "@/components/StackComparison";
 import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
+import DemosCTA from "@/components/DemosCTA";
 import Testimonials from "@/components/Testimonials";
 import SiteAuditCTA from "@/components/SiteAuditCTA";
 import Newsletter from "@/components/Newsletter";
@@ -33,6 +34,7 @@ export default function Home() {
       <AiOsTeaser />
       <Services />
       <Portfolio />
+      <DemosCTA />
       <Testimonials />
       <SiteAuditCTA />
       <Newsletter />
