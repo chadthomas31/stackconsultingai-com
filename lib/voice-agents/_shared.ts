@@ -7,9 +7,16 @@
  * simple file read (or POST'd as JSON to an extension config endpoint).
  */
 
-/** California two-party consent recording disclosure. Always first sentence. */
+/**
+ * California two-party consent recording disclosure. ALWAYS the first sentence,
+ * spoken before any caller audio is processed for intake.
+ *
+ * Per CIPA (Galanter v. Cresta): the disclosure must name that the caller is
+ * talking to an AI/automated assistant AND that the call is recorded/processed
+ * by AI — the legacy "recorded for quality" wording does not disclose either.
+ */
 export const CA_RECORDING_DISCLOSURE =
-  "Just so you know, this call is recorded and reviewed by Stack Consulting AI for quality. Is that okay?";
+  "You've reached Stack Consulting AI. I'm an automated assistant, and this call is recorded and processed by our AI to help you. Is that okay?";
 
 /** Hard cap reminder injected into every prompt. */
 export const THREE_MIN_WRAP_RULE = `
@@ -40,6 +47,12 @@ BEHAVIOR RULES:
 - If asked about pricing: "Chad will follow up with you directly — he'll show you what
   this would cost for your shop. Want me to flag you as a priority lead?"
 - If the caller is hostile or off-topic, politely steer back once, then end politely.
+- CONSENT REFUSAL: If the caller declines recording or says they don't consent
+  (e.g. "I don't want to be recorded"), do NOT keep collecting intake details.
+  Say: "No problem — I'll have someone from Stack Consulting AI call you back on a
+  line that isn't recorded. What's the best number and your name?" Capture name +
+  number + reason only, then end politely. Never continue the recorded flow after
+  a refusal.
 - Never make medical, legal, or financial claims. Never collect a credit card.
 - If asked to do something outside your scope, say: "I'm just the receptionist —
   I can take a message and have Chad call you back."
