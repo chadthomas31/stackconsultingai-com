@@ -2,7 +2,8 @@
 
 import { useState, useEffect, memo, type FormEvent } from "react";
 import { ArrowRight, Phone, MessageSquare, Check } from "lucide-react";
-import type { Vertical } from "@/lib/voice-agents";
+import { DEMO_PICKER, isLiveVertical } from "@/lib/voice-agents";
+import { DEMO_CONSENT_NOTICE } from "@/lib/demo-consent";
 import TurnstileWidget from "@/components/TurnstileWidget";
 
 const TURNSTILE_ENABLED = Boolean(
@@ -10,8 +11,10 @@ const TURNSTILE_ENABLED = Boolean(
 );
 
 interface Props {
-  vertical: Vertical;
-  displayName: string;
+  /** Optional seed for the picker — used by /demos/[vertical] deep-links. */
+  vertical?: string;
+  /** Optional display-name override; otherwise derived from DEMO_PICKER. */
+  displayName?: string;
 }
 
 type Stage = "form" | "verify" | "revealed";
@@ -21,12 +24,24 @@ interface RevealPayload {
   dialString: string;
 }
 
-export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
+export default function VerticalDemoFunnel({
+  vertical: verticalProp,
+  displayName: displayNameProp,
+}: Props) {
   const [stage, setStage] = useState<Stage>("form");
+  const [vertical, setVertical] = useState<string>(verticalProp ?? "auto");
+  const [consent, setConsent] = useState(false);
+  const [comingSoon, setComingSoon] = useState(false);
   const [leadId, setLeadId] = useState<string | null>(null);
   const [reveal, setReveal] = useState<RevealPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const displayName =
+    displayNameProp ??
+    DEMO_PICKER.find((v) => v.id === vertical)?.displayName ??
+    "AI Receptionist";
+  const live = isLiveVertical(vertical);
 
   // Form state
   const [firstName, setFirstName] = useState("");
@@ -42,11 +57,43 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
   async function onSubmitForm(e: FormEvent) {
     e.preventDefault();
     setError(null);
+    if (!consent) return;
     if (!email || !mobile) {
       setError("Email and mobile are required");
       return;
     }
     setSubmitting(true);
+
+    // Coming-soon verticals: capture a lead, never reveal a number, skip Turnstile.
+    if (!live) {
+      try {
+        const res = await fetch("/api/demos/interest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            vertical,
+            firstName,
+            bizName,
+            email,
+            mobile,
+            consent,
+          }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.ok) {
+          const apiError = typeof json.error === "string" ? json.error : null;
+          setError(apiError ?? "Something went wrong — try again.");
+          return;
+        }
+        setComingSoon(true);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Network error");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
     try {
       const res = await fetch("/api/demos/start", {
         method: "POST",
@@ -124,24 +171,57 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
     <div className="rounded-md border border-border bg-white p-6 md:p-8 shadow-sm">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-xs uppercase tracking-wide text-brand font-semibold">
-          Live demo
+          {live ? "Live demo" : "Coming soon"}
         </span>
         <span className="text-xs text-navy-900/40">·</span>
         <span className="text-xs text-navy-900/60">{displayName}</span>
       </div>
       <h3 className="font-heading text-2xl md:text-3xl font-bold text-navy-900 mb-4">
-        {stage === "form" && "Try the live agent"}
-        {stage === "verify" && "Check your phone"}
-        {stage === "revealed" && "Call the number now"}
+        {comingSoon && "Thanks — we’ll reach out"}
+        {!comingSoon && stage === "form" && "Try the live agent"}
+        {!comingSoon && stage === "verify" && "Check your phone"}
+        {!comingSoon && stage === "revealed" && "Call the number now"}
       </h3>
 
+      {/* COMING SOON CONFIRMATION */}
+      {comingSoon && (
+        <div className="rounded-md border border-border bg-soft p-5 text-sm text-navy-900/80 leading-relaxed">
+          <p>
+            Thanks — that line isn&rsquo;t live yet. Chad will reach out to set
+            up your {displayName.toLowerCase()} demo.
+          </p>
+        </div>
+      )}
+
       {/* FORM */}
-      {stage === "form" && (
+      {stage === "form" && !comingSoon && (
         <form onSubmit={onSubmitForm} className="space-y-4">
           <p className="text-navy-900/70 text-sm leading-relaxed mb-2">
             We&rsquo;ll text you a 6-digit code, then reveal the demo number. The
             call is recorded for your follow-up report. About 3 minutes.
           </p>
+
+          <div>
+            <label
+              htmlFor="vd-vertical"
+              className="block text-sm font-medium text-navy-900 mb-1.5"
+            >
+              Your industry
+            </label>
+            <select
+              id="vd-vertical"
+              value={vertical}
+              onChange={(e) => setVertical(e.target.value)}
+              className="w-full px-3 py-2.5 rounded-md border border-border bg-white text-navy-900 focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand"
+            >
+              {DEMO_PICKER.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.displayName}
+                  {v.live ? "" : " (coming soon)"}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <Field
             label="First name"
@@ -177,9 +257,19 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
             hint="US numbers only. We&rsquo;ll text a one-time code."
           />
 
+          <label className="flex items-start gap-2 text-sm text-navy-700">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              className="mt-1"
+            />
+            <span>{DEMO_CONSENT_NOTICE}</span>
+          </label>
+
           {error && <ErrorBox text={error} />}
 
-          {TURNSTILE_ENABLED && (
+          {live && TURNSTILE_ENABLED && (
             <>
               {!turnstileToken && (
                 <p className="text-xs text-navy-900/55">
@@ -198,11 +288,17 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
           <button
             type="submit"
             disabled={
-              submitting || (TURNSTILE_ENABLED && !turnstileToken)
+              !consent ||
+              submitting ||
+              (live && TURNSTILE_ENABLED && !turnstileToken)
             }
             className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors disabled:opacity-60"
           >
-            {submitting ? "Sending…" : "Text me the code"}
+            {submitting
+              ? "Sending…"
+              : live
+                ? "Text me the code"
+                : "Notify me when it’s live"}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </button>
 
