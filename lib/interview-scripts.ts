@@ -3,7 +3,7 @@
  *
  * Stacks (the OpenAI Realtime voice agent) uses this to conduct an industry-
  * specific 20–30 minute business audit. The caller picks an industry from
- * the homepage CallMeDemo; we build a system prompt from the matching script
+ * the homepage assessment widget; we build a system prompt from the matching script
  * and feed it to the agent. After the call, Claude extracts structured data
  * against these field names to generate the report.
  *

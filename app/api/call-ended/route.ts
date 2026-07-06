@@ -3,7 +3,10 @@ import crypto from "node:crypto";
 import { extractAssessment } from "@/lib/claude-extract";
 import { saveAssessment, markEmailSent } from "@/lib/assessments-db";
 import { sendAssessmentEmail, isResendConfigured } from "@/lib/email";
-import { findRecentLeadByMobile } from "@/lib/demo-leads-db";
+import {
+  findRecentLeadByMobile,
+  findRecentLeadByMobileAndDid,
+} from "@/lib/demo-leads-db";
 import { handleDemoCallEnded } from "@/lib/handle-demo-call";
 import { normalizeToE164 } from "@/lib/sms";
 
@@ -19,6 +22,8 @@ interface CallEndedPayload {
   recordingUrl?: string;
   callerPhoneNumber?: string;
   durationSeconds?: number;
+  vertical?: string;
+  didDialed?: string;
 }
 
 /** Verify FreeSWITCH HMAC — returns true if signature matches or no secret configured. */
@@ -34,6 +39,7 @@ function verifySignature(rawBody: string, signatureHeader: string | null) {
     .update(rawBody)
     .digest("hex");
   const provided = signatureHeader.replace(/^sha256=/, "").trim();
+  if (!/^[a-f0-9]{64}$/i.test(provided)) return false;
   if (expected.length !== provided.length) return false;
   return crypto.timingSafeEqual(
     Buffer.from(expected, "hex"),
@@ -76,8 +82,14 @@ export async function POST(req: NextRequest) {
   if (payload.callerPhoneNumber) {
     const mobileE164 = normalizeToE164(payload.callerPhoneNumber);
     if (mobileE164) {
-      const lead = await findRecentLeadByMobile(mobileE164);
-      if (lead) {
+      const lead = payload.didDialed
+        ? await findRecentLeadByMobileAndDid(mobileE164, payload.didDialed)
+        : await findRecentLeadByMobile(mobileE164);
+      // If the payload names a vertical, the matched lead must agree — else this is
+      // a cross-vertical mismatch; skip the demo branch rather than mis-attribute.
+      if (lead && payload.vertical && lead.vertical !== payload.vertical) {
+        console.warn("[call-ended] vertical mismatch, skipping demo attribution");
+      } else if (lead) {
         try {
           const result = await handleDemoCallEnded({
             lead,

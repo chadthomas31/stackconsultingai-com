@@ -117,6 +117,25 @@ stackconsultingai.com`;
   }
 }
 
+/** Generic plain-text email sender. */
+export async function sendPlainEmail(opts: {
+  to: string;
+  subject: string;
+  text: string;
+}): Promise<{ id: string | null; error?: string }> {
+  if (!isResendConfigured()) {
+    return { id: null, error: "Resend not configured (missing RESEND_API_KEY)" };
+  }
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const result = await resend.emails.send({
+    from: FROM_ADDRESS,
+    to: opts.to,
+    subject: opts.subject,
+    text: opts.text,
+  });
+  return { id: result.data?.id ?? null, error: result.error?.message };
+}
+
 function escapeHtml(s: string) {
   return s
     .replace(/&/g, "&amp;")
