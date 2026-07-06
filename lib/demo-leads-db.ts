@@ -150,6 +150,26 @@ export async function findRecentLeadByMobile(
   return (data as DemoLeadRow) ?? null;
 }
 
+/** Did-scoped variant of findRecentLeadByMobile — used by /api/call-ended when the payload names the DID dialed. */
+export async function findRecentLeadByMobileAndDid(
+  mobile: string,
+  didDialed: string,
+): Promise<DemoLeadRow | null> {
+  if (!isSupabaseConfigured()) return null;
+  const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+  const { data } = await supabaseAdmin
+    .from("demo_leads")
+    .select("*")
+    .eq("mobile_e164", mobile)
+    .eq("did_dialed", didDialed)
+    .not("sms_verified_at", "is", null)
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (data as DemoLeadRow) ?? null;
+}
+
 export async function markCallFinished(input: {
   leadId: string;
   callUuid?: string;
