@@ -53,3 +53,24 @@ export function getVerticalDid(vertical: Vertical): string | null {
 export function formatDialString(did: string): string {
   return did.replace(/[^\d+]/g, "");
 }
+
+/**
+ * The verticals shown in the /demos picker. This is a SUPERSET of VERTICAL_AGENTS:
+ * it includes dental + general which have no agent/DID yet.
+ * `live: true` means the vertical reveals a real DID; false means "coming soon"
+ * (capture a lead, reveal nothing). Flip a vertical live by setting live: true AND
+ * ensuring its DID env var is set (and, for dental/general, adding an agent module).
+ */
+export const DEMO_PICKER: { id: string; displayName: string; live: boolean }[] = [
+  { id: "auto", displayName: "Auto Repair", live: true },
+  { id: "hvac", displayName: "HVAC", live: false },
+  { id: "plumbing", displayName: "Plumbing", live: false },
+  { id: "medspa", displayName: "Med Spa / Aesthetics", live: false },
+  { id: "dental", displayName: "Dental", live: false },
+  { id: "general", displayName: "General Local Service", live: false },
+];
+
+/** True only for verticals that reveal a real DID this slice (Auto). */
+export function isLiveVertical(id: string): boolean {
+  return DEMO_PICKER.some((v) => v.id === id && v.live);
+}
