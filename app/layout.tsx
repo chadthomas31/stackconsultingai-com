@@ -3,7 +3,6 @@ import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import CookieConsent from "@/components/CookieConsent";
 import StructuredData from "@/components/StructuredData";
@@ -73,7 +72,6 @@ export default function RootLayout({
         </noscript>
 
         <VercelAnalytics />
-        <SpeedInsights />
         <CookieConsent />
         <ConversionTracker />
         <Navbar />
