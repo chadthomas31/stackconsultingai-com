@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "newsletter:preview": "tsx scripts/preview-newsletter-content.ts",
+    "newsletter:generate": "tsx scripts/generate-newsletter-manual.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
@@ -44,7 +46,8 @@
     "@types/bcryptjs": "^3.0.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.19",
-    "prisma": "^6.19.2"
+    "prisma": "^6.19.2",
+    "tsx": "^4.22.4"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.mjs"
