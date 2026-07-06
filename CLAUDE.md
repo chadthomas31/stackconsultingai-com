@@ -82,10 +82,10 @@
   Order matters — this is the conversion flow:                                                                                  
   1. Hero (H1 + subhead + 2 CTAs: "Try live AI demo" + "Talk to Chad")                                                          
   2. ClientLogoStrip (infinite marquee, real client names)                                                                      
-  3. CallMeDemo (the signature interactive)                                                                                     
-  4. StackComparison (old stack vs better stack)                                                                                
-  5. Services (split-layout: sticky copy left, service list right)                                                              
-  6. Portfolio (real screenshots, grid)                                                                                         
+  3. StackComparison (old stack vs better stack)                                                                                
+  4. Services (split-layout: sticky copy left, service list right)                                                              
+  5. Portfolio (real screenshots, grid)                                                                                         
+  6. DemosCTA (links to `/demos` — live voice, lead agent, KB demos)                                                            
   7. Testimonials (featured quote + stat callout, then 2 secondary)                                                             
   8. SiteAuditCTA (existing lead-gen tool)                                                                                      
   9. Newsletter (The Stack Report)                                                                                              
@@ -96,8 +96,7 @@
                                                                                                                                 
   ### Conversion Hierarchy                                                                                                      
   1. **Primary goal**: visitor books a discovery call (ContactForm or Calendly)                                                 
-  2. **Secondary goal**: visitor tries the live AI call demo (becomes a real                                                    
-     lead because we have their phone number)                                                                                   
+  2. **Secondary goal**: visitor tries a live AI demo on `/demos` (inbound call reveal or vertical funnel with SMS verify)                                                                                   
   3. **Tertiary goal**: visitor subscribes to The Stack Report newsletter                                                       
                                                                                                                                 
   ### Accessibility                                                                                                             
@@ -155,8 +154,10 @@
   - Lead-gen tools live under `app/tools/<tool>/` with matching API at `app/api/<tool>/route.ts`. Pattern: client wizard component (e.g. `components/AutomationFinder.tsx`) → POST → API route runs analysis → writes lead to Supabase → emails Chad via Resend.
   - The Stack Report newsletter: `app/stack-report/` (index + `[slug]`), `app/api/newsletter/{generate,publish,route}` for admin-protected generation. Issues stored in Supabase (`newsletter_issues` table).
 
-  ### Signature live demo (`/#call-me`)
-  `components/CallMeDemo.tsx` (or equivalent) → `POST /api/call-me/route.ts` → triggers FreeSWITCH on **fspbx (107.175.53.217 / Tailscale 100.78.119.28)** to place an outbound OpenAI Realtime call to the visitor. Backend operations live in `docs/pbx-operations.md`. FusionPBX dialplans are stored in **Postgres + `/var/cache/fusionpbx/`**, not in XML files — never edit XML directly.
+  ### Live voice demos (`/demos`)
+  **Inbound (live):** `components/demos/InboundDemoReveal.tsx` → `POST /api/demos/reveal` reveals **+19497490001** after lead capture. Vertical industry demos at `/demos/{hvac,plumbing,auto,medspa}` use `VerticalDemoFunnel` + Telnyx SMS verify → vertical DIDs on fspbx ext 5004–5007.
+  **Outbound (deferred, Task 3b):** `CallMeDemo.tsx` exists but is not mounted; do not use theatrical `app/api/call-me/route.ts`.
+  Phone system state (DIDs, env checklist, smoke tests): `docs/phone-system-handoff.md`. PBX ops: `docs/pbx-operations.md`. FusionPBX dialplans live in **Postgres + `/var/cache/fusionpbx/`**, not XML files.
 
   ### Supabase
   - Client: `lib/supabase.ts` (anon key, RLS-enforced)

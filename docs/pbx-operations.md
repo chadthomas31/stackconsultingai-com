@@ -114,6 +114,11 @@ SMS sender for vertical funnel verification: `+19492397922` (949-239-7922). Webs
 | DID            | Routes to             | Notes                                           |
 | -------------- | --------------------- | ----------------------------------------------- |
 | 949-749-0001  | `sca_inbound` IVR     | Main Stack Consulting line                       |
+| 949-239-7922  | Telnyx SMS only       | Vertical funnel verification sender (not voice)  |
+| 949-239-7923  | Ext 5007              | HVAC vertical demo                               |
+| 949-239-7924  | Ext 5004              | Plumbing vertical demo                           |
+| 949-239-7925  | Ext 5005              | Auto vertical demo                               |
+| 949-239-7926  | Ext 5006              | Medspa vertical demo                             |
 | 949-998-2424  | Ext 5000 (@strategicsync.com) | Strategic Sync line                      |
 | 442-212-1616  | Ext 5003 directly     | Palm Springs AI Tools Assessment (bypasses IVR) |
 

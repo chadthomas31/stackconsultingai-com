@@ -61,7 +61,7 @@ Four distinct paths — do not merge them in copy or routing:
 | **1. Inbound reveal (Demo 01)** | `/demos#demo-call` | `InboundDemoReveal` → `POST /api/demos/reveal` | Inbound to **+19497490001** | Live |
 | **2. Vertical funnel (Demo 04)** | `/demos/hvac`, `/demos/plumbing`, `/demos/auto`, `/demos/medspa` | `VerticalDemoFunnel` → `/api/demos/start`, `/api/demos/verify` | Inbound to vertical DID after SMS | Live |
 | **3. Homepage CTA** | `/` (DemosCTA section) | Links to `/demos` | — | Live |
-| **4. Outbound Call Me** | Was planned for homepage / `/demos` | `CallMeDemo` → `/api/demos/call` or `/api/call-me` | Outbound originate | **Deferred (Task 3b)** — component exists, **not mounted** |
+| **4. Outbound Call Me** | Was planned for homepage / `/demos` | `CallMeDemo` → `POST /api/demos/call` (`DEMO_CALL_ORIGINATE_*`); legacy `/api/call-me` is theatrical — do not reuse | Outbound originate | **Deferred (Task 3b)** — component exists, **not mounted** |
 
 ### Vertical funnel flow
 

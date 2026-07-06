@@ -1,5 +1,7 @@
 # Vertical Demo Funnel — Live-up Checklist
 
+> **Canonical phone state:** [`docs/phone-system-handoff.md`](./phone-system-handoff.md) — start there for DIDs, env vars, and demo paths.
+
 **Last reconciled:** 2026-07-06  
 **Branch:** `main` (Turnstile fix merged in `0328c81`)
 **Spec:** `docs/superpowers/specs/2026-05-28-vertical-demo-funnel-design.md`
