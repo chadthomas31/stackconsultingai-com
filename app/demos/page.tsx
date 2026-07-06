@@ -58,22 +58,22 @@ export default function DemosPage() {
               <a href="#demo-call" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">01</span>
                 <span className="text-navy-900 font-medium">Call a live AI receptionist</span>
-                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
+                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition motion-reduce:transition-none motion-reduce:translate-y-0" aria-hidden="true" />
               </a>
               <a href="#demo-lead" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">02</span>
                 <span className="text-navy-900 font-medium">Lead-capture agent</span>
-                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
+                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition motion-reduce:transition-none motion-reduce:translate-y-0" aria-hidden="true" />
               </a>
               <a href="#demo-kb" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">03</span>
                 <span className="text-navy-900 font-medium">Knowledge-base Q&amp;A</span>
-                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
+                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition motion-reduce:transition-none motion-reduce:translate-y-0" aria-hidden="true" />
               </a>
               <a href="#demo-verticals" className="group flex items-baseline gap-3 py-2 border-t border-border hover:border-navy-900 transition-colors">
                 <span className="font-mono text-xs text-brand font-semibold">04</span>
                 <span className="text-navy-900 font-medium">Industry receptionists</span>
-                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition" aria-hidden="true" />
+                <ArrowDown className="w-3.5 h-3.5 text-navy-900/40 group-hover:text-brand group-hover:translate-y-0.5 transition motion-reduce:transition-none motion-reduce:translate-y-0" aria-hidden="true" />
               </a>
             </nav>
           </div>
@@ -240,13 +240,13 @@ export default function DemosPage() {
                 <Link
                   key={v.slug}
                   href={`/demos/${v.slug}`}
-                  className="group flex flex-col rounded-md border border-border bg-white p-6 hover:border-navy-900 hover:shadow-[0_8px_30px_rgba(0,18,46,0.10)] transition"
+                  className="group flex flex-col rounded-md border border-border bg-white p-6 hover:border-navy-900 hover:shadow-[0_8px_30px_rgba(0,18,46,0.10)] transition motion-reduce:transition-none motion-reduce:shadow-none"
                 >
                   <span className="font-heading text-xl font-bold text-navy-900 mb-2">{v.name}</span>
                   <span className="text-sm text-muted-foreground leading-relaxed flex-1">{v.blurb}</span>
                   <span className="mt-5 inline-flex items-center gap-2 text-brand font-medium text-sm">
                     Try the {v.name} line
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" aria-hidden="true" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition motion-reduce:transition-none motion-reduce:translate-x-0" aria-hidden="true" />
                   </span>
                 </Link>
               ))}

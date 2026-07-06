@@ -1,7 +1,7 @@
 # Stack Consulting AI — Demos + Portal + Apply Tracker
 
 Master task list. Picked up by Cursor or Claude Code in any session.
-Last sync: 2026-04-29.
+Last sync: 2026-07-06.
 
 Goal: ship `/demos` page (3 live AI demos) + client phone portal at
 `portal.stackconsultingai.com`, then apply to OpenAI AI Support Engineer
@@ -16,12 +16,13 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 - [x] **Task 1 — Scaffold `/demos` page + 3 component shells + mock APIs**
   - Files created:
     - `app/demos/page.tsx` (server, metadata, asymmetric layout)
-    - `components/demos/CallMeDemo.tsx`
+    - `components/demos/CallMeDemo.tsx` (outbound shell — retained for optional Task 3b; not mounted on `/demos`)
     - `components/demos/LeadAgentDemo.tsx`
     - `components/demos/KbDemo.tsx`
     - `app/api/demos/call/route.ts` (mock SSE)
     - `app/api/demos/notify/route.ts` (mock SSE)
     - `app/api/demos/kb/route.ts` (mock SSE)
+  - Demo 01 on `/demos` is now `InboundDemoReveal` + `/api/demos/reveal` (inbound path shipped in Task 3).
   - Edited: `components/Navbar.tsx` (Live Demos link), `app/sitemap.ts`
   - Build verified: `/demos` 7.42 kB / 119 kB First Load JS, prerendered.
   - Uncommitted on `main`. Push when ready.
@@ -42,13 +43,24 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
   - `app/demos/page.tsx` — copy updated: "Discord · Email" not "Slack · CRM".
   - Tested live end-to-end: Discord embed posted + email landed.
 
-- [ ] **Task 3 — Wire Demo 1: Call Me (real FreeSWITCH outbound)**
+- [x] **Task 3 — Wire Demo 1: inbound voice path** (2026-07-06)
+  - Shipped **inbound** Demo 01 on `/demos` — visitor calls our live line (not outbound originate):
+    - `components/demos/InboundDemoReveal.tsx` — contact capture form, reveals gated demo number after submit.
+    - `app/api/demos/reveal/route.ts` — validates lead fields, persists to Supabase, returns `(949) 749-0001` tel link.
+    - Live FreeSWITCH + OpenAI Realtime agent (ext 5002) answers inbound on FusionPBX IVR.
+  - Demo 04 vertical SMS funnels: `/demos/{hvac,plumbing,auto,medspa}` with industry-specific inbound lines
+    via `/api/demos/verify` + `/api/demos/start`.
+  - `app/demos/page.tsx` copy and jump links reflect inbound truth (no outbound "we call you" claims).
+
+- [ ] **Task 3b — Outbound Call Me demo** (optional backlog — deferred)
+  - Partially wired but **not mounted** on `/demos`:
+    - `components/demos/CallMeDemo.tsx` — outbound UI shell.
+    - `app/api/demos/call/route.ts` — mock SSE stages (replace with real FsPBX originate).
+  - Would require: E.164 validation, rate-limit 1/IP/hr, hCaptcha gate, FsPBX webhook originate,
+    Supabase lead persist, stage updates from FreeSWITCH callback.
   - PBX 107.175.53.217, FsPBX webhook port 8089, ext 5002 (OpenAI Realtime).
-  - Validate phone (E.164), rate-limit 1/IP/hr, hCaptcha gate.
-  - Originate via FsPBX webhook. Persist as lead in Supabase.
-  - Stream stage updates from FreeSWITCH webhook callback.
-  - Replace mock STAGES in `app/api/demos/call/route.ts`.
   - Existing `app/api/call-me/route.ts` is theatrical — do NOT reuse.
+  - Does not block Task 5 or Task 14 (inbound path is the shipped proof).
 
 - [x] **Task 4 — Wire Demo 2: KB RAG Q&A** (2026-07-05)
   - Implemented with `lib/portfolio/kb` in-memory corpus (10 service-doc topics) +
@@ -118,14 +130,16 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
     swap `mailto:` hrefs in CallOptions.tsx for direct booking URLs.
   - Build clean.
 
-- [~] **Task 5 — Polish + ship `/demos`** (nearly complete — pending live URL confirm)
+- [x] **Task 5 — Polish + ship `/demos`** (2026-07-06)
   - [x] Homepage card (`DemosCTA`) between Portfolio and Testimonials (2026-07-05).
   - [x] Copy pass + a11y polish on `/demos` page and `components/demos/*` (2026-07-05):
     truthful stack labels, KB input aria-label/maxLength, aria-live transcript,
     reduced-motion live-dot rule in `globals.css`.
-  - [ ] Motion budget audit + perf check (no LCP regression).
-  - [ ] Push to GitHub → Vercel auto-deploys → confirm live URL.
-  - Blocks Task 14.
+  - [x] Live URL confirmed: https://stackconsultingai.com/demos shows truthful copy
+    (merged PR #5, deployed to Vercel).
+  - [~] Motion budget audit + perf check (no LCP regression) — deferred as non-blocking
+    for Task 14 proof links; light `motion-reduce` polish applied 2026-07-06.
+  - Unblocks Task 14 (portal proof link still depends on Task 13).
 
 ---
 

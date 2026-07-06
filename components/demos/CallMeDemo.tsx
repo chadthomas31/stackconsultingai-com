@@ -1,5 +1,9 @@
 "use client";
 
+// Outbound demo UI — not mounted on /demos. Retained for optional Task 3b
+// (CallMeDemo + /api/demos/call). The shipped Demo 01 path is inbound via
+// InboundDemoReveal + /api/demos/reveal.
+
 import { useRef, useState, type FormEvent } from "react";
 import { Phone, PhoneOutgoing, CheckCircle2, AlertCircle } from "lucide-react";
 
