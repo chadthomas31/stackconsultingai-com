@@ -143,7 +143,7 @@
   - `components/` — flat directory (no subfolders), one component per file, all PascalCase. Imported via `@/components/*` path alias
   - `lib/` — server-side helpers: Supabase client (`supabase.ts`), Anthropic extractor (`claude-extract.ts`), Gemini video extractor (`gemini-video-extract.ts`), Resend wrapper (`email.ts`), DB access modules (`assessments-db.ts`, `newsletter-issues-db.ts`), tool catalog, prompt scripts, schemas
   - `migrations/` — hand-applied SQL files; see `migrations/README.md`. **No migration runner** — paste into Supabase SQL Editor manually before deploying dependent code
-  - `docs/` — `pbx-operations.md` (FreeSWITCH live demo backend), PRDs, handoff notes
+  - `docs/` — `pbx-operations.md` (FreeSWITCH live demo backend), PRDs, handoff notes. Phone system state (DIDs, vertical funnel, env checklist): `docs/phone-system-handoff.md`
   - `public/screenshots/` — real client portfolio screenshots (WebP)
   - `types/` — shared TypeScript types
 

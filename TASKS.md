@@ -1,7 +1,7 @@
 # Stack Consulting AI — Demos + Portal + Apply Tracker
 
 Master task list. Picked up by Cursor or Claude Code in any session.
-Last sync: 2026-04-29.
+Last sync: 2026-07-06.
 
 Goal: ship `/demos` page (3 live AI demos) + client phone portal at
 `portal.stackconsultingai.com`, then apply to OpenAI AI Support Engineer
@@ -42,13 +42,18 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
   - `app/demos/page.tsx` — copy updated: "Discord · Email" not "Slack · CRM".
   - Tested live end-to-end: Discord embed posted + email landed.
 
-- [ ] **Task 3 — Wire Demo 1: Call Me (real FreeSWITCH outbound)**
-  - PBX 107.175.53.217, FsPBX webhook port 8089, ext 5002 (OpenAI Realtime).
-  - Validate phone (E.164), rate-limit 1/IP/hr, hCaptcha gate.
-  - Originate via FsPBX webhook. Persist as lead in Supabase.
-  - Stream stage updates from FreeSWITCH webhook callback.
-  - Replace mock STAGES in `app/api/demos/call/route.ts`.
-  - Existing `app/api/call-me/route.ts` is theatrical — do NOT reuse.
+- [x] **Task 3 — Inbound voice on `/demos`** (2026-07-06)
+  - Demo 01: `InboundDemoReveal` → `POST /api/demos/reveal` → reveals **+19497490001** after lead capture.
+  - Demo 04: vertical funnel at `/demos/{hvac,plumbing,auto,medspa}` — questionnaire → Turnstile (when both keys set) → Telnyx SMS verify → DID reveal → tap-to-call.
+  - Components: `components/demos/InboundDemoReveal.tsx`, `components/demos/VerticalDemoFunnel.tsx`, `components/TurnstileWidget.tsx`.
+  - APIs: `app/api/demos/reveal`, `app/api/demos/start`, `app/api/demos/verify`.
+  - PBX vertical extensions 5004–5007 verified 2026-06-05. See `docs/phone-system-handoff.md`.
+
+- [ ] **Task 3b — Outbound Call Me (deferred)**
+  - `CallMeDemo.tsx` exists but is **not mounted** on homepage or `/demos`.
+  - Real FreeSWITCH outbound originate via PBX webhook — separate from inbound reveal path.
+  - Existing `app/api/call-me/route.ts` is theatrical — do NOT reuse for `/demos`.
+  - Env stubs in `.env.local.example`: `DEMO_CALL_ORIGINATE_URL`, `DEMO_CALL_ORIGINATE_TOKEN`.
 
 - [x] **Task 4 — Wire Demo 2: KB RAG Q&A** (2026-07-05)
   - Implemented with `lib/portfolio/kb` in-memory corpus (10 service-doc topics) +
@@ -118,14 +123,14 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
     swap `mailto:` hrefs in CallOptions.tsx for direct booking URLs.
   - Build clean.
 
-- [~] **Task 5 — Polish + ship `/demos`** (nearly complete — pending live URL confirm)
+- [x] **Task 5 — Polish + ship `/demos`** (2026-07-06)
   - [x] Homepage card (`DemosCTA`) between Portfolio and Testimonials (2026-07-05).
   - [x] Copy pass + a11y polish on `/demos` page and `components/demos/*` (2026-07-05):
     truthful stack labels, KB input aria-label/maxLength, aria-live transcript,
     reduced-motion live-dot rule in `globals.css`.
-  - [ ] Motion budget audit + perf check (no LCP regression).
-  - [ ] Push to GitHub → Vercel auto-deploys → confirm live URL.
-  - Blocks Task 14.
+  - [x] Live URL confirmed: https://stackconsultingai.com/demos
+  - [ ] Motion budget audit + perf check (no LCP regression) — deferred.
+  - Unblocks Task 14 (proof link live).
 
 ---
 

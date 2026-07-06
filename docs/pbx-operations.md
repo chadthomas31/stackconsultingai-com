@@ -81,14 +81,33 @@ SELECT domain_uuid FROM v_domains WHERE domain_name='stackconsultingai.com';
 - Ownership: `www-data:www-data`, mode 644 (FS runs as `www-data`)
 - Any config/data files Lua reads must also be readable by `www-data`. `/home/chad/` is **not** — use `/var/lib/freeswitch/<subdir>/` instead.
 
-## Current deployed extensions (2026-04-19)
+## Current deployed extensions (2026-07-06)
 
 | Ext | Name                | Lua                       | Voice stack                              |
 | --- | ------------------- | ------------------------- | ---------------------------------------- |
 | 5002 | ai-assistant       | `ai_assistant.lua`        | OpenAI Realtime, `gpt-realtime`, `sage`  |
 | 5003 | stacks-assessment  | `stacks_assessment.lua`   | OpenAI Realtime, `gpt-realtime`, `sage`  |
+| 5004 | demo-plumbing      | `ai_assistant_demo.lua`   | OpenAI Realtime vertical demo            |
+| 5005 | demo-auto          | `ai_assistant_demo.lua`   | OpenAI Realtime vertical demo            |
+| 5006 | demo-medspa        | `ai_assistant_demo.lua`   | OpenAI Realtime vertical demo            |
+| 5007 | demo-hvac          | `ai_assistant_demo.lua`   | OpenAI Realtime vertical demo            |
+
+**Note:** ext **5003** is the live **Stacks Assessment** agent (AI Tools Assessment product). It is **NOT** the HVAC vertical demo — HVAC is **5007** (`+19492397923`).
 
 Init JSON for 5003 at `/var/lib/freeswitch/stacks_init/*.b64` (session.update + response.create + VAD re-enable, base64-encoded).
+
+## Vertical demo extensions (2026-06-05)
+
+Verified on fspbx: public DID routes + tenant extensions for vertical demos. Scripts at `/usr/share/freeswitch/scripts/ai_assistant_demo.lua`; reports via local webhook `127.0.0.1:8089` (`ai_webhook_server.py`), not website `/api/call-ended`.
+
+| Ext | Vertical | Telnyx DID (E.164) | Telnyx display |
+| --- | -------- | ------------------ | -------------- |
+| 5007 | HVAC | `+19492397923` | 949-239-7923 |
+| 5004 | Plumbing | `+19492397924` | 949-239-7924 |
+| 5005 | Auto | `+19492397925` | 949-239-7925 |
+| 5006 | Medspa | `+19492397926` | 949-239-7926 |
+
+SMS sender for vertical funnel verification: `+19492397922` (949-239-7922). Website env vars `DEMO_DID_*` must match these DIDs. Full handoff: `docs/phone-system-handoff.md`.
 
 ## DID routing
 

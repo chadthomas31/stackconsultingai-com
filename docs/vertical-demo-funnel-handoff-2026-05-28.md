@@ -1,6 +1,7 @@
 # Vertical Demo Funnel — Live-up Checklist
 
-**Branch:** `feat/vertical-demo-funnel`
+**Last reconciled:** 2026-07-06  
+**Branch:** `main` (Turnstile fix merged in `0328c81`)
 **Spec:** `docs/superpowers/specs/2026-05-28-vertical-demo-funnel-design.md`
 **Plan:** `docs/superpowers/plans/2026-05-28-vertical-demo-funnel.md`
 
@@ -12,7 +13,7 @@ What shipped in commit `16ce6e6`:
 - `/api/call-ended` extended to branch on demo leads → Claude-summarized report email
 - Sitemap updated
 
-Build green at commit time. Vercel preview deploys automatically off this branch.
+Build green at commit time. Production deploys from `main` via Vercel.
 
 ---
 
@@ -111,16 +112,16 @@ TURNSTILE_SECRET_KEY=<from Cloudflare>
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=<from Cloudflare — same widget as secret>
 ```
 
-**Enforcement rule (shipped in `cursor/fix-vertical-demo-turnstile-5330`):**
+**Enforcement rule (shipped on `main`, commit `0328c81`):**
 - Turnstile is enforced only when **both** keys are set
 - `VerticalDemoFunnel` renders the widget when `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
   is present at **build** time — **redeploy Vercel after adding the public key**
 - If only `TURNSTILE_SECRET_KEY` is set (no public key), the API skips bot
   check so the funnel still works
 
-**"Bot check failed" on production before merge:** old code required a token
-when only the secret was set, but the form had no widget. Merge the Turnstile
-fix branch and redeploy.
+**"Bot check failed" root cause (fixed on main):** old code required a token
+when only the secret was set, but the form had no widget. Fixed in `0328c81` —
+ensure Vercel prod has deployed this commit.
 
 When both keys are unset, the start route skips Turnstile (dev mode).
 
@@ -199,7 +200,7 @@ demo call volume daily until task 17 ships.
 - Real Cal.com / Google Cal write integration (currently mocked in agent prompt)
 - Spanish-language agents
 - Cost ceiling autosuspend
-- Adding the Turnstile widget render to the form — **done** on branch
-  `cursor/fix-vertical-demo-turnstile-5330` (merge + redeploy required)
+
+**Done on main (`0328c81`):** Turnstile widget render on `VerticalDemoFunnel` via `components/TurnstileWidget.tsx`.
 
 See the plan doc Tasks 17, 18, 19 for the queued work.
