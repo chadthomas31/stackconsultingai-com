@@ -12,6 +12,7 @@ import {
   normalizeToE164,
   sendVerificationCode,
 } from "@/lib/sms";
+import { notifyChadOfLead } from "@/lib/lead-notify";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -179,6 +180,15 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
+
+  await notifyChadOfLead({
+    vertical: body.vertical,
+    firstName: body.firstName,
+    bizName: body.bizName,
+    email: body.email,
+    mobile: mobileE164,
+    comingSoon: false,
+  });
 
   const sms = await sendVerificationCode(mobileE164, smsCode);
   if (!sms.ok) {
