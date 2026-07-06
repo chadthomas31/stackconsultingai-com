@@ -21,6 +21,7 @@
 - **Consent copy (verbatim):** "This is a live AI demo — you'll be talking to an automated voice assistant, not a person. The call is recorded and processed by AI to run the demo. Please don't share medical, financial, payment, or other sensitive information — this is a demo line only."
 - **Branch before implementing.** Do not commit Track work to `main` directly; create `feat/demo-slice1-auto`.
 - **Track B touches production PBX.** Do not start Track B until Track A is merged AND Chad explicitly approves the Track B start. Follow provision-phone discipline (validate on the Auto extension only).
+- **`.env.local.example` DIDs are stale for non-Auto verticals** (Finding 5): it maps `HVAC=7923`/`MEDSPA=7926`, but the Jul-05 handoff says 7923=medspa, 7926=hvac, plumbing=7922, Woods=7924. **`DEMO_DID_AUTO=+19492397925` is correct.** Do NOT trust the example file when flipping any other vertical live — fix it first (a later slice). This slice only touches Auto.
 
 ---
 
@@ -34,9 +35,11 @@
 **Track A — modified:**
 - `lib/email.ts` — add generic `sendPlainEmail({to,subject,text})` (reuse existing Resend client).
 - `lib/voice-agents/index.ts` — add `DEMO_PICKER` list + `isLiveVertical()`.
-- `components/demos/VerticalDemoFunnel.tsx` — add vertical picker + consent gate + live/coming-soon branching.
+- `components/demos/VerticalDemoFunnel.tsx` — add vertical picker + consent gate + live/coming-soon branching (preserve Turnstile on live branch).
 - `app/demos/page.tsx` — mount the consolidated funnel; remove Demo 01 + static vertical cards.
 - `app/api/demos/start/route.ts` — notify Chad on lead creation.
+- `app/api/call-ended/route.ts` — hex-validate signature; did-scoped demo attribution (A8).
+- `lib/demo-leads-db.ts` — add `findRecentLeadByMobileAndDid` (A8).
 
 **Track A — removed / redirected:**
 - `components/demos/InboundDemoReveal.tsx`, `app/api/demos/reveal/route.ts` (delete).
@@ -44,8 +47,9 @@
 - `components/demos/CallMeDemo.tsx`, `app/api/demos/call/route.ts` (delete).
 
 **Track B — modified (on `fspbx-2`, not in repo):**
-- The demo post-call handler: `ai-webhook.service` Python at `127.0.0.1:8089` and/or the `ai_assistant_demo.lua` hangup hook — add HMAC-signed POST to `/api/call-ended`.
-- Vercel env + `fspbx-2` env: `CALL_WEBHOOK_SECRET`, `DEMO_INTERNAL_SECRET`.
+- The **existing 5003 assessment sender** — add HMAC signing (must sign before the secret is enforced, or the live assessment path 401s).
+- The demo post-call handler: `ai-webhook.service` Python at `127.0.0.1:8089` and/or the `ai_assistant_demo.lua` hangup hook — add HMAC-signed POST to `/api/call-ended` with `vertical`+`didDialed`.
+- Vercel env + `fspbx-2` env: `CALL_WEBHOOK_SECRET` (enforced only after both senders sign), `DEMO_INTERNAL_SECRET`.
 
 ---
 
@@ -230,6 +234,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { notifyChadOfLead } from "@/lib/lead-notify";
 import { supabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
+import { DEMO_PICKER } from "@/lib/voice-agents";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -251,12 +256,39 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  if (!body.vertical || !body.email) {
-    return NextResponse.json({ error: "Vertical and email required" }, { status: 400 });
+  // Finding 4 — validate + rate-limit before emailing Chad (spam guard).
+  const vertical = String(body.vertical ?? "");
+  const email = String(body.email ?? "").trim().toLowerCase();
+
+  if (!DEMO_PICKER.some((v) => v.id === vertical)) {
+    return NextResponse.json({ error: "Unknown vertical" }, { status: 400 });
+  }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
   if (!body.consent) {
     return NextResponse.json({ error: "Consent required" }, { status: 400 });
   }
+
+  // Rate limit: max 3 coming-soon submissions per email per 24h.
+  if (isSupabaseConfigured()) {
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count } = await supabaseAdmin
+      .from("tool_leads")
+      .select("id", { count: "exact", head: true })
+      .eq("tool_name", "demo-comingsoon")
+      .eq("email", email)
+      .gte("created_at", since);
+    if ((count ?? 0) >= 3) {
+      return NextResponse.json(
+        { error: "Too many requests — try again later." },
+        { status: 429 },
+      );
+    }
+  }
+
+  // NOTE: use the normalized `vertical` and `email` locals (not body.*) in the
+  // insert + notifyChadOfLead calls below.
 
   // Store coming-soon interest in tool_leads (demo_leads.vertical CHECK excludes dental/general).
   if (isSupabaseConfigured()) {
@@ -529,17 +561,86 @@ git commit -m "chore(demos): retire /try duplicate, Demo 01 stub, and orphaned C
 
 ---
 
-### Task A8: Deploy Track A + live smoke test
+### Task A8: Harden `/api/call-ended` (signature validation + did-scoped attribution)
+
+Safe website change; prepares the endpoint for Track B. Backward-compatible — when `didDialed`/`vertical` are absent (nothing posts them during Track A), behavior is unchanged.
+
+**Files:**
+- Modify: `app/api/call-ended/route.ts`
+- Modify: `lib/demo-leads-db.ts`
+
+**Interfaces:**
+- Produces: `findRecentLeadByMobileAndDid(mobile: string, didDialed: string)` in `lib/demo-leads-db.ts`; `CallEndedPayload` gains optional `vertical?: string; didDialed?: string`.
+
+- [ ] **Step 1: Hex-validate the signature (Finding 3)**
+
+In `verifySignature()` (`app/api/call-ended/route.ts`), before `Buffer.from(signatureHeader, "hex")`, reject non-hex/wrong-length input so `timingSafeEqual` can't throw on a same-length non-hex string:
+```ts
+if (!signatureHeader || !/^[a-f0-9]{64}$/i.test(signatureHeader)) return false;
+```
+
+- [ ] **Step 2: Add a did-scoped lead lookup to `lib/demo-leads-db.ts`**
+
+Model it on the existing `findRecentLeadByMobile` (same table/columns), but scope to the DID dialed:
+```ts
+export async function findRecentLeadByMobileAndDid(mobile: string, didDialed: string) {
+  if (!isSupabaseConfigured()) return null;
+  const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+  const { data } = await supabaseAdmin
+    .from("demo_leads")
+    .select("*")
+    .eq("mobile_e164", mobile)
+    .eq("did_dialed", didDialed)
+    .not("sms_verified_at", "is", null)
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data ?? null;
+}
+```
+
+- [ ] **Step 3: Use did-scoped match in the demo branch (Finding 2)**
+
+In `app/api/call-ended/route.ts`: add `vertical?: string; didDialed?: string` to `CallEndedPayload`, import `findRecentLeadByMobileAndDid`, and in the demo branch prefer the did-scoped lookup:
+```ts
+const lead = payload.didDialed
+  ? await findRecentLeadByMobileAndDid(mobileE164, payload.didDialed)
+  : await findRecentLeadByMobile(mobileE164);
+// If the payload names a vertical, the matched lead must agree — else this is
+// a cross-vertical mismatch; skip the demo branch rather than mis-attribute.
+if (lead && payload.vertical && lead.vertical !== payload.vertical) {
+  console.warn("[call-ended] vertical mismatch, skipping demo attribution");
+} else if (lead) {
+  // ...existing handleDemoCallEnded path
+}
+```
+
+- [ ] **Step 4: Verify build**
+
+Run: `npm run build`
+Expected: PASS.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add app/api/call-ended/route.ts lib/demo-leads-db.ts
+git commit -m "fix(call-ended): validate hex signature + did-scoped demo attribution"
+```
+
+---
+
+### Task A9: Deploy Track A + live smoke test
 
 - [ ] **Step 1: Pre-flight — dial the Auto line before trusting it**
 
 `.env.local` and the spec say Auto (949-239-7925) is live, but a stale Jun-12 note flagged a dead number. **Actually call 949-239-7925 from a phone and confirm the AI auto-receptionist answers** before shipping a reveal that points at it. If it does NOT answer, STOP and escalate — do not deploy a funnel that reveals a dead line.
 
-- [ ] **Step 2: Confirm env vars in Vercel**
+- [ ] **Step 2: Confirm `DEMO_DID_AUTO` in Vercel**
 
-In the Vercel dashboard (Strategic-Sync team → `stackconsultingai-com` → Settings → Environment Variables):
-- Confirm `DEMO_DID_AUTO` = `+19492397925` (E.164; matches `.env.local`). If missing, set it.
-- Set `CALL_WEBHOOK_SECRET` now (Production) even though the PBX side lands in Track B. Today `/api/call-ended` accepts **unsigned** POSTs when the secret is unset; setting it here closes that gap while Track A is live. Use `openssl rand -hex 32`; record the value for Track B B1 (the box must use the same one). Nothing legitimately POSTs to `/api/call-ended` yet, so setting it early breaks nothing.
+In the Vercel dashboard (Strategic-Sync team → `stackconsultingai-com` → Settings → Environment Variables), confirm `DEMO_DID_AUTO` = `+19492397925` (E.164; matches `.env.local`). If missing, set it.
+
+**Do NOT set `CALL_WEBHOOK_SECRET` in Track A.** `/api/call-ended` also serves the **live 5003 assessment path** (the generic `extractAssessment` branch). That branch almost certainly receives **unsigned** POSTs from the assessment line today (the secret is currently unset, so the route accepts them). Setting the secret before the 5003 PBX sender is updated to sign would **401 live assessments**. Secret rollout is coordinated across all senders in Track B (B1). The unsigned-POST window stays open through Track A — accepted as LOW risk (an attacker needs a matching recent-lead mobile), and closed properly in B1.
 
 - [ ] **Step 3: Merge and push**
 
@@ -569,46 +670,54 @@ Note in the progress ledger: Track A done. **Stop here and get Chad's explicit a
 
 > Do not start until Track A is deployed AND Chad approves the Track B start. All work is over SSH to `fspbx-2` (`ssh fspbx-2`, `100.117.67.62`). Validate on the Auto extension only. Keep the existing local-file + Postfix fallback intact.
 
-### Task B1: Set shared secrets on both sides
+### Task B1: Inventory posting handlers + stage secrets (DO NOT enforce yet)
 
-**Files:** Vercel env + `fspbx-2` env.
+**Files:** box inspection; box env; Vercel env (`DEMO_INTERNAL_SECRET` only for now).
 
-- [ ] **Step 1: Reuse the A8 secret; generate the internal one**
+> **Why this ordering (Finding 1):** `/api/call-ended` also serves the **live 5003 assessment** path. The moment `CALL_WEBHOOK_SECRET` is set on the website, EVERY sender that posts unsigned gets 401'd — including 5003. So: find all senders, make them all sign, and only THEN enforce the secret (B3).
 
-`CALL_WEBHOOK_SECRET` was already set in Vercel during Track A (A8 Step 2) — use that exact value on the box. Generate `DEMO_INTERNAL_SECRET` with `openssl rand -hex 32`.
+- [ ] **Step 1: Find every handler that POSTs to `/api/call-ended`**
 
-- [ ] **Step 2: Set `DEMO_INTERNAL_SECRET` in Vercel**
+SSH `fspbx-2` and grep for the endpoint across the AI services and Lua:
+```bash
+ssh fspbx-2 "grep -rn 'call-ended' /usr/share/freeswitch/scripts /etc/systemd/system /var/lib/freeswitch 2>/dev/null; systemctl cat ai-webhook.service 2>/dev/null | grep -i environ"
+```
+You MUST account for the **5003 assessment sender** (live — 442-212-1616). Confirm whether it currently posts **unsigned** (no `x-signature`). Record the file/function for each sender (5003 assessment, plus any others). The new 5005 demo sender is added in B2.
 
-Vercel → `stackconsultingai-com` → Settings → Environment Variables: add `DEMO_INTERNAL_SECRET` (Production). Redeploy so it takes effect. (`CALL_WEBHOOK_SECRET` is already there from A8.)
-
-- [ ] **Step 3: Set on `fspbx-2`**
-
-Add the same `CALL_WEBHOOK_SECRET` (and `DEMO_INTERNAL_SECRET` if the bridge uses the internal GET) to the environment the post-call handler reads (e.g. the `ai-webhook.service` unit's `Environment=` / `EnvironmentFile=`). Do not restart FreeSWITCH; restart only the webhook service if required.
-
-- [ ] **Step 4: Verify HMAC is now enforced**
+- [ ] **Step 2: Generate both secrets**
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}" -X POST https://stackconsultingai.com/api/call-ended \
-  -H 'Content-Type: application/json' -H 'x-signature: bogus' \
-  -d '{"transcript":"x","callerPhoneNumber":"+19495550000"}'
+openssl rand -hex 32   # CALL_WEBHOOK_SECRET
+openssl rand -hex 32   # DEMO_INTERNAL_SECRET
 ```
-Expected: `401` (bad signature rejected — previously would have passed unsigned).
+Store them. **Do NOT put `CALL_WEBHOOK_SECRET` on the website yet.**
+
+- [ ] **Step 3: Stage the secrets safely**
+
+- Box: add BOTH `CALL_WEBHOOK_SECRET` and `DEMO_INTERNAL_SECRET` to the handler env (`ai-webhook.service` `EnvironmentFile=`). Restart only that service.
+- Vercel: add ONLY `DEMO_INTERNAL_SECRET` (Production) — it just gates the internal GET, no live path depends on it. **Leave `CALL_WEBHOOK_SECRET` out of Vercel until B3.**
 
 ---
 
-### Task B2: POST the finished Auto call to /api/call-ended (HMAC-signed)
+### Task B2: Sign every posting handler on the box (5003 assessment + new 5005 demo)
 
-**Files:** the demo post-call handler on `fspbx-2` (`ai-webhook.service` Python and/or `ai_assistant_demo.lua` hangup hook).
+**Files:** the 5003 assessment sender AND the demo post-call handler on `fspbx-2` (`ai-webhook.service` Python and/or `ai_assistant_demo.lua` hangup hook).
 
-**Contract the website already enforces** (`app/api/call-ended/route.ts`): header `x-signature` = hex `HMAC-SHA256(rawBody, CALL_WEBHOOK_SECRET)`; JSON body `{ transcript: string, callerPhoneNumber: string, durationSeconds?: number, recordingUrl?: string }`. The route matches `callerPhoneNumber` → `findRecentLeadByMobile` → `handleDemoCallEnded` → updates `demo_leads` + emails via `sendDemoReportEmail`.
+**Contract** (`app/api/call-ended/route.ts`, hardened in Task A8): header `x-signature` = hex `HMAC-SHA256(rawBody, CALL_WEBHOOK_SECRET)`; demo body `{ transcript, callerPhoneNumber, durationSeconds?, vertical, didDialed }`. The route prefers a **did-scoped** lead match (Task A8) so the transcript can't attach to the wrong vertical.
 
-- [ ] **Step 1: Locate the current post-call write**
+Because `CALL_WEBHOOK_SECRET` is still absent from the website (B1), the route accepts signed-or-unsigned during this task — so both senders can be updated and deployed with **zero downtime** before enforcement.
 
-On `fspbx-2`, find where demo calls currently write `/var/lib/freeswitch/ai_leads` + trigger Postfix (grep the webhook service + `ai_assistant_demo.lua`). This is where the new POST is added — **in addition to**, not replacing, the local write.
+- [ ] **Step 1: Add signing to the existing 5003 assessment sender**
 
-- [ ] **Step 2: Add the signed POST (Auto path only)**
+Find the 5003 sender from B1 Step 1. Add the HMAC signature to its existing POST (read `CALL_WEBHOOK_SECRET` from box env, sign the exact raw body it already sends, set the `x-signature` header). Do not change its payload. This is prerequisite so 5003 survives B3 enforcement.
 
-In the handler, after the transcript/summary is assembled, add an HMAC-signed POST. Python reference:
+- [ ] **Step 2: Locate the demo local write**
+
+Find where demo calls currently write `/var/lib/freeswitch/ai_leads` + trigger Postfix. The new POST is added **in addition to** — never replacing — the local write (fallback).
+
+- [ ] **Step 3: Add the signed demo POST with deterministic attribution (Auto only)**
+
+After the transcript/summary is assembled, add:
 ```python
 import hmac, hashlib, json, os, urllib.request
 
@@ -618,6 +727,8 @@ def post_call_ended(transcript, caller_e164, duration_s):
         "transcript": transcript,
         "callerPhoneNumber": caller_e164,
         "durationSeconds": duration_s,
+        "vertical": "auto",              # Finding 2: pin the vertical
+        "didDialed": "+19492397925",     # Finding 2: did-scoped match on the website
     }
     raw = json.dumps(payload).encode()
     sig = hmac.new(secret, raw, hashlib.sha256).hexdigest()
@@ -633,36 +744,58 @@ def post_call_ended(transcript, caller_e164, duration_s):
         # Non-fatal: local /var/lib/freeswitch/ai_leads + Postfix already fired.
         print(f"[call-ended POST failed] {e}")
 ```
-Gate this call so it only fires for the **Auto** extension (5005) this slice.
+Gate this call to the **Auto** extension (5005) only this slice.
 
-- [ ] **Step 3: Reload deliberately**
+- [ ] **Step 4: Reload deliberately**
 
-If a Lua change was needed: `fs_cli -x reloadxml`. If only the Python service changed: restart just that service. Follow provision-phone — do not push to other extensions.
+If Lua changed: `fs_cli -x reloadxml`. If only the Python service changed: restart just that service. provision-phone discipline — no other extensions.
 
-- [ ] **Step 4: Signed-POST self-test from the box**
+- [ ] **Step 5: Self-test both senders (secret still unset on website)**
 
-Run the `post_call_ended` function once with a dummy transcript and a known test mobile, then check that `/api/call-ended` returned 200 and (if that mobile has a recent `demo_leads` row) the row got a `call_summary`.
+Fire each sender once with a dummy transcript + known test mobile → expect `200`. For the demo self-test, if that mobile has a recent verified `demo_leads` row, confirm it got `call_summary`.
 
 ---
 
-### Task B3: End-to-end verification + handoff doc
+### Task B3: Enforce the secret (both senders now sign)
+
+**Files:** Vercel env.
+
+- [ ] **Step 1: Set `CALL_WEBHOOK_SECRET` in Vercel**
+
+Only now that 5003 + 5005 both sign (B2): Vercel → `stackconsultingai-com` → Env Vars → add `CALL_WEBHOOK_SECRET` (Production, the same value as the box). Redeploy.
+
+- [ ] **Step 2: Verify enforcement AND no 5003 regression**
+
+- Bad signature → 401:
+```bash
+curl -s -o /dev/null -w "%{http_code}" -X POST https://stackconsultingai.com/api/call-ended \
+  -H 'Content-Type: application/json' -H 'x-signature: bogus' \
+  -d '{"transcript":"x","callerPhoneNumber":"+19495550000"}'
+```
+Expected: `401`.
+- **5003 regression check:** place a real assessment call to **442-212-1616**, complete it, and confirm an assessment row + email are produced (NOT 401). If it 401s, the 5003 sender isn't signing correctly — fix B2 Step 1 before proceeding.
+- A signed demo POST still returns `200`.
+
+---
+
+### Task B4: End-to-end demo loop + handoff doc
 
 - [ ] **Step 1: Full loop, real cellular call**
 
-From a **real cell phone** (not a softphone/landline — cellular audio is the true test): complete the `/demos` Auto flow to reveal 949-239-7925, call it, talk to the AI receptionist through a full intake, hang up.
+From a **real cell phone** (cellular audio is the true test): complete the `/demos` Auto flow → reveal 949-239-7925 → call it → full intake → hang up.
 
-- [ ] **Step 2: Confirm the loop closed**
+- [ ] **Step 2: Confirm the loop closed with correct attribution**
 
 Within ~1 minute confirm:
-- The caller's `demo_leads` row now has `call_summary`, `call_duration_s`, `transcript` populated.
+- The caller's `demo_leads` row (matched by mobile **and** `did_dialed` per Task A8 — correct vertical/persona) now has `call_summary`, `call_duration_s`, `transcript`.
 - Chad received the branded call-report email (`sendDemoReportEmail`).
 
 - [ ] **Step 3: Update the handoff doc**
 
-Append to `docs/phone-handoff-2026-07-05.md` (or a new dated handoff): Auto return-leg wired; `/api/call-ended` now receives demo transcripts; `CALL_WEBHOOK_SECRET` set both sides; local `ai_leads` fallback retained. Commit:
+Append to `docs/phone-handoff-2026-07-05.md`: Auto return-leg wired; 5003 + 5005 senders now HMAC-signed; `CALL_WEBHOOK_SECRET` enforced both sides; demo attribution is did-scoped; local `ai_leads` fallback retained. Commit:
 ```bash
 git add docs/phone-handoff-2026-07-05.md
-git commit -m "docs(pbx): Auto demo return-leg wired to /api/call-ended"
+git commit -m "docs(pbx): Auto demo return-leg wired; call-ended HMAC enforced across senders"
 git push origin main
 ```
 
@@ -678,6 +811,13 @@ Ledger: Track B done. Slice 1 definition-of-done met.
 
 **Placeholder scan:** All code steps contain real code. The one remaining "confirm against source" point is the `tool_leads` column set (A3 note) — an existing-code fact the implementer verifies against `migrations/001_create_tools_tables.sql`, not an invented value. The email sender is now concrete (`sendPlainEmail` added to `lib/email.ts` reusing `FROM_ADDRESS`/`isResendConfigured`/`new Resend`), notify address from `LEAD_NOTIFY_EMAIL`.
 
-**Review fix-ups folded in (2026-07-06 plan review):** (1) 🔴 real gap — `lib/email.ts` has no `sendEmailToChad`; replaced with a concrete `sendPlainEmail` + explicit notify address (A2). (2) 🟡 Turnstile bot-gate preserved on the live Auto branch (A5 Step 5). (3) 🟡 DID-liveness pre-flight dial before deploy (A8 Step 1); `CALL_WEBHOOK_SECRET` moved into Track A (A8 Step 2) to close the unsigned-`/api/call-ended` gap while A is live, reconciled in B1.
+**Review fix-ups folded in (2026-07-06 review #1):** (1) 🔴 real gap — `lib/email.ts` has no `sendEmailToChad`; replaced with a concrete `sendPlainEmail` + explicit notify address (A2). (2) 🟡 Turnstile bot-gate preserved on the live Auto branch (A5 Step 5). (3) 🟡 DID-liveness pre-flight dial before deploy (A9 Step 1).
+
+**Review fix-ups folded in (2026-07-06 review #2):**
+- 🔴 **Finding 1** — `/api/call-ended` also serves the LIVE 5003 assessment path; setting `CALL_WEBHOOK_SECRET` early would 401 it. Reverted the Track-A secret-set; secret rollout is now sequenced in Track B: inventory senders (B1) → sign 5003 + 5005 (B2) → enforce secret with a 5003 no-regression check (B3).
+- 🔴 **Finding 2** — demo attribution matched by mobile only → wrong vertical on multi-verify. Demo POST now sends `vertical`+`didDialed` (B2), and the route prefers a did-scoped match with a vertical-agreement guard (A8, new `findRecentLeadByMobileAndDid`).
+- 🟡 **Finding 3** — `verifySignature` could throw on same-length non-hex input; added `/^[a-f0-9]{64}$/i` guard (A8 Step 1).
+- 🟡 **Finding 4** — `/api/demos/interest` was an unauthenticated spam path; added DEMO_PICKER validation, email normalization, and a 3/email/24h rate limit (A3).
+- 🟡 **Finding 5** — `.env.local.example` DIDs stale for non-Auto verticals; documented in Global Constraints (Auto correct; fix before flipping others).
 
 **Type consistency:** `notifyChadOfLead(LeadNotice)` used identically in A2/A3/A4. `isLiveVertical`/`DEMO_PICKER` defined in A1, consumed in A3/A5. `x-signature`/`CALL_WEBHOOK_SECRET`/`callerPhoneNumber`/`durationSeconds` match the route contract read from `app/api/call-ended/route.ts`.
