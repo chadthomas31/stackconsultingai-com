@@ -40,8 +40,16 @@ function isTurnstileEnforced(): boolean {
   );
 }
 
+type TurnstileVerifyResponse = {
+  success?: boolean;
+  "error-codes"?: string[];
+};
+
 /** Verify a Cloudflare Turnstile token against the siteverify endpoint. */
-async function verifyTurnstile(token: string): Promise<boolean> {
+async function verifyTurnstile(
+  token: string,
+  remoteIp: string | null,
+): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) return true;
   try {
@@ -50,12 +58,26 @@ async function verifyTurnstile(token: string): Promise<boolean> {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ secret, response: token }),
+        body: JSON.stringify({
+          secret,
+          response: token,
+          ...(remoteIp ? { remoteip: remoteIp } : {}),
+        }),
       },
     );
-    const json = (await res.json().catch(() => ({}))) as { success?: boolean };
+    const json = (await res.json().catch(() => ({}))) as TurnstileVerifyResponse;
+    if (!json.success) {
+      console.warn(
+        "[demos/start] Turnstile verify failed:",
+        json["error-codes"]?.join(", ") ?? "unknown",
+      );
+    }
     return Boolean(json.success);
-  } catch {
+  } catch (err) {
+    console.warn(
+      "[demos/start] Turnstile verify error:",
+      err instanceof Error ? err.message : String(err),
+    );
     return false;
   }
 }
@@ -95,6 +117,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const ip = getClientIp(req);
+
   if (isTurnstileEnforced()) {
     if (!body.turnstileToken) {
       return NextResponse.json(
@@ -102,7 +126,7 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    const turnstileOk = await verifyTurnstile(body.turnstileToken);
+    const turnstileOk = await verifyTurnstile(body.turnstileToken, ip);
     if (!turnstileOk) {
       return NextResponse.json(
         { error: "Bot check failed — refresh and try again" },
@@ -110,8 +134,6 @@ export async function POST(req: NextRequest) {
       );
     }
   }
-
-  const ip = getClientIp(req);
 
   // Rate limits — count first, refuse before we ever generate a code or burn an SMS.
   const [byEmail, byMobile, byIp] = await Promise.all([

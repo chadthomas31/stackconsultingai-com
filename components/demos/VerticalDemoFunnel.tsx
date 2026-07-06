@@ -37,6 +37,7 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
   // Verify state
   const [code, setCode] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   async function onSubmitForm(e: FormEvent) {
     e.preventDefault();
@@ -69,7 +70,9 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
           apiError?.includes("Bot check failed")
         ) {
           errMsg =
-            "Bot check failed — refresh the page, complete the security check, and try again.";
+            "Bot check failed — complete the security check again and retry.";
+          setTurnstileToken(null);
+          setTurnstileKey((k) => k + 1);
         }
         setError(errMsg);
         setSubmitting(false);
@@ -184,6 +187,7 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
                 </p>
               )}
               <TurnstileWidget
+                key={turnstileKey}
                 onToken={setTurnstileToken}
                 onExpire={() => setTurnstileToken(null)}
                 onError={() => setTurnstileToken(null)}

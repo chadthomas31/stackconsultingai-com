@@ -84,26 +84,45 @@ TELNYX_API_KEY=<paste from Telnyx portal — Messaging API key>
 TELNYX_SENDER_NUMBER=+19492397922
 ```
 
-**10DLC registration required.** Telnyx → Messaging → 10DLC:
-- Register brand "Stack Consulting AI"
-- Create low-volume campaign "Lead conversion / demo verification" (~$2/mo)
-- Assign `+19492397922` (and optionally the 4 inbound DIDs)
-- 1–3 day approval. Codes deliver as filtered spam until approved.
+**10DLC — MNO_PROVISIONED (2026-06-09).** Campaign is live on carriers:
+
+| Field | Value |
+|---|---|
+| Brand | Stack Consulting AI |
+| TCR ID | `C70VRIQ` |
+| Telnyx campaign ID | `4b30019e-9b92-3d7b-8055-906cc08a4b56` |
+| Status | `MNO_PROVISIONED` (provisioned 2026-06-09) |
+
+**Post-provision checklist:**
+1. Telnyx → Messaging → 10DLC → assign **`+19492397922`** to this campaign
+2. Set `TELNYX_API_KEY` + `TELNYX_SENDER_NUMBER` in Vercel (Production)
+3. Redeploy after env changes
 
 When these are unset, `lib/sms.ts` logs the code to the server console
 and returns success — useful for dev, but production must have both.
 
-### 4. Cloudflare Turnstile (optional but recommended)
+### 4. Cloudflare Turnstile (vertical demo bot check)
 
-Create a Turnstile site in the Cloudflare dashboard. Then set:
+Create a Turnstile site in the Cloudflare dashboard (hostname must include
+`stackconsultingai.com` and `*.vercel.app` for previews). Then set **both**:
 
 ```
 TURNSTILE_SECRET_KEY=<from Cloudflare>
-NEXT_PUBLIC_TURNSTILE_SITE_KEY=<from Cloudflare>   # if/when widget is added to the form
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=<from Cloudflare — same widget as secret>
 ```
 
-When `TURNSTILE_SECRET_KEY` is unset, the start route skips Turnstile
-verification (dev mode).
+**Enforcement rule (shipped in `cursor/fix-vertical-demo-turnstile-5330`):**
+- Turnstile is enforced only when **both** keys are set
+- `VerticalDemoFunnel` renders the widget when `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+  is present at **build** time — **redeploy Vercel after adding the public key**
+- If only `TURNSTILE_SECRET_KEY` is set (no public key), the API skips bot
+  check so the funnel still works
+
+**"Bot check failed" on production before merge:** old code required a token
+when only the secret was set, but the form had no widget. Merge the Turnstile
+fix branch and redeploy.
+
+When both keys are unset, the start route skips Turnstile (dev mode).
 
 ### 5. Internal-bridge secret (for FreeSWITCH lookups)
 
@@ -180,6 +199,7 @@ demo call volume daily until task 17 ships.
 - Real Cal.com / Google Cal write integration (currently mocked in agent prompt)
 - Spanish-language agents
 - Cost ceiling autosuspend
-- Adding the Turnstile widget render to the form (server-verify is wired; widget rendering is a Phase 1B follow-up)
+- Adding the Turnstile widget render to the form — **done** on branch
+  `cursor/fix-vertical-demo-turnstile-5330` (merge + redeploy required)
 
 See the plan doc Tasks 17, 18, 19 for the queued work.
