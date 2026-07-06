@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, memo, type FormEvent } from "react";
 import { ArrowRight, Phone, MessageSquare, Check } from "lucide-react";
 import type { Vertical } from "@/lib/voice-agents";
+import TurnstileWidget from "@/components/TurnstileWidget";
+
+const TURNSTILE_ENABLED = Boolean(
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+);
 
 interface Props {
   vertical: Vertical;
@@ -31,6 +36,7 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
 
   // Verify state
   const [code, setCode] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   async function onSubmitForm(e: FormEvent) {
     e.preventDefault();
@@ -50,11 +56,22 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
           bizName,
           email,
           mobile,
+          ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.leadId) {
-        setError(json.error ?? `Submit failed (${res.status})`);
+        const apiError =
+          typeof json.error === "string" ? json.error : null;
+        let errMsg = apiError ?? `Submit failed (${res.status})`;
+        if (
+          res.status === 400 &&
+          apiError?.includes("Bot check failed")
+        ) {
+          errMsg =
+            "Bot check failed — refresh the page, complete the security check, and try again.";
+        }
+        setError(errMsg);
         setSubmitting(false);
         return;
       }
@@ -159,9 +176,26 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
 
           {error && <ErrorBox text={error} />}
 
+          {TURNSTILE_ENABLED && (
+            <>
+              {!turnstileToken && (
+                <p className="text-xs text-navy-900/55">
+                  Complete the security check below
+                </p>
+              )}
+              <TurnstileWidget
+                onToken={setTurnstileToken}
+                onExpire={() => setTurnstileToken(null)}
+                onError={() => setTurnstileToken(null)}
+              />
+            </>
+          )}
+
           <button
             type="submit"
-            disabled={submitting}
+            disabled={
+              submitting || (TURNSTILE_ENABLED && !turnstileToken)
+            }
             className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors disabled:opacity-60"
           >
             {submitting ? "Sending…" : "Text me the code"}
@@ -230,7 +264,7 @@ export default function VerticalDemoFunnel({ vertical, displayName }: Props) {
   );
 }
 
-function Field(props: {
+interface FieldProps {
   label: string;
   id: string;
   value: string;
@@ -241,7 +275,9 @@ function Field(props: {
   hint?: string;
   inputMode?: "numeric" | "text" | "email" | "tel";
   autoComplete?: string;
-}) {
+}
+
+const Field = memo(function Field(props: FieldProps) {
   return (
     <label htmlFor={props.id} className="block">
       <span className="block text-sm font-medium text-navy-900 mb-1.5">
@@ -267,7 +303,7 @@ function Field(props: {
       )}
     </label>
   );
-}
+});
 
 function ErrorBox({ text }: { text: string }) {
   return (

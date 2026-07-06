@@ -33,11 +33,17 @@ function getClientIp(req: NextRequest): string | null {
   );
 }
 
-/** Verify a Cloudflare Turnstile token. Returns true when no key is configured (dev). */
-async function verifyTurnstile(token: string | undefined): Promise<boolean> {
+function isTurnstileEnforced(): boolean {
+  return Boolean(
+    process.env.TURNSTILE_SECRET_KEY &&
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  );
+}
+
+/** Verify a Cloudflare Turnstile token against the siteverify endpoint. */
+async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true; // dev mode
-  if (!token) return false;
+  if (!secret) return true;
   try {
     const res = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
@@ -89,12 +95,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const turnstileOk = await verifyTurnstile(body.turnstileToken);
-  if (!turnstileOk) {
-    return NextResponse.json(
-      { error: "Bot check failed — refresh and try again" },
-      { status: 400 },
-    );
+  if (isTurnstileEnforced()) {
+    if (!body.turnstileToken) {
+      return NextResponse.json(
+        { error: "Complete the security check below the form" },
+        { status: 400 },
+      );
+    }
+    const turnstileOk = await verifyTurnstile(body.turnstileToken);
+    if (!turnstileOk) {
+      return NextResponse.json(
+        { error: "Bot check failed — refresh and try again" },
+        { status: 400 },
+      );
+    }
   }
 
   const ip = getClientIp(req);
