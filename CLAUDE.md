@@ -136,7 +136,11 @@
   ## Codebase Architecture
 
   ### Stack
-  Next.js 15 App Router · React 19 · TypeScript 5.7 · Tailwind v3 (NOT v4 — `@tailwindcss/postcss` is installed but config is v3-style in `tailwind.config.ts`) · Supabase (Postgres + RLS) · Resend (email) · Anthropic SDK + Google GenAI · Vercel hosting.
+  Next.js 15 App Router · React 19 · TypeScript 5.7 · Tailwind v3 (NOT v4 — `@tailwindcss/postcss` is installed but config is v3-style in `tailwind.config.ts`) · Resend (email) · Anthropic SDK + Google GenAI · Vercel hosting.
+
+  **Two databases, two auth models — know which half you're in:**
+  - **Marketing site + lead tools + newsletter** → **Supabase** (Postgres + RLS), accessed via `lib/supabase.ts`. Cloud, shared with prod.
+  - **Client portal** (`app/(portal)`, `app/(admin)`, `app/(auth)`) → **Prisma 6 + SQLite + NextAuth v5 beta**. Local file DB at `prisma/dev.db` (gitignored). `lib/db.ts` = PrismaClient singleton; `lib/auth.ts` = NextAuth (Credentials + bcryptjs). Schema in `prisma/schema.prisma` (User/Project/Invoice/Message). This is the same stack as the standalone `~/projects/sca-client-portal/`, integrated into this repo. Don't reach for Supabase in portal routes or Prisma in marketing routes.
 
   ### Top-level layout
   - `app/` — App Router pages, layouts, API routes
@@ -146,11 +150,13 @@
   - `docs/` — `pbx-operations.md` (FreeSWITCH live demo backend), PRDs, handoff notes
   - `public/screenshots/` — real client portfolio screenshots (WebP)
   - `types/` — shared TypeScript types
+  - `prisma/` — portal schema, migrations, `seed.mjs`, and `dev.db` (SQLite, gitignored). Portal only.
+  - **Ignore these**: `harmonist/` is a nested git repo (gitignored, vendored/scratch — not app code). `sreenshots/` (sic) is a junk dir — the real asset dir is `public/screenshots/`.
 
   ### App Router conventions
   - Single root `app/layout.tsx` injects GA4 (`G-GKBVKQ49ND`) + GTM (`GTM-5N9G6XQ4`) via `next/script lazyOnload`, plus skip-link target. Don't duplicate analytics in child layouts.
   - `app/page.tsx` is the homepage and composes the section canon listed above.
-  - **Client Portal**: Routes under `app/(portal)`, `app/(admin)`, and `app/(auth)`. See `PORTAL_INTEGRATION.md` for details.
+  - **Client Portal**: Routes under `app/(portal)`, `app/(admin)`, and `app/(auth)`. Runs on the Prisma/SQLite/NextAuth stack (see Stack section), NOT Supabase. See `PORTAL_INTEGRATION.md` for details.
   - Marketing pages live under `app/services/<slug>/` and `app/services/ai-consulting-<city>/` — geo-variant landing pages share the `CityAiConsultingPage` component.
   - Lead-gen tools live under `app/tools/<tool>/` with matching API at `app/api/<tool>/route.ts`. Pattern: client wizard component (e.g. `components/AutomationFinder.tsx`) → POST → API route runs analysis → writes lead to Supabase → emails Chad via Resend.
   - The Stack Report newsletter: `app/stack-report/` (index + `[slug]`), `app/api/newsletter/{generate,publish,route}` for admin-protected generation. Issues stored in Supabase (`newsletter_issues` table).
@@ -182,6 +188,14 @@
   ```
   No test runner is wired up — verification is `npm run build` + manual browser check.
 
+  ### Portal (Prisma) commands
+  Only for `app/(portal)`/`(admin)`/`(auth)` work — no effect on the Supabase-backed marketing site.
+  ```bash
+  npx prisma generate          # After schema.prisma edits (regenerates @prisma/client)
+  npx prisma migrate dev       # Dev migration against prisma/dev.db
+  npm run db:seed              # prisma.seed hook → npx tsx prisma/seed.mjs
+  ```
+
   ### Deploy
   Push to `main` on GitHub → Vercel auto-deploys. Branch must be up-to-date with `origin/main` before pushing (the session frequently drifts behind). Run `git pull --rebase` first when status shows "behind".
 
@@ -197,6 +211,7 @@
   - GA4 + GTM both run; don't add a third analytics script.
   - All static images under `public/screenshots/*` should be **WebP**, optimized, with `priority` set on above-the-fold usages.
   - The homepage section order in this file is the conversion flow — don't reorder casually.
+  - Two DBs coexist: Supabase (marketing/tools/newsletter) and Prisma+SQLite (portal). Import `lib/supabase.ts` in marketing routes, `lib/db.ts`/`lib/auth.ts` in portal routes — mixing them breaks in confusing ways.
 
   ## Multi-Model Orchestration
 
