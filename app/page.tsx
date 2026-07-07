@@ -17,6 +17,7 @@ import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
 import FinalCTA from "@/components/FinalCTA";
 import AiOsTeaser from "@/components/AiOsTeaser";
+import AgentThisWeek from "@/components/AgentThisWeek";
 
 // Homepage section order per CLAUDE.md → Section Canon
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
       <FoundingClientSpecial />
       <StackComparison />
       <AiOsTeaser />
+      <AgentThisWeek />
       <Services />
       <Portfolio />
       <DemosCTA />
