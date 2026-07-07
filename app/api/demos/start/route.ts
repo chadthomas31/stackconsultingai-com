@@ -87,6 +87,8 @@ interface StartBody {
   vertical?: string;
   firstName?: string;
   bizName?: string;
+  bizDescription?: string;
+  bizConfig?: unknown;
   email?: string;
   mobile?: string;
   turnstileToken?: string;
@@ -167,6 +169,8 @@ export async function POST(req: NextRequest) {
     vertical: body.vertical,
     firstName: body.firstName,
     bizName: body.bizName,
+    bizDescription: body.bizDescription,
+    bizConfig: body.bizConfig,
     email: body.email,
     mobileE164,
     smsCode,

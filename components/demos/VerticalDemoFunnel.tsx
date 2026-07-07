@@ -5,6 +5,11 @@ import { ArrowRight, Phone, MessageSquare, Check } from "lucide-react";
 import { DEMO_PICKER, isLiveVertical } from "@/lib/voice-agents";
 import { DEMO_CONSENT_NOTICE } from "@/lib/demo-consent";
 import TurnstileWidget from "@/components/TurnstileWidget";
+import MyBusinessFunnel, {
+  BASE_INDUSTRIES,
+  type BaseIndustry,
+} from "@/components/demos/MyBusinessFunnel";
+import type { ReceptionistConfig } from "@/lib/receptionist-config-schema";
 
 const TURNSTILE_ENABLED = Boolean(
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
@@ -42,12 +47,58 @@ export default function VerticalDemoFunnel({
     DEMO_PICKER.find((v) => v.id === vertical)?.displayName ??
     "AI Receptionist";
   const live = isLiveVertical(vertical);
+  const isMyBusiness = vertical === "mybusiness";
 
   // Form state
   const [firstName, setFirstName] = useState("");
   const [bizName, setBizName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+
+  // "My Business" build-your-own state
+  const [myBizIndustry, setMyBizIndustry] = useState<BaseIndustry>(
+    BASE_INDUSTRIES[0],
+  );
+  const [myBizDescription, setMyBizDescription] = useState("");
+  const [myBizCity, setMyBizCity] = useState("");
+  const [myBizConfig, setMyBizConfig] = useState<ReceptionistConfig | null>(
+    null,
+  );
+  const [generatingConfig, setGeneratingConfig] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
+
+  async function onGenerateConfig() {
+    setGenError(null);
+    if (!bizName || !myBizDescription) {
+      setGenError("Business name and description required");
+      return;
+    }
+    setGeneratingConfig(true);
+    try {
+      const res = await fetch("/api/demos/generate-receptionist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          companyName: bizName,
+          industry: myBizIndustry,
+          description: myBizDescription,
+          city: myBizCity,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.config) {
+        setGenError(
+          typeof json.error === "string" ? json.error : "Could not draft config",
+        );
+        return;
+      }
+      setMyBizConfig(json.config as ReceptionistConfig);
+    } catch (err) {
+      setGenError(err instanceof Error ? err.message : "Network error");
+    } finally {
+      setGeneratingConfig(false);
+    }
+  }
 
   // Verify state
   const [code, setCode] = useState("");
@@ -60,6 +111,10 @@ export default function VerticalDemoFunnel({
     if (!consent) return;
     if (!email || !mobile) {
       setError("Email and mobile are required");
+      return;
+    }
+    if (isMyBusiness && !myBizConfig) {
+      setError("Generate your receptionist config first");
       return;
     }
     setSubmitting(true);
@@ -99,11 +154,17 @@ export default function VerticalDemoFunnel({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          vertical,
+          // "My Business" leads store one of the 4 base verticals — the
+          // demo_leads.vertical CHECK constraint doesn't know "mybusiness".
+          // biz_config being non-null is what marks the lead as custom.
+          vertical: isMyBusiness ? myBizIndustry : vertical,
           firstName,
           bizName,
           email,
           mobile,
+          ...(isMyBusiness
+            ? { bizDescription: myBizDescription, bizConfig: myBizConfig }
+            : {}),
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
@@ -237,6 +298,24 @@ export default function VerticalDemoFunnel({
             onChange={setBizName}
             placeholder="Acme HVAC"
           />
+
+          {isMyBusiness && (
+            <MyBusinessFunnel
+              companyName={bizName}
+              industry={myBizIndustry}
+              onIndustryChange={setMyBizIndustry}
+              description={myBizDescription}
+              onDescriptionChange={setMyBizDescription}
+              city={myBizCity}
+              onCityChange={setMyBizCity}
+              config={myBizConfig}
+              onConfigChange={setMyBizConfig}
+              generating={generatingConfig}
+              error={genError}
+              onGenerate={onGenerateConfig}
+            />
+          )}
+
           <Field
             label="Email"
             id="vd-email"
@@ -290,15 +369,18 @@ export default function VerticalDemoFunnel({
             disabled={
               !consent ||
               submitting ||
+              (isMyBusiness && !myBizConfig) ||
               (live && TURNSTILE_ENABLED && !turnstileToken)
             }
             className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-brand text-white font-medium hover:bg-brand-hover transition-colors disabled:opacity-60"
           >
             {submitting
               ? "Sending…"
-              : live
-                ? "Text me the code"
-                : "Notify me when it’s live"}
+              : isMyBusiness
+                ? "Use this — text me the code"
+                : live
+                  ? "Text me the code"
+                  : "Notify me when it’s live"}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </button>
 

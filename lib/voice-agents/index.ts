@@ -68,6 +68,7 @@ export const DEMO_PICKER: { id: string; displayName: string; live: boolean }[] =
   { id: "medspa", displayName: "Med Spa / Aesthetics", live: false },
   { id: "dental", displayName: "Dental", live: false },
   { id: "general", displayName: "General Local Service", live: false },
+  { id: "mybusiness", displayName: "My Business (build your own)", live: true },
 ];
 
 /** True only for verticals that reveal a real DID this slice (Auto). */
