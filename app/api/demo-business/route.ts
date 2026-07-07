@@ -21,11 +21,21 @@ export async function GET(req: NextRequest) {
   }
   const { data } = await supabaseAdmin
     .from("demo_leads")
-    .select("biz_name, voice")
+    .select("biz_name, voice, biz_config, vertical")
     .eq("mobile_e164", phone)
     .not("biz_name", "is", null)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
-  return NextResponse.json({ business_name: data?.biz_name || null, voice: data?.voice || null });
+  const cfg = (data?.biz_config ?? null) as null | {
+    summary?: string; services?: string[]; greeting?: string;
+  };
+  return NextResponse.json({
+    business_name: data?.biz_name || null,
+    voice: data?.voice || null,
+    industry: data?.vertical || null,
+    summary: cfg?.summary || null,
+    services: cfg?.services?.join(", ") || null,
+    greeting: cfg?.greeting || null,
+  });
 }
