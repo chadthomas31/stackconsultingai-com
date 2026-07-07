@@ -14,6 +14,8 @@ export interface DemoLeadRow {
   vertical: Vertical;
   first_name: string | null;
   biz_name: string | null;
+  biz_description: string | null;
+  biz_config: unknown | null;
   email: string;
   mobile_e164: string;
   sms_code: string | null;
@@ -42,6 +44,8 @@ export async function createDemoLead(input: {
   vertical: Vertical;
   firstName?: string;
   bizName?: string;
+  bizDescription?: string;
+  bizConfig?: unknown;
   email: string;
   mobileE164: string;
   smsCode: string;
@@ -60,6 +64,8 @@ export async function createDemoLead(input: {
       vertical: input.vertical,
       first_name: input.firstName ?? null,
       biz_name: input.bizName ?? null,
+      biz_description: input.bizDescription ?? null,
+      biz_config: input.bizConfig ?? null,
       email: input.email.toLowerCase().trim(),
       mobile_e164: input.mobileE164,
       sms_code: input.smsCode,
