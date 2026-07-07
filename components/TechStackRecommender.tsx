@@ -669,7 +669,7 @@ export default function TechStackRecommender() {
             <Code className="w-4 h-4" />
             <span>Tech Stack Recommender</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect Stack</h2>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect Stack</h1>
           <p className="text-xl text-muted-foreground">
             Answer a few questions and get a personalized technology recommendation.
           </p>

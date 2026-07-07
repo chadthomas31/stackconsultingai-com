@@ -1,4 +1,5 @@
 import ROICalculator from "@/components/ROICalculator";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -38,10 +39,22 @@ export default function ROICalculatorPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Website ROI Calculator</h1>
-
       {/* Calculator */}
       <ROICalculator />
+
+      <ToolSeoPanel
+        title="Validate the ROI assumptions before you rebuild"
+        intro="The calculator gives you a directional model. The useful work is checking whether traffic, conversion rate, close rate, and average job value match what is actually happening in your business."
+        bullets={[
+          "Review analytics and form submissions before choosing a redesign budget.",
+          "Tie every website improvement to a measurable action: calls, bookings, quote requests, demo requests, or newsletter signups.",
+          "Prioritize fixes that shorten the path from visitor intent to a tracked lead.",
+        ]}
+        primaryHref="/services/website-automation-audit-orange-county"
+        primaryLabel="Get a conversion audit"
+        secondaryHref="/services/business-automation-orange-county"
+        secondaryLabel="Explore automation services"
+      />
 
       {/* Additional Value Proposition */}
       <section className="py-16 px-4 border-t border-border">

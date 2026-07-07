@@ -1,4 +1,5 @@
 import SiteAudit from "@/components/SiteAudit";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -46,10 +47,22 @@ export default function SiteAuditPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Free AI Website Site Audit</h1>
-
       {/* Audit Tool */}
       <SiteAudit />
+
+      <ToolSeoPanel
+        title="Translate the site audit into a repair plan"
+        intro="The audit checks performance, SEO, accessibility, and best practices. The next step is deciding which fixes protect search visibility, which fixes improve conversions, and which can wait."
+        bullets={[
+          "Core Web Vitals and mobile usability issues should be handled before adding more landing pages.",
+          "Accessibility fixes often improve conversion too: labels, contrast, keyboard paths, and readable error messages reduce drop-off.",
+          "SEO warnings should be grouped by template so one code change can clean up many crawl errors at once.",
+        ]}
+        primaryHref="/free-ai-site-audit"
+        primaryLabel="Request a manual review"
+        secondaryHref="/services/web-development"
+        secondaryLabel="See web development services"
+      />
 
       {/* Why This Matters */}
       <section className="py-16 px-4 border-t border-border">

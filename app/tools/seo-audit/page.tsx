@@ -1,4 +1,5 @@
 import SEOAudit from "@/components/SEOAudit";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -38,10 +39,22 @@ export default function SEOAuditPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Free SEO Quick Audit</h1>
-
       {/* SEO Audit Tool */}
       <SEOAudit />
+
+      <ToolSeoPanel
+        title="Use the SEO audit to fix issues in the right order"
+        intro="A quick SEO score is only useful when it turns into a prioritized fix list. Start with crawlability, broken links, metadata, headings, structured data, and internal links before chasing new content."
+        bullets={[
+          "Technical errors compound across a site, so fix repeated template problems before editing individual pages.",
+          "Local service pages should have one clear H1, a unique title, a useful meta description, and links to related services.",
+          "Thin tool or blog pages should answer what the page does, who it helps, and what the visitor should do next.",
+        ]}
+        primaryHref="/services/website-automation-audit-orange-county"
+        primaryLabel="See website audit services"
+        secondaryHref="/stack-report"
+        secondaryLabel="Read The Stack Report"
+      />
 
       {/* Additional Value Proposition */}
       <section className="py-16 px-4 border-t border-border">

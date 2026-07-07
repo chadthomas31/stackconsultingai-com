@@ -12,6 +12,11 @@ const nextConfig = {
     return [
       { source: '/blog', destination: '/stack-report', permanent: true },
       { source: '/blog/:slug', destination: '/stack-report/:slug', permanent: true },
+      {
+        source: '/services/ai-consulting-dana-point',
+        destination: '/services/ai-consulting-orange-county',
+        permanent: true,
+      },
     ];
   },
 };

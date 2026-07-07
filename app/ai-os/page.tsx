@@ -7,12 +7,12 @@ import AiOsStickyCTA from "@/components/AiOsStickyCTA";
 import { ArrowRight, Terminal, Workflow, Plug, Phone, Lock, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Stack AI OS — A managed AI workstation for your business | Stack Consulting AI",
+  title: "Stack AI OS | Stack Consulting AI",
   description:
     "We set up one machine — Mac, Windows, or Linux — with the AI tools and automations your business needs, then keep it running. Three tiers. Local-private option for law, medical, and finance.",
   alternates: { canonical: "https://stackconsultingai.com/ai-os" },
   openGraph: {
-    title: "Stack AI OS — A managed AI workstation for your business",
+    title: "Stack AI OS | Managed Business AI Workstation",
     description:
       "One machine, set up and maintained by us. The AI does the work — you never touch the tools.",
     url: "https://stackconsultingai.com/ai-os",

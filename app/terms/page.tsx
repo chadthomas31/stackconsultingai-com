@@ -2,6 +2,9 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Stack Consulting AI",
+  description:
+    "Terms for using Stack Consulting AI website, consulting services, free audits, SMS messages, and project agreements.",
+  alternates: { canonical: "https://stackconsultingai.com/terms" },
 };
 
 export default function TermsOfService() {

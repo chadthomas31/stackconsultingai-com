@@ -1,4 +1,5 @@
 import TechStackRecommender from "@/components/TechStackRecommender";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -38,10 +39,22 @@ export default function TechStackPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Tech Stack Recommender</h1>
-
       {/* Recommender */}
       <TechStackRecommender />
+
+      <ToolSeoPanel
+        title="Choose a stack your business can maintain"
+        intro="The best stack is the one that supports the workflow without trapping the business in fragile custom code. Use the recommendation as a starting point for hosting, database, authentication, integrations, and maintenance planning."
+        bullets={[
+          "Marketing sites usually need fast rendering, simple editing paths, analytics, and reliable forms.",
+          "Automation-heavy builds need a database, background jobs, API integrations, and clear failure alerts.",
+          "Client portals need authentication, permissions, audit trails, and a maintenance plan before launch.",
+        ]}
+        primaryHref="/services/web-development"
+        primaryLabel="Plan a technical build"
+        secondaryHref="/services/maintenance"
+        secondaryLabel="Review maintenance support"
+      />
 
       {/* Additional Value Proposition */}
       <section className="py-16 px-4 border-t border-border">

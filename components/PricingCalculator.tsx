@@ -116,7 +116,7 @@ export default function PricingCalculator() {
             <Calculator className="w-4 h-4" />
             <span>Project Planner</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Plan Your Project</h2>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Plan Your Project</h1>
           <p className="text-xl text-muted-foreground">
             Stack smarter. Move faster.
           </p>

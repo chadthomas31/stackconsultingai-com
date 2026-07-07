@@ -1,4 +1,5 @@
 import PricingCalculator from "@/components/PricingCalculator";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -37,10 +38,22 @@ export default function CostCalculatorPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Website Cost Calculator</h1>
-
       {/* Calculator */}
       <PricingCalculator />
+
+      <ToolSeoPanel
+        title="Use the estimate to scope the right website build"
+        intro="A website quote should reflect the business outcome, not just the page count. The calculator helps separate a straightforward marketing site from a lead-generation build with forms, analytics, integrations, and automation."
+        bullets={[
+          "Simple brochure sites need clear positioning, fast pages, and clean contact paths before custom software gets involved.",
+          "Lead-generation sites need tracked forms, conversion events, local SEO structure, and follow-up automation.",
+          "Larger builds should include staging, content migration, redirects, analytics checks, and launch monitoring in the scope.",
+        ]}
+        primaryHref="/services/web-development"
+        primaryLabel="See web development services"
+        secondaryHref="/free-ai-site-audit"
+        secondaryLabel="Audit your current site"
+      />
       
       {/* Additional Value Proposition */}
       <section className="py-16 px-4 border-t border-border">

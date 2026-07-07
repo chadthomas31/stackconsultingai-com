@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Custom Web Development with Next.js | Stack Consulting AI",
+  title: "Next.js Web Development | Stack Consulting AI",
   description:
     "Custom website and web application development for businesses in Orange County and Southern California. We build fast, scalable sites with Next.js, TypeScript, and Tailwind CSS. Free consultation.",
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     canonical: "https://stackconsultingai.com/services/web-development",
   },
   openGraph: {
-    title: "Custom Web Development | Southern California | Stack Consulting AI",
+    title: "Web Development Orange County | Stack Consulting AI",
     description:
       "Custom website and web application development for businesses in Orange County and Southern California. Fast, scalable, SEO-optimized.",
     url: "https://stackconsultingai.com/services/web-development",

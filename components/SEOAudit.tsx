@@ -319,7 +319,7 @@ export default function SEOAudit() {
             <Search className="w-4 h-4" />
             <span>SEO Analysis</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">SEO Quick Audit</h2>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">SEO Quick Audit</h1>
           <p className="text-xl text-muted-foreground">
             Get instant SEO insights for any website.
           </p>

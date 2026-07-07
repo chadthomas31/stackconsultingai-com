@@ -1,4 +1,5 @@
 import AutomationFinder from "@/components/AutomationFinder";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -46,10 +47,22 @@ export default function AutomationFinderPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Free Automation Opportunity Finder</h1>
-
       {/* Tool */}
       <AutomationFinder />
+
+      <ToolSeoPanel
+        title="Turn the automation report into a practical first build"
+        intro="The finder is meant to narrow the field, not hand you a generic automation wish list. Use the result to spot one workflow with clear inputs, clear ownership, and enough repetition to justify a small build."
+        bullets={[
+          "Look for handoffs that happen every week: lead intake, quote follow-up, appointment reminders, reporting, or document creation.",
+          "Start with one workflow before replacing a whole operating process. Smaller pilots are easier to test and easier for a team to adopt.",
+          "Connect the recommendation to revenue, response time, or avoided admin hours so the build has a real success measure.",
+        ]}
+        primaryHref="/services/business-automation-orange-county"
+        primaryLabel="See business automation services"
+        secondaryHref="/ai-automation-small-business-guide"
+        secondaryLabel="Read the small business guide"
+      />
 
       {/* Why Automate? */}
       <section className="py-16 px-4 border-t border-border">

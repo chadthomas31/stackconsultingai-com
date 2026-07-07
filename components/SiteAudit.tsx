@@ -661,9 +661,9 @@ export default function SiteAudit() {
             <BarChart3 className="w-4 h-4" />
             <span>Free AI Site Audit</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold font-heading mb-4">
             How Does Your Website Score?
-          </h2>
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Get a comprehensive performance, SEO, and accessibility audit powered by
             Google Lighthouse — completely free.

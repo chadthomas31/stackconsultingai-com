@@ -1,4 +1,5 @@
 import TimelineEstimator from "@/components/TimelineEstimator";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -37,10 +38,22 @@ export default function TimelineEstimatorPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Project Timeline Estimator</h1>
-
       {/* Estimator */}
       <TimelineEstimator />
+
+      <ToolSeoPanel
+        title="Use the timeline to protect launch quality"
+        intro="Most website and automation delays come from content, access, integrations, and review loops. A realistic timeline should include discovery, build time, testing, deployment, and post-launch checks."
+        bullets={[
+          "Gather domain, hosting, analytics, CRM, and calendar access before development starts.",
+          "Separate must-have launch scope from ideas that can ship after the first working version.",
+          "Leave room for redirects, form testing, mobile review, accessibility checks, and analytics verification.",
+        ]}
+        primaryHref="/services/web-development"
+        primaryLabel="Plan a website project"
+        secondaryHref="/services/business-automation-orange-county"
+        secondaryLabel="Plan an automation project"
+      />
 
       {/* Additional Value Proposition */}
       <section className="py-16 px-4 border-t border-border">

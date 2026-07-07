@@ -1,4 +1,5 @@
 import SpeedChecker from "@/components/SpeedChecker";
+import ToolSeoPanel from "@/components/ToolSeoPanel";
 import Link from "next/link";
 import { ArrowLeft, Home } from "lucide-react";
 
@@ -38,10 +39,22 @@ export default function SpeedCheckerPage() {
         </div>
       </div>
 
-      <h1 className="sr-only">Free Website Speed Checker</h1>
-
       {/* Speed Checker */}
       <SpeedChecker />
+
+      <ToolSeoPanel
+        title="Prioritize speed fixes that affect leads"
+        intro="A faster website is not just a Lighthouse score. For local businesses, speed matters most on mobile service pages, booking flows, and call-to-action sections where visitors decide whether to contact you."
+        bullets={[
+          "Start with LCP assets, oversized images, render-blocking scripts, and layout shifts above the fold.",
+          "Keep analytics and chat scripts lazy so they do not block the first useful paint.",
+          "Retest the pages that actually drive leads, not only the homepage.",
+        ]}
+        primaryHref="/services/web-development"
+        primaryLabel="Fix website performance"
+        secondaryHref="/tools/site-audit"
+        secondaryLabel="Run a full site audit"
+      />
 
       {/* Additional Value Proposition */}
       <section className="py-16 px-4 border-t border-border">

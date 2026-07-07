@@ -7,7 +7,7 @@ import KbDemo from "@/components/demos/KbDemo";
 import LeadAgentDemo from "@/components/demos/LeadAgentDemo";
 
 export const metadata: Metadata = {
-  title: "Live AI Demos — Voice, Knowledge, Lead Agent | Stack Consulting AI",
+  title: "Live AI Demos | Stack Consulting AI",
   description:
     "Working AI systems you can try right now: call a live AI receptionist, query a real document corpus with cited answers, route a lead through Claude Haiku, and try industry-specific receptionists for HVAC, plumbing, auto repair, and medspas. Built on FreeSWITCH, OpenAI Realtime, and Claude.",
   alternates: { canonical: "https://stackconsultingai.com/demos" },

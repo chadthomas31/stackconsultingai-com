@@ -651,9 +651,9 @@ export default function AutomationFinder() {
             <Zap className="w-4 h-4" />
             <span>Free Automation Report</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold font-heading mb-4">
             Find Your Automation Opportunities
-          </h2>
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Answer a few questions about your business and get a personalized
             automation roadmap with estimated time and cost savings.

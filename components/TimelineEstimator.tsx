@@ -392,9 +392,9 @@ export default function TimelineEstimator() {
             <Calendar className="w-4 h-4" />
             <span>Timeline Estimator</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Estimate Your Project Timeline
-          </h2>
+          </h1>
           <p className="text-xl text-muted-foreground">
             See a realistic phase-by-phase schedule for your web project.
           </p>

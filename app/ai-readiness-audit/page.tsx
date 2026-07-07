@@ -19,8 +19,7 @@ import PricingTier from "@/components/PricingTier";
 import CallOptions from "@/components/CallOptions";
 
 export const metadata: Metadata = {
-  title:
-    "AI Readiness Audit for Small Businesses | Fixed-Price Report | Stack Consulting AI",
+  title: "AI Readiness Audit | Stack Consulting AI",
   description:
     "A founder-led AI readiness audit for small businesses. We map your workflows, score your AI readiness, and deliver a prioritized report with fixed-price recommendations. Two flat-fee tiers. No retainer.",
   keywords: [
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
     canonical: "https://stackconsultingai.com/ai-readiness-audit",
   },
   openGraph: {
-    title: "AI Readiness Audit — Fixed-Price Report for Small Businesses",
+    title: "AI Readiness Audit | Stack Consulting AI",
     description:
       "Two flat-fee audit tiers. Workflow audit at $497. Full readiness audit at $1,497. Real builder, real recommendations, no retainer lock-in.",
     url: "https://stackconsultingai.com/ai-readiness-audit",

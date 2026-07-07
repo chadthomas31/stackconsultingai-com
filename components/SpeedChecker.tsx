@@ -297,7 +297,7 @@ export default function SpeedChecker() {
             <Zap className="w-4 h-4" />
             <span>Performance Analyzer</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Website Speed Checker</h2>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Website Speed Checker</h1>
           <p className="text-xl text-muted-foreground">
             See how fast your website really is.
           </p>

@@ -167,9 +167,9 @@ export default function ROICalculator() {
             <TrendingUp className="w-4 h-4" />
             <span>ROI Calculator</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Calculate Your Website ROI
-          </h2>
+          </h1>
           <p className="text-xl text-muted-foreground">
             See how much revenue a new website could generate for your business.
           </p>

@@ -17,12 +17,12 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mon
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stackconsultingai.com"),
-  title: "AI Consulting & Web Development | Southern California | Stack Consulting AI",
+  title: "AI Consulting Orange County | Stack Consulting AI",
   description: "AI automation, custom web development, and business process automation for small businesses in Southern California and Orange County. Smarter systems, real ROI. Free consultation.",
   keywords: ["AI consulting", "web development", "business automation", "Southern California", "Orange County", "AI automation", "Next.js", "TypeScript", "small business", "web development Orange County", "AI consulting Southern California", "business process automation"],
   authors: [{ name: "Stack Consulting AI" }],
   openGraph: {
-    title: "AI Consulting & Web Development | Southern California | Stack Consulting AI",
+    title: "AI Consulting Orange County | Stack Consulting AI",
     description: "AI automation, custom web development, and business process automation for small businesses in Southern California. Smarter systems, real ROI.",
     type: "website",
     url: "https://stackconsultingai.com",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Consulting & Web Development | Southern California",
+    title: "AI Consulting Orange County | Stack Consulting AI",
     description: "AI automation, custom web development, and business process automation for small businesses in Southern California. Smarter systems, real ROI.",
     images: ["https://stackconsultingai.com/og-image.png"],
   },
