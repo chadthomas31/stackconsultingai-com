@@ -21,19 +21,23 @@ interface VerifyBody {
 /** Read the vertical + mobile that belong to a lead row so we know which DID to reveal. */
 async function readLeadCore(
   leadId: string,
-): Promise<{ vertical: Vertical; mobile: string } | null> {
+): Promise<{ vertical: Vertical; mobile: string; isCustom: boolean } | null> {
   if (!isSupabaseConfigured()) {
     // Dev stub — pretend it's an hvac lead so the UI flow works locally.
-    return { vertical: "hvac", mobile: "+15555550000" };
+    return { vertical: "hvac", mobile: "+15555550000", isCustom: false };
   }
   const { data, error } = await supabaseAdmin
     .from("demo_leads")
-    .select("vertical, mobile_e164")
+    .select("vertical, mobile_e164, biz_config")
     .eq("id", leadId)
     .maybeSingle();
   if (error || !data) return null;
   if (!isVertical(data.vertical)) return null;
-  return { vertical: data.vertical as Vertical, mobile: data.mobile_e164 };
+  return {
+    vertical: data.vertical as Vertical,
+    mobile: data.mobile_e164,
+    isCustom: data.biz_config != null,
+  };
 }
 
 export async function POST(req: NextRequest) {
@@ -56,7 +60,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Lead not found" }, { status: 404 });
   }
 
-  const did = getVerticalDid(core.vertical);
+  const did = core.isCustom
+    ? (process.env.DEMO_DID_MYBUSINESS ?? null)
+    : getVerticalDid(core.vertical);
   if (!did) {
     // DID not configured for this vertical (env not set yet). Surface clearly.
     return NextResponse.json(
