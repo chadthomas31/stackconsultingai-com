@@ -110,6 +110,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
+        {/* Umami analytics (self-hosted @ analytics.stackconsultingai.com) */}
+        <Script
+          id="umami-analytics"
+          defer
+          src="https://analytics.stackconsultingai.com/script.js"
+          data-website-id="43834196-c622-4117-9110-b9f9f1e6f849"
+          strategy="afterInteractive"
+        />
+
         {/* Chat widget removed 2026-04-21 — GoHighLevel subscription cancelled.
             Previously: GHL chat widget via widgets.leadconnectorhq.com. */}
       </body>
