@@ -29,7 +29,13 @@ export async function POST(req: NextRequest) {
   }
 
   const apiKey = process.env.BEEHIIV_API_KEY;
-  const publicationId = process.env.BEEHIIV_PUBLICATION_ID;
+  // Prod stores the publication id under the versioned name
+  // `BEEHIIV_PUBLICATION_ID_API_V2` (BEEHIIV_API_BASE is v2). Accept the plain
+  // name too for local/dev, and fall back to V1 as a last resort.
+  const publicationId =
+    process.env.BEEHIIV_PUBLICATION_ID ||
+    process.env.BEEHIIV_PUBLICATION_ID_API_V2 ||
+    process.env.BEEHIIV_PUBLICATION_ID_API_V1;
 
   if (!apiKey || !publicationId) {
     // Dev/un-configured fallback — tell the client to open the Beehiiv
