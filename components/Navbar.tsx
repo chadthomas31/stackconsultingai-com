@@ -96,8 +96,8 @@ export default function Navbar() {
               src="/stack-logo-2026.webp"
               alt="Stack Consulting AI"
               width={1000}
-              height={321}
-              className="h-9 md:h-10 w-auto"
+              height={254}
+              className="h-10 md:h-12 w-auto"
               priority
             />
           </Link>
