@@ -91,6 +91,14 @@ const projects = [
     url: "https://secondwindcarts.com"
   },
   {
+    name: "CartLab Customs",
+    description: "Joe Simrak's San Clemente custom golf cart and street-legal LSV builder — spec-by-spec cart builder, repairs, and a client portal",
+    image: "/screenshots/cartlabcustoms.webp",
+    alt: "CartLab Customs - custom golf cart and street-legal LSV builder website in San Clemente with a cart configurator and client portal",
+    tags: ["Next.js", "E-commerce", "Client Portal"],
+    url: "https://cartlabcustoms.com"
+  },
+  {
     name: "Angel's Beauty Academy",
     description: "Lupita's Santa Ana beauty academy — bilingual Spanish/English site with classes, FAQ, and community gallery",
     image: "/screenshots/angelsbeautyacademy.webp",

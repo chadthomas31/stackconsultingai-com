@@ -13,6 +13,7 @@ const CLIENTS = [
   "The Puffery",
   "VenturAI",
   "Second Wind Carts",
+  "CartLab Customs",
   "Angel's Beauty Academy",
 ];
 
