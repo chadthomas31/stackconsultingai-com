@@ -81,6 +81,38 @@ const projects = [
     alt: "Continental Interior Service - commercial construction website",
     tags: ["Astro", "Construction", "B2B"],
     url: "https://continental-interior-services.vercel.app"
+  },
+  {
+    name: "Second Wind Carts",
+    description: "Joe Simrak's golf cart repair and custom build shop — services, pricing, and a quote request",
+    image: "/screenshots/secondwindcarts.webp",
+    alt: "Second Wind Carts - golf cart repair and custom builds website with pricing and quote request",
+    tags: ["Website", "Local SEO", "Services"],
+    url: "https://secondwindcarts.com"
+  },
+  {
+    name: "CartLab Customs",
+    description: "Joe Simrak's San Clemente custom golf cart and street-legal LSV builder — spec-by-spec cart builder, repairs, and a client portal",
+    image: "/screenshots/cartlabcustoms.webp",
+    alt: "CartLab Customs - custom golf cart and street-legal LSV builder website in San Clemente with a cart configurator and client portal",
+    tags: ["Next.js", "E-commerce", "Client Portal"],
+    url: "https://cartlabcustoms.com"
+  },
+  {
+    name: "Angel's Beauty Academy",
+    description: "Lupita's Santa Ana beauty academy — bilingual Spanish/English site with classes, FAQ, and community gallery",
+    image: "/screenshots/angelsbeautyacademy.webp",
+    alt: "Angel's Beauty Academy - bilingual beauty school and salon website in Santa Ana, California",
+    tags: ["Website", "Bilingual", "Education"],
+    url: "https://angelsbeautyacademy.com"
+  },
+  {
+    name: "Elevance Financial Services",
+    description: "Government surplus-funds recovery firm — no-upfront-fee messaging, process walkthrough, and a team login",
+    image: "/screenshots/elevancefinancial.webp",
+    alt: "Elevance Financial Services - website for recovering funds held by government agencies",
+    tags: ["Website", "Financial Services", "Team Portal"],
+    url: "https://elevancefinancial.org"
   }
 ];
 
