@@ -18,22 +18,25 @@ import { HVAC_AGENT } from "./hvac";
 import { PLUMBING_AGENT } from "./plumbing";
 import { AUTO_AGENT } from "./auto";
 import { MEDSPA_AGENT } from "./medspa";
+import { GOLFCART_AGENT } from "./golfcart";
 
 export const VERTICAL_AGENTS = {
   hvac: HVAC_AGENT,
   plumbing: PLUMBING_AGENT,
   auto: AUTO_AGENT,
   medspa: MEDSPA_AGENT,
+  golfcart: GOLFCART_AGENT,
 } as const;
 
 export type Vertical = keyof typeof VERTICAL_AGENTS;
-export const VERTICALS: Vertical[] = ["hvac", "plumbing", "auto", "medspa"];
+export const VERTICALS: Vertical[] = ["hvac", "plumbing", "auto", "medspa", "golfcart"];
 
 const DID_ENV_KEYS: Record<Vertical, string> = {
   hvac: "DEMO_DID_HVAC",
   plumbing: "DEMO_DID_PLUMBING",
   auto: "DEMO_DID_AUTO",
   medspa: "DEMO_DID_MEDSPA",
+  golfcart: "DEMO_DID_GOLFCART",
 };
 
 export function isVertical(value: unknown): value is Vertical {
@@ -63,14 +66,15 @@ export function formatDialString(did: string): string {
  */
 export const DEMO_PICKER: { id: string; displayName: string; live: boolean }[] = [
   { id: "auto", displayName: "Auto Repair", live: true },
-  { id: "hvac", displayName: "HVAC", live: false },
-  { id: "plumbing", displayName: "Plumbing", live: false },
+  { id: "golfcart", displayName: "Golf Cart Shops", live: true },
+  { id: "hvac", displayName: "HVAC", live: true },
+  { id: "plumbing", displayName: "Plumbing", live: true },
   { id: "medspa", displayName: "Med Spa / Aesthetics", live: false },
   { id: "dental", displayName: "Dental", live: false },
   { id: "general", displayName: "General Local Service", live: false },
 ];
 
-/** True only for verticals that reveal a real DID this slice (Auto). */
+/** True only for verticals that reveal a real DID (auto, golfcart, hvac, plumbing). */
 export function isLiveVertical(id: string): boolean {
   return DEMO_PICKER.some((v) => v.id === id && v.live);
 }

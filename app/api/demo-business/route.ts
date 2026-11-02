@@ -24,6 +24,9 @@ export async function GET(req: NextRequest) {
     .select("biz_name, voice")
     .eq("mobile_e164", phone)
     .not("biz_name", "is", null)
+    // Only SMS-verified signups count: the PBX demo gate lets a caller in when this
+    // returns a name, so an unverified form fill must not unlock the AI.
+    .not("sms_verified_at", "is", null)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();

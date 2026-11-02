@@ -102,4 +102,25 @@ export const COPY: Record<Vertical, VerticalCopy> = {
       'Try saying: "I\'m a new client interested in Botox, I\'d love to book a consultation, can I come in this week?"',
     cta: "Book a fit call",
   },
+
+  golfcart: {
+    vertical: "golfcart",
+    displayName: "Golf Cart Shops",
+    oneLiner: "AI receptionist for golf cart shops · Repairs, mobile service & builds",
+    h1: "You're under a cart when the phone rings. The AI receptionist answers it.",
+    subhead:
+      "Enter your shop name and cell, then call the demo. It answers as your shop, takes the repair or build request, gets the cart's make and model, and collects the address for mobile jobs.",
+    proofLine:
+      "Built by Stack Consulting AI, the team behind cartlabcustoms.com and secondwindcarts.com.",
+    agentDoes: [
+      "Sorts repairs from custom builds, lithium conversions, lift kits and street-legal upgrades",
+      "Captures the cart's brand, model, gas or electric, and the full address for mobile repairs",
+      "Flags brake failure and smoking or hot batteries as urgent, with 'don't drive it' safety steps",
+    ],
+    whyItMatters:
+      "Most cart shops are one or two people turning wrenches. Every call that goes to voicemail is a customer who calls the next shop. The receptionist picks up every call and texts you the details.",
+    bookingScript:
+      'Try saying: "My Club Car Precedent won\'t charge anymore, it\'s lithium, can someone come out to my house in San Clemente this week?"',
+    cta: "Book a fit call",
+  },
 };
