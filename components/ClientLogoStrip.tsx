@@ -12,6 +12,9 @@ const CLIENTS = [
   "Continental Interior",
   "The Puffery",
   "VenturAI",
+  "Second Wind Carts",
+  "CartLab Customs",
+  "Angel's Beauty Academy",
 ];
 
 export default function ClientLogoStrip() {
