@@ -232,6 +232,9 @@ export default function DemosPage() {
               <Link href="/ai-receptionist" className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-white/30 text-white/90 hover:bg-white/5 hover:border-white/60 transition font-medium">
                 Pricing for AI Receptionist
               </Link>
+              <Link href="/samples" className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-white/30 text-white/90 hover:bg-white/5 hover:border-white/60 transition font-medium">
+                See sample websites
+              </Link>
             </div>
           </div>
         </section>

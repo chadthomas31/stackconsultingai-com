@@ -17,7 +17,10 @@ export default function Footer() {
                   pathname === "/login" ||
                   pathname === "/register";
 
-  if (isPortal) return null;
+  // Sample business sites (/samples/<vertical>) render their own header and footer.
+  const isSampleSite = pathname.startsWith("/samples/");
+
+  if (isPortal || isSampleSite) return null;
 
   return (
     <footer className="relative py-12 px-4 border-t border-border">

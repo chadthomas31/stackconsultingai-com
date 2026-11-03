@@ -49,7 +49,10 @@ export default function Navbar() {
     };
   }, []);
 
-  if (isPortal) return null;
+  // Sample business sites (/samples/<vertical>) render their own header and footer.
+  const isSampleSite = pathname.startsWith("/samples/");
+
+  if (isPortal || isSampleSite) return null;
 
   const handleSectionClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     const element = document.getElementById(sectionId);
