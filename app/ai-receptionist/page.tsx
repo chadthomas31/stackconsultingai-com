@@ -21,7 +21,7 @@ import RetroCallPreview from "@/components/RetroCallPreview";
 
 export const metadata: Metadata = {
   title:
-    "AI Receptionist for Small Business | 24/7 Voice Agent | Stack Consulting AI",
+    "AI Receptionist for Small Business | Stack Consulting AI",
   description:
     "An AI receptionist that answers missed calls, qualifies callers, transfers to humans, and emails the transcript — start with a free pilot.",
   keywords: [

@@ -28,7 +28,7 @@ export async function generateMetadata({
   const { vertical } = await params;
   if (!isVertical(vertical)) return { title: "Demo not found" };
   const c = COPY[vertical];
-  const title = `${c.displayName} AI Receptionist — Live Demo | Stack Consulting AI`;
+  const title = `${c.displayName} AI Receptionist Demo | Stack Consulting AI`;
   const description =
     `Dial the live demo. Hear an AI receptionist tuned for ${c.displayName.toLowerCase()} ` +
     `shops handle a real call end-to-end. Get a call-report email seconds after you hang up.`;

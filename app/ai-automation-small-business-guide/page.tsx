@@ -17,7 +17,7 @@ import {
 
 export const metadata: Metadata = {
   title:
-    "AI Automation for Small Businesses: Practical Use Cases, Costs, and Tools (2026 Guide) | Stack Consulting AI",
+    "AI Automation for Small Business: Costs, Tools & Use Cases",
   description:
     "A practical 2026 guide to AI automation for small businesses. Real use cases, honest cost ranges, and the tools that actually work — AI receptionists, appointment booking, lead follow-up, CRM automation, missed-call text-back, and more.",
   keywords: [

@@ -25,7 +25,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const issue = await getIssueBySlug(slug);
   if (!issue) {
-    return { title: "Issue not found — The Stack Report" };
+    return { title: "Issue not found | Stack Report" };
   }
   const url = `https://stackconsultingai.com/stack-report/${issue.slug}`;
   const heroImage = issue.hero_image
@@ -33,7 +33,7 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title: `${issue.subject} — The Stack Report`,
+    title: `${issue.subject} | Stack Report`,
     description: issue.preheader,
     keywords: issue.keywords ?? undefined,
     alternates: { canonical: url },

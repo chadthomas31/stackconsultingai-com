@@ -2,6 +2,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Stack Consulting AI",
+  description:
+    "Terms that apply to stackconsultingai.com, the free tools, the live AI demos, and consulting engagements with Stack Consulting AI.",
 };
 
 export default function TermsOfService() {

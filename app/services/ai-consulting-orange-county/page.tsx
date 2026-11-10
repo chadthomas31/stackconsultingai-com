@@ -22,7 +22,7 @@ import CallOptions from "@/components/CallOptions";
 
 export const metadata: Metadata = {
   title:
-    "AI Consulting for Small Businesses in Orange County | Stack Consulting AI",
+    "AI Consulting Orange County | Stack Consulting AI",
   description:
     "Founder-led AI consulting in Orange County. We build voice agents, chatbots, and automations for SoCal small businesses. Real OC team, no offshore handoffs. Free assessment.",
   keywords: [

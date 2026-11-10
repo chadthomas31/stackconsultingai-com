@@ -2,6 +2,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Stack Consulting AI",
+  description:
+    "How Stack Consulting AI collects, uses, and protects information from visitors, lead-tool users, and clients.",
 };
 
 export default function PrivacyPolicy() {

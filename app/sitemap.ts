@@ -36,7 +36,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/demos/medspa`, lastModified: new Date('2026-05-28'), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/demos/golfcart`, lastModified: new Date('2026-11-02'), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/samples`, lastModified: new Date('2026-11-02'), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/portfolio`, lastModified: new Date('2026-04-28'), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/services/ai-consulting-orange-county`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/services/ai-consulting-irvine`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/services/ai-consulting-newport-beach`, lastModified: new Date('2026-04-25'), changeFrequency: 'monthly', priority: 0.85 },

@@ -40,7 +40,7 @@ const config: CityConfig = {
   localProof:
     "We built a custom booking system + automated follow-ups for Fix It San Clemente that drove appointments up 40% in 90 days. That's a real San Clemente client, not a stock testimonial.",
   neighbors: [
-    { name: "Dana Point", slug: "dana-point" },
+    { name: "Irvine", slug: "irvine" },
     { name: "Mission Viejo", slug: "mission-viejo" },
     { name: "Newport Beach", slug: "newport-beach" },
   ],

@@ -15,7 +15,7 @@ import {
 
 export const metadata: Metadata = {
   title:
-    "Free AI Website & Automation Audit for Small Businesses | Stack Consulting AI",
+    "Free AI Website & Automation Audit | Stack Consulting AI",
   description:
     "Free AI-powered website + automation audit. We review your site, lead capture, contact forms, phone flow, booking process, and automation opportunities. Plain-English report. No sales pitch. Orange County small businesses welcome.",
   keywords: [

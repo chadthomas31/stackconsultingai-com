@@ -20,7 +20,7 @@ import CallOptions from "@/components/CallOptions";
 
 export const metadata: Metadata = {
   title:
-    "AI Readiness Audit for Small Businesses | Fixed-Price Report | Stack Consulting AI",
+    "AI Readiness Audit for Small Businesses | Stack Consulting AI",
   description:
     "A founder-led AI readiness audit for small businesses. We map your workflows, score your AI readiness, and deliver a prioritized report with fixed-price recommendations. Two flat-fee tiers. No retainer.",
   keywords: [
