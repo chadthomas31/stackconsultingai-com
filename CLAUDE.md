@@ -154,7 +154,7 @@
   - **Ignore these**: `harmonist/` is a nested git repo (gitignored, vendored/scratch — not app code). `sreenshots/` (sic) is a junk dir — the real asset dir is `public/screenshots/`.
 
   ### App Router conventions
-  - Single root `app/layout.tsx` injects GA4 (`G-GKBVKQ49ND`) + GTM (`GTM-5N9G6XQ4`) via `next/script lazyOnload`, plus skip-link target. Don't duplicate analytics in child layouts.
+  - Single root `app/layout.tsx` injects GA4 (`G-K0SQK9DXZP`) + GTM (`GTM-5N9G6XQ4`) via `next/script lazyOnload`, plus skip-link target. Don't duplicate analytics in child layouts.
   - `app/page.tsx` is the homepage and composes the section canon listed above.
   - **Client Portal**: Routes under `app/(portal)`, `app/(admin)`, and `app/(auth)`. Runs on the Prisma/SQLite/NextAuth stack (see Stack section), NOT Supabase. See `PORTAL_INTEGRATION.md` for details.
   - Marketing pages live under `app/services/<slug>/` and `app/services/ai-consulting-<city>/` — geo-variant landing pages share the `CityAiConsultingPage` component.
