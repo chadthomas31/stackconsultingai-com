@@ -1,7 +1,17 @@
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 
-const projects = [
+type Project = {
+  name: string;
+  description: string;
+  image: string;
+  alt: string;
+  tags: string[];
+  url: string;
+  spotlight?: boolean;
+};
+
+const projects: Project[] = [
   {
     name: "Fix It San Clemente",
     description: "Mobile auto repair with online booking — 40% more appointments after launch",
@@ -9,6 +19,24 @@ const projects = [
     alt: "Fix It San Clemente - mobile auto repair website with online booking built by Stack Consulting AI",
     tags: ["Next.js", "Booking", "Local SEO"],
     url: "https://fixitsanclemente.com"
+  },
+  {
+    name: "CartLab Customs",
+    description: "Joe's second site with us: a spec-by-spec cart configurator for street-legal LSV builds, repair and upgrade services, and a client portal",
+    image: "/screenshots/cartlabcustoms.webp",
+    alt: "CartLab Customs - custom golf cart and street-legal LSV builder website in San Clemente with a cart configurator and client portal",
+    tags: ["Next.js", "Cart Configurator", "Client Portal"],
+    url: "https://cartlabcustoms.com",
+    spotlight: true
+  },
+  {
+    name: "Second Wind Carts",
+    description: "Joe Simrak's golf cart repair and refresh shop: services, published pricing, a builds gallery, and a plan-your-cart quote request",
+    image: "/screenshots/secondwindcarts.webp",
+    alt: "Second Wind Carts - golf cart repair and custom builds website with pricing and quote request",
+    tags: ["Website", "Local SEO", "Quote Form"],
+    url: "https://secondwindcarts.com",
+    spotlight: true
   },
   {
     name: "Strategic Sync",
@@ -83,22 +111,6 @@ const projects = [
     url: "https://continental-interior-services.vercel.app"
   },
   {
-    name: "Second Wind Carts",
-    description: "Joe Simrak's golf cart repair and custom build shop — services, pricing, and a quote request",
-    image: "/screenshots/secondwindcarts.webp",
-    alt: "Second Wind Carts - golf cart repair and custom builds website with pricing and quote request",
-    tags: ["Website", "Local SEO", "Services"],
-    url: "https://secondwindcarts.com"
-  },
-  {
-    name: "CartLab Customs",
-    description: "Joe Simrak's San Clemente custom golf cart and street-legal LSV builder — spec-by-spec cart builder, repairs, and a client portal",
-    image: "/screenshots/cartlabcustoms.webp",
-    alt: "CartLab Customs - custom golf cart and street-legal LSV builder website in San Clemente with a cart configurator and client portal",
-    tags: ["Next.js", "E-commerce", "Client Portal"],
-    url: "https://cartlabcustoms.com"
-  },
-  {
     name: "Angel's Beauty Academy",
     description: "Lupita's Santa Ana beauty academy — bilingual Spanish/English site with classes, FAQ, and community gallery",
     image: "/screenshots/angelsbeautyacademy.webp",
@@ -117,7 +129,9 @@ const projects = [
 ];
 
 export default function Portfolio() {
-  const [featured, ...rest] = projects;
+  const [featured, ...others] = projects;
+  const spotlight = others.filter((p) => p.spotlight);
+  const rest = others.filter((p) => !p.spotlight);
 
   return (
     <section id="portfolio" className="py-24 px-4">
@@ -167,6 +181,56 @@ export default function Portfolio() {
             </div>
           </div>
         </a>
+
+        {/* Spotlight — one client, two sites */}
+        <div className="mb-8">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+            <p className="text-sm font-medium text-primary tracking-wide uppercase">
+              Repeat client · Joe Simrak, San Clemente
+            </p>
+            <p className="text-sm text-muted-foreground">
+              One shop owner, two businesses, two sites.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {spotlight.map((project) => (
+              <a
+                key={project.name}
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300"
+              >
+                <div className="relative h-56 md:h-64 overflow-hidden bg-secondary">
+                  <Image
+                    src={project.image}
+                    alt={project.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6 bg-card">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                    {project.name}
+                  </h3>
+                  <p className="text-muted-foreground mb-4">{project.description}</p>
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                    View Live Site
+                    <ExternalLink className="w-4 h-4" />
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
 
         {/* Remaining Projects — compact grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
