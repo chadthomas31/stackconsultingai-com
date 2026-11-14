@@ -1097,11 +1097,16 @@ PHASE 2 — PICK INDUSTRY, THEN RUN INDUSTRY QUESTIONS
 ${industryMenu}
 
    Listen to their answer. Internally pick the BEST-MATCHING industry from
-   the list above. Acknowledge with a short natural line like "Got it —
-   auto repair," then run THAT industry's question script below in order.
+   the list above. Acknowledge with a short natural line that repeats the
+   industry THEY named (e.g. "Got it — home services"), then run THAT
+   industry's question script below in order.
 
    If their business doesn't clearly match any industry, use the
    "Something else" script.
+
+   If their turn is silent, background noise, or you can't make out the
+   words, say "Sorry, I didn't catch that" and ask again. Never guess or
+   confirm an industry, name, or business the caller did not actually say.
 
 ${industryBranches}
 

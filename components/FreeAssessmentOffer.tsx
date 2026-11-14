@@ -19,8 +19,8 @@ import CallOpsConsole, {
 } from "./CallOpsConsole";
 import { trackConversionEvent } from "@/lib/analytics-client";
 
-const STACKS_PHONE = "+14422121616";
-const STACKS_PHONE_DISPLAY = "(442) 212-1616";
+const STACKS_PHONE = "+19497490001";
+const STACKS_PHONE_DISPLAY = "(949) 749-0001";
 
 type ViewState = "form" | "streaming" | "done" | "error";
 
@@ -345,7 +345,7 @@ export default function FreeAssessmentOffer() {
                 {STACKS_PHONE_DISPLAY}
               </a>
               <p className="text-white/70 text-sm mb-5 leading-relaxed">
-                Direct line to the assessment agent. Palm Springs area code.
+                Direct line to the assessment agent. Orange County area code.
                 10&ndash;20 minute call. Report in your inbox within 24 hours.
               </p>
               <a

@@ -28,7 +28,7 @@ function formatMs(ms?: number) {
 }
 
 function formatPhone(e164: string) {
-  // +14422121616 -> (442) 212-1616
+  // +19497490001 -> (949) 749-0001
   const d = e164.replace(/[^\d]/g, "");
   if (d.length === 11 && d.startsWith("1")) {
     return `(${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7)}`;
