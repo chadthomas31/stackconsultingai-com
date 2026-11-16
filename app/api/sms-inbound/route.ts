@@ -135,10 +135,13 @@ export async function POST(req: NextRequest) {
   }
 
   // 2. Forward to Chad's cell. Skip short-code senders (carrier/verification spam).
+  // Send from a 10DLC-registered number (SMS_FORWARD_FROM / TELNYX_SENDER_NUMBER); carriers reject
+  // unregistered senders (Telnyx 40010), so the receiving DID is only a last resort.
   const forwardTo = process.env.SMS_FORWARD_TO;
-  if (forwardTo && to && !isShortCode && from !== forwardTo) {
+  const forwardFrom = process.env.SMS_FORWARD_FROM || process.env.TELNYX_SENDER_NUMBER || to;
+  if (forwardTo && forwardFrom && !isShortCode && from !== forwardTo) {
     const body = `Text to ${pretty(to)} from ${pretty(from)}:\n${summary}`;
-    const r = await sendTelnyx(to, forwardTo, body.slice(0, 1500));
+    const r = await sendTelnyx(forwardFrom, forwardTo, body.slice(0, 1500));
     results.forwarded = r.ok;
     if (!r.ok) console.error("[sms-inbound] forward failed:", r.error);
   }
